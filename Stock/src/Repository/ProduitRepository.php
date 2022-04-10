@@ -22,6 +22,8 @@ class ProduitRepository extends ServiceEntityRepository
     public function getAll()
     {
         return $this->createQueryBuilder('produit')
+            ->leftJoin('produit.categorie', 'categorie', 'WITH')
+            ->addSelect('categorie')
             ->orderBy('produit.nom', 'ASC')
             ->getQuery()
             ->getResult();
@@ -35,7 +37,7 @@ class ProduitRepository extends ServiceEntityRepository
     /**
      * @return Produit[]
      */
-    public function search(array $args) : array
+    public function search(array $args): array
     {
         $nom = $args['nom'] ?? null;
         $categorie = $args['categorie'] ?? null;

@@ -19,24 +19,32 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(path: '/api')]
 class ApiController extends AbstractController
 {
-    public function __construct(private ProduitRepository $produitRepository, private CategorieRepository $categorieRepository, private SerializeApi $serializeApi, private Logger $logger)
-    {
+    public function __construct(
+        private ProduitRepository $produitRepository,
+        private CategorieRepository $categorieRepository,
+        private SerializeApi $serializeApi,
+        private Logger $logger
+    ) {
     }
+
     #[Route(path: '/all')]
-    public function index() : JsonResponse
+    public function index(): JsonResponse
     {
-        $produits = $this->serializeApi->serializeProduits($this->produitRepository->findAll());
+        $produits = $this->serializeApi->serializeProduits($this->produitRepository->getAll());
         $categories = $this->serializeApi->serializeCategorie($this->categorieRepository->findAll());
         $data = ['categories' => $categories, 'produits' => $produits];
+
         return new JsonResponse($data);
     }
+
     #[Route(path: '/update/{id}/{quantite}')]
-    public function updateQuantite(Produit $produit, int $quantite) : JsonResponse
+    public function updateQuantite(Produit $produit, int $quantite): JsonResponse
     {
         $produit->setQuantite($quantite);
         $this->produitRepository->flush();
         $data = ['quantite' => $quantite];
         $this->logger->log($produit, $quantite);
+
         return new JsonResponse($data);
     }
 }
