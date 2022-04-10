@@ -166,4 +166,12 @@ class AvaloirRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function getLastAvaloir(): ?Avaloir
+    {
+        return $this->createQueryBuilder('avaloir')
+            ->addOrderBy('avaloir.updatedAt', 'DESC')
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Cache\CacheInterface;
 
 /**
  * Class ApiController
@@ -37,16 +38,24 @@ class ApiController extends AbstractController
         private ElasticSearch $elasticSearch,
         private ElasticServer $elasticServer,
         private MailerAvaloir $mailerAvaloir,
-        private LocationUpdater $locationUpdater
+        private LocationUpdater $locationUpdater,
+        private CacheInterface $cache
     ) {
     }
 
     #[Route(path: '/all', format: 'json')]
     public function index(): JsonResponse
     {
-        $avaloirs = $this->serializeApi->serializeAvaloirs($this->avaloirRepository->getAll());
+        $last = $this->avaloirRepository->getLastAvaloir();
+        $date = "";
+        if ($last) {
+            $date = $last->getUpdatedAt()->format('Y-m-d H:m');
+        }
+        return $this->cache->get('allAvaloirs-'.$date, function () {
+            $avaloirs = $this->serializeApi->serializeAvaloirs($this->avaloirRepository->getAll());
 
-        return new JsonResponse($avaloirs);
+            return new JsonResponse($avaloirs);
+        });
     }
 
     #[Route(path: '/dates', format: 'json')]
