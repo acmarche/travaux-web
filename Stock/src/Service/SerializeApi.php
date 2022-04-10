@@ -70,17 +70,7 @@ class SerializeApi
         $std->localite = $avaloir->getLocalite();
         $std->description = $avaloir->getDescription();
         $std->createdAt = $avaloir->getCreatedAt()->format(DateTimeInterface::RFC3339);//'Y-m-d H:m'
-        if ($avaloir->getImageName()) {
-            $pathImg = $this->uploaderHelper->asset($avaloir, 'imageFile');
-            $fullPath = $this->root.$pathImg;
-            if (is_readable($fullPath)) {
-                $thumb = $this->filterService->getUrlOfFilteredImage($pathImg, 'avaloir_heighten_filter');
-                $std->imageUrl = $thumb !== '' && $thumb !== '0' ? $thumb : $this->urlBase.$this->uploaderHelper->asset(
-                        $avaloir,
-                        'imageFile'
-                    );
-            }
-        }
+        $std->imageUrl = $this->getImage($avaloir);
 
         return $std;
     }
@@ -188,5 +178,34 @@ class SerializeApi
         $std->createdAt = $commentaire->getCreatedAt()->format(DateTimeInterface::RFC3339);
 
         return $std;
+    }
+
+    /**
+     * /media/cache/avaloir_heighten_filter/avaloirs/3692/aval-3692.jpg"
+     * @param Avaloir $avaloir
+     * @return string|null
+     */
+    private function getImage(Avaloir $avaloir): ?string
+    {
+        $imageUrl = null;
+        if ($avaloir->getImageName()) {
+            $url = $this->root.'/media/cache/avaloir_heighten_filter/avaloirs/'.$avaloir->getId(
+                ).'/aval-'.$avaloir->getId().'.jpg';
+            if (is_readable($url)) {
+                return $this->urlBase.'/media/cache/avaloir_heighten_filter/avaloirs/'.$avaloir->getId(
+                    ).'/aval-'.$avaloir->getId().'.jpg';
+            }
+            $pathImg = $this->uploaderHelper->asset($avaloir, 'imageFile');
+            $fullPath = $this->root.$pathImg;
+            if (is_readable($fullPath)) {
+                $thumb = $this->filterService->getUrlOfFilteredImage($pathImg, 'avaloir_heighten_filter');
+                $imageUrl = $thumb !== '' && $thumb !== '0' ? $thumb : $this->urlBase.$this->uploaderHelper->asset(
+                        $avaloir,
+                        'imageFile'
+                    );
+            }
+        }
+
+        return $imageUrl;
     }
 }
