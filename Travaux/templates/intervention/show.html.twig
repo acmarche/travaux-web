@@ -3,41 +3,36 @@
 {% block body -%}
 
     <div class="card">
-        <h3 class="card-header">Full</h3>
+        <div class="card-header">
+            <h3>{{ intervention }}</h3>
+            {% if intervention.etat == 'En attente' %}
+                <i class="float-right far fa-hourglass" title="{{ intervention.etat }}"></i>
+            {% endif %}
+        </div>
         <div class="card-body">
             {% include '@AcMarcheTravaux/intervention/actions.html.twig' with {'intervention': intervention } %}
 
-            {% if workflow_can(intervention, 'auteur_accept') %}
-                <p class="text-warning">Cette intervention doit être validée par un auteur</p>
-                {% if is_granted('ROLE_TRAVAUX_AUTEUR') %}
-                    <p>
-                        <a href="{{ path('validation_show', {'id': intervention.id}) }}" class="btn btn-warning btn-xs">
-                            Traiter cette demande
-                        </a>
-                    </p>
-                {% endif %}
-            {% endif %}
-
-            {% if workflow_can(intervention, 'publish') %}
-                <p class="text-warning">Cette intervention doit être validée par un administrateur</p>
-                {% if is_granted('ROLE_TRAVAUX_ADMIN') %}
-                    <p>
-                        <a href="{{ path('validation_show', {'id': intervention.id}) }}" class="btn btn-warning btn-xs">
-                            Traiter cette demande
-                        </a>
-                    </p>
-                {% endif %}
-            {% endif %}
+            {% include '@AcMarcheTravaux/intervention/_workflow.html.twig' %}
 
             {% include '@AcMarcheTravaux/intervention/panel.html.twig' %}
 
             {% include '@AcMarcheTravaux/intervention/documents.html.twig' %}
 
             {% include '@AcMarcheTravaux/intervention/suivis.html.twig' with {'form': delete_form_suivis } %}
-
-            {% include '@AcMarcheTravaux/intervention/modal_archiver.html.twig' %}
         </div>
+        {% if not pdf %}
+            <div class="card-footer text-muted">
+        <span class="text-muted">
+                {{ 'Created' | trans }} {{ intervention.createdAt|date('d-m-Y H:i:s') }} par {{ intervention.useradd }}
+                . {{ 'Updated' | trans }} {{ intervention.updatedAt|date('d-m-Y H:i:s') }}
+            </span>
+                {% if intervention.archive %}
+                    <i class="float-right fas fa-archive" title="Archive"></i>
+                {% endif %}
+            </div>
+        {% endif %}
     </div>
 
+    {% include '@AcMarcheTravaux/intervention/modal_archiver.html.twig' %}
     {% include '@AcMarcheTravaux/intervention/delete.html.twig' %}
 {% endblock %}

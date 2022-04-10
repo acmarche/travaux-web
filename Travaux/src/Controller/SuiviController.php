@@ -24,16 +24,15 @@ use Symfony\Component\Routing\Annotation\Route;
 #[IsGranted('ROLE_TRAVAUX')]
 class SuiviController extends AbstractController
 {
-    public function __construct(private SuiviService $suiviService, private EventDispatcherInterface $dispatcher, private ManagerRegistry $managerRegistry)
-    {
+    public function __construct(
+        private SuiviService $suiviService,
+        private EventDispatcherInterface $dispatcher,
+        private ManagerRegistry $managerRegistry
+    ) {
     }
-    /**
-     * Displays a form to create a new Suivi entity.
-     *
-     *
-     */
+
     #[Route(path: '/new/{id}', name: 'suivi_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, Intervention $intervention) : Response
+    public function new(Request $request, Intervention $intervention): Response
     {
         $suivi = $this->suiviService->initSuivi($intervention);
         $form = $this->createForm(SuiviType::class)
@@ -51,6 +50,7 @@ class SuiviController extends AbstractController
 
             return $this->redirectToRoute('intervention_show', array('id' => $intervention->getId()));
         }
+
         return $this->render(
             '@AcMarcheTravaux/suivi/new.html.twig',
             array(
@@ -60,13 +60,14 @@ class SuiviController extends AbstractController
             )
         );
     }
+
     /**
      * Displays a form to edit an existing Suivi entity.
      *
      *
      */
     #[Route(path: '/{id}/edit', name: 'suivi_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Suivi $suivi) : Response
+    public function edit(Request $request, Suivi $suivi): Response
     {
         $em = $this->managerRegistry->getManager();
         $editForm = $this->createForm(SuiviType::class, $suivi)
@@ -88,6 +89,7 @@ class SuiviController extends AbstractController
 
             return $this->redirectToRoute('intervention_show', array('id' => $intervention->getId()));
         }
+
         return $this->render(
             '@AcMarcheTravaux/suivi/edit.html.twig',
             array(

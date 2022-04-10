@@ -1,218 +1,197 @@
-<div class="card bg-light mb-3">
-    <div class="card-header">
-        <h3>{{ intervention }}</h3>
-        {% if intervention.etat == 'En attente' %}
-            <i class="float-right far fa-hourglass" title="{{ intervention.etat }}"></i>
-        {% endif %}
-    </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-6">
-                <table class='table table-bordered table-hover'>
-                    <tr>
-                        <th>
-                            Numéro:
-                        </th>
-                        <td>
-                            {{ intervention.id }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Priorité:
-                        </th>
-                        <td>
-                            {{ intervention.priorite }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            <i class="far fa-calendar-alt"></i> Demandé le:
-                        </th>
-                        <td>
-                            {{ intervention.createdAt | date('d-m-Y') }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            <i class="far fa-calendar-alt"></i> Reporté au:
-                        </th>
-                        <td>
-                            {% if intervention.dateExecution %}
-                                {{ intervention.dateExecution | date('d-m-Y') }}
-                            {% endif %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            <i class="far fa-calendar-alt"></i> Validé le:
-                        </th>
-                        <td>
-                            {% if intervention.datevalidation %}
-                                {{ intervention.datevalidation | date('d-m-Y') }}
-                            {% endif %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Type:
-                        </th>
-                        <td>
-                            {{ intervention.domaine }}
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <th>
-                            Service:
-                        </th>
-                        <td>
-                            {{ intervention.service }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Bâtiment:
-                        </th>
-                        <td>
-                            {{ intervention.batiment }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Catégorie
-                        </th>
-                        <td>
-                            {{ intervention.categorie }}
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div class="col-md-6">
-                <table class='table table-bordered table-hover'>
-                    <tr>
-                        <th>
-                            Etat:
-                        </th>
-                        <td>
-                            {{ intervention.etat }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            <i class="far fa-calendar-alt"></i> Date rappel:
-                        </th>
-                        <td>
-                            {% if intervention.daterappel %}
-                                {{ intervention.daterappel | date('d-m-Y') }}
-                            {% endif %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            <i class="fas fa-user"></i>
-                            <strong>Affectation:</strong>
-                        </th>
-                        <td>
-                            {{ intervention.affectation | nl2br }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            <strong>Affecté à un privé</strong>
-                        </th>
-                        <td>
-                            {% if intervention.affectePrive %}
-                                Oui
-                            {% endif %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Transmis:
-                        </th>
-                        <td>
-                            {% if intervention.transmis %}
-                                <i class="fas fa-check"></i>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            <i class="far fa-calendar-alt"></i> Soumis le
-                        </th>
-                        <td>
-                            {% if intervention.soumisle %}
-                                {{ intervention.soumisle | date('d-m-Y') }}
-                            {% endif %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            <i class="fas fa-euro-sign"></i> Coût en main
-                            d'oeuvre:
-                        </th>
-                        <td>
-                            {% if intervention.coutmain %}
-                                {{ intervention.coutmain | number_format(2, ',', ' ') }} €
-                            {% endif %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            <i class="fas fa-euro-sign"></i><strong> Coût en
-                                matériel:</strong>
-                        </th>
-                        <td>
-                            {% if intervention.coutmateriel %}
-                                {{ intervention.coutmateriel | number_format(2, ',', ' ') }} €
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% set total = intervention.coutmain + intervention.coutmateriel %}
-                    {% if total > 0 %}
-                        <tr>
-                            <th>
-                                <span class="text-warning">Soit un total de</span>
-                            </th>
-                            <td>
-                                <span class="text-warning">{{ total | number_format(2, ',', ' ') }} €</span>
-                            </td>
-                        </tr>
+<div class="row">
+    <div class="col-md-6">
+        <table class='table table-bordered table-hover'>
+            <tr>
+                <th>
+                    Numéro:
+                </th>
+                <td>
+                    {{ intervention.id }}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Priorité:
+                </th>
+                <td>
+                    {{ intervention.priorite }}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <i class="far fa-calendar-alt"></i> Demandé le:
+                </th>
+                <td>
+                    {{ intervention.createdAt | date('d-m-Y') }}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <i class="far fa-calendar-alt"></i> Reporté au:
+                </th>
+                <td>
+                    {% if intervention.dateExecution %}
+                        {{ intervention.dateExecution | date('d-m-Y') }}
                     {% endif %}
-                    <tr>
-                        <th>
-                            <i class="far fa-calendar-alt"></i> Date de solution:
-                        </th>
-                        <td>
-                            {% if intervention.datesolution %}
-                                {{ intervention.datesolution | date('d-m-Y') }}
-                            {% endif %}
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div class="col-md-12">
-                <br/>
-                <p class="card-text">{{ intervention.descriptif | nl2br }}</p>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <i class="far fa-calendar-alt"></i> Validé le:
+                </th>
+                <td>
+                    {% if intervention.datevalidation %}
+                        {{ intervention.datevalidation | date('d-m-Y') }}
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Type:
+                </th>
+                <td>
+                    {{ intervention.domaine }}
+                </td>
+            </tr>
 
-                {% if intervention.solution %}
-                    <h4 class="text-success">Solution apportée:</h4>
-                    {{ intervention.solution | nl2br }}
-                {% endif %}
-                <br/>
-            </div>
-        </div>
+            <tr>
+                <th>
+                    Service:
+                </th>
+                <td>
+                    {{ intervention.service }}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Bâtiment:
+                </th>
+                <td>
+                    {{ intervention.batiment }}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Catégorie
+                </th>
+                <td>
+                    {{ intervention.categorie }}
+                </td>
+            </tr>
+        </table>
     </div>
-    {% if not pdf %}
-        <div class="card-footer text-muted">
-        <span class="text-muted">
-                {{ 'Created' | trans }} {{ intervention.createdAt|date('d-m-Y H:i:s') }} par {{ intervention.useradd }}
-                . {{ 'Updated' | trans }} {{ intervention.updatedAt|date('d-m-Y H:i:s') }}
-            </span>
-            {% if intervention.archive %}
-                <i class="float-right fas fa-archive" title="Archive"></i>
+    <div class="col-md-6">
+        <table class='table table-bordered table-hover'>
+            <tr>
+                <th>
+                    Etat:
+                </th>
+                <td>
+                    {{ intervention.etat }}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <i class="far fa-calendar-alt"></i> Date rappel:
+                </th>
+                <td>
+                    {% if intervention.daterappel %}
+                        {{ intervention.daterappel | date('d-m-Y') }}
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <i class="fas fa-user"></i>
+                    <strong>Affectation:</strong>
+                </th>
+                <td>
+                    {{ intervention.affectation | nl2br }}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <strong>Affecté à un privé</strong>
+                </th>
+                <td>
+                    {% if intervention.affectePrive %}
+                        Oui
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Transmis:
+                </th>
+                <td>
+                    {% if intervention.transmis %}
+                        <i class="fas fa-check"></i>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <i class="far fa-calendar-alt"></i> Soumis le
+                </th>
+                <td>
+                    {% if intervention.soumisle %}
+                        {{ intervention.soumisle | date('d-m-Y') }}
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <i class="fas fa-euro-sign"></i> Coût en main
+                    d'oeuvre:
+                </th>
+                <td>
+                    {% if intervention.coutmain %}
+                        {{ intervention.coutmain | number_format(2, ',', ' ') }} €
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <i class="fas fa-euro-sign"></i><strong> Coût en
+                        matériel:</strong>
+                </th>
+                <td>
+                    {% if intervention.coutmateriel %}
+                        {{ intervention.coutmateriel | number_format(2, ',', ' ') }} €
+                    {% endif %}
+                </td>
+            </tr>
+            {% set total = intervention.coutmain + intervention.coutmateriel %}
+            {% if total > 0 %}
+                <tr>
+                    <th>
+                        <span class="text-warning">Soit un total de</span>
+                    </th>
+                    <td>
+                        <span class="text-warning">{{ total | number_format(2, ',', ' ') }} €</span>
+                    </td>
+                </tr>
             {% endif %}
-        </div>
-    {% endif %}
+            <tr>
+                <th>
+                    <i class="far fa-calendar-alt"></i> Date de solution:
+                </th>
+                <td>
+                    {% if intervention.datesolution %}
+                        {{ intervention.datesolution | date('d-m-Y') }}
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-12">
+        <br/>
+        <p class="card-text">{{ intervention.descriptif | nl2br }}</p>
+
+        {% if intervention.solution %}
+            <h4 class="text-success">Solution apportée:</h4>
+            {{ intervention.solution | nl2br }}
+        {% endif %}
+        <br/>
+    </div>
 </div>
