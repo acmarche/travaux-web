@@ -172,6 +172,7 @@ class AvaloirRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('avaloir')
             ->addOrderBy('avaloir.updatedAt', 'DESC')
             ->getQuery()
+            ->setMaxResults(1)
             ->getOneOrNullResult();
     }
 }
