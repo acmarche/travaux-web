@@ -124,7 +124,7 @@ class Group implements Stringable
     /**
      * @return Collection|User[]
      */
-    public function getUsers(): array|ArrayCollection
+    public function getUsers(): array|Collection
     {
         return $this->users;
     }
