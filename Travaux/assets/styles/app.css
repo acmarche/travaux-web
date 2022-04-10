@@ -3,6 +3,16 @@
 @import "tokenfield.css";
 @import '~lightgallery/css/lightgallery-bundle.min.css';
 
+label.required:after {
+    content: " *";
+    color: red;
+}
+
+legend.required:after {
+    content: " *";
+    color: red;
+}
+
 .icon-rose {
     color: hotpink;
 }
