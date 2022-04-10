@@ -1,0 +1,17 @@
+{{ form_start(form) }}
+{{ form_errors(form) }}
+<div class="row">
+    <div class="col">
+        {{ form_widget(form.latitude) }}
+    </div>
+    <div class="col">
+        {{ form_widget(form.longitude) }}
+    </div>
+    <div class="col">
+        <button class="btn btn-primary ml-1 mb-2" type="submit"><i class="far fa-save" aria-hidden="true"></i>
+            Sauvegarder
+        </button>
+    </div>
+</div>
+<span class="text-muted">Déplacer le curseur pour corriger la localisation</span>
+{{ form_end(form) }}

@@ -1,0 +1,21 @@
+{% extends '@AcMarcheAvaloir/layout_avaloir.html.twig' %}
+
+{% block body -%}
+    <div class="card">
+        <h3 class="card-header">
+            Détail de la commentaire <strong>{{ entity }}</strong>
+            {% if entity.quartier %}
+                dans le quartier <strong>{{ entity.quartier }}</strong>
+            {% endif %}
+        </h3>
+        <div class="card-body">
+            {% include '@AcMarcheAvaloir/commentaire/actions.html.twig' %}
+            {{ commentaire.content | nl2br }}
+        </div>
+        <div class="card-footer text-muted">
+            {{ 'Created' | trans }} {{ commentaire.createdAt|date('d-m-Y H:i:s') }}
+            . {{ 'Updated' | trans }} {{ commentaire.updatedAt|date('d-m-Y H:i:s') }}
+        </div>
+    </div>
+    {% include '@AcMarcheAvaloir/commentaire/delete.html.twig' %}
+{% endblock %}

@@ -1,0 +1,23 @@
+<h3 class="text-success">Liste des produits</h3>
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Nom</th>
+        <th>Catégorie</th>
+        <th>Quantite</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for produit in categorie.produits %}
+        <tr>
+            <td><a href="{{ path('stock_produit_show', {'id': produit.id}) }}">{{ produit.nom }}</a></td>
+            <td>{{ produit.categorie }}</td>
+            <td>{{ produit.quantite }}</td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="3">no records found</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

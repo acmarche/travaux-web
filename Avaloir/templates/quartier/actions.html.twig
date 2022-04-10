@@ -1,0 +1,23 @@
+{% if is_granted('ROLE_TRAVAUX_AVALOIR') %}
+
+    <a href="{{ path('quartier') }}" class="btn btn-primary" role="button"><i
+                class="fas fa-arrow-left"></i>
+        Retour à la liste</a>
+
+    <a href="{{ path('quartierrue_new', { 'id': quartier.id }) }}" class="btn btn-primary"
+       role="button"><i class="fas fa-list"></i> Ses rues</a>
+
+    <a href="{{ path('nettoyage_quartier_new', { 'id': quartier.id }) }}" class="btn btn-primary"
+       role="button"><i class="far fa-calendar-alt"></i> Ajouter une date de nettoyage</a>
+
+    <a href="{{ path('quartier_edit', { 'id': quartier.id }) }}" class="btn btn-primary" role="button"><i
+                class="far fa-edit"></i>
+        Editer</a>
+
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+        <i class="fas fa-trash"></i> Supprimer
+    </button>
+    <br/>
+
+    <br/>
+{% endif %}

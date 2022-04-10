@@ -1,0 +1,22 @@
+{% extends '@AcMarcheTravaux/layout.html.twig' %}
+
+{% block body -%}
+    <div class="card">
+        <h3 class="card-header">Détail du document</h3>
+        <div class="card-body">
+
+            {% include '@AcMarcheTravaux/document/actions.html.twig' %}
+
+            {% if 'image' in entity.mime %}
+                <img src="{{ entity | apptravaux_download | imagine_filter('actravaux_zoom') }}"
+                     alt="img"/>
+                <br/><br/>
+            {% endif %}
+
+            <i class="fas fa-download"></i>
+            <a href="{{ absolute_url(entity | apptravaux_download ) }}">Télécharger</a>
+        </div>
+    </div>
+
+    {% include '@AcMarcheTravaux/document/delete.html.twig' %}
+{% endblock %}

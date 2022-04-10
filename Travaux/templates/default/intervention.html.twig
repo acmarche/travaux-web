@@ -1,0 +1,13 @@
+{# template use by annexes #}
+<h4>Liste des intervention</h4>
+<ul class="list-group">
+    {% for intervention in intervention %}
+        <li class="list-group-item">
+            <a href="{{ path('intervention_show', { 'id': intervention.id }) }}" title="Détail de l'intervention">
+                {{ intervention.intitule }}
+            </a>
+        </li>
+    {% else %}
+        <li class="list-group-item">Aucun intervention</li>
+    {% endfor %}
+</ul>

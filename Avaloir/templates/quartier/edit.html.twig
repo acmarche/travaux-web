@@ -1,0 +1,11 @@
+{% extends '@AcMarcheAvaloir/layout_avaloir.html.twig' %}
+
+{% block body -%}
+    <div class="card">
+        <h3 class="card-header">Edition de {{ entity }}</h3>
+        <div class="card-body">
+            {{ form(edit_form) }}
+        </div>
+    </div>
+{% endblock %}
+

@@ -1,0 +1,18 @@
+{% extends '@AcMarcheStock/layout.html.twig' %}
+
+
+{% block body %}
+
+    <div class="card">
+        <h3 class="card-header">{{ produit.nom }}</h3>
+        <div class="card-body">
+            {{ include('@AcMarcheStock/produit/_form.html.twig', {'button_label': 'Update'}) }}
+
+            <br/>
+            <a href="{{ path('stock_produit_show',{'id': produit.id}) }}"><i class="fas fa-arrow-left"></i>
+                Annuler</a>
+        </div>
+    </div>
+
+    {{ include('@AcMarcheStock/produit/_delete_form.html.twig') }}
+{% endblock %}

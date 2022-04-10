@@ -1,0 +1,7 @@
+Votre demande d'intervention {{ intervention.intitule }} a été {{ result }} {% if dateExecution %} au {{ dateExecution|date('d-m-Y') }} {% endif %}
+
+{{ message }}
+
+{% if result == 'acceptée' %}
+{{ url('intervention_show', {'id': intervention.id}) }}
+{% endif %}

@@ -1,0 +1,29 @@
+{% if is_granted('ROLE_TRAVAUX_ADMIN') or is_granted('ROLE_TRAVAUX_REDACTEUR') %}
+    <div class="modal fade" id="archiveModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        {% if intervention.archive %}Désarchiver
+                        {% else %}
+                            Archiver
+                        {% endif %} une intervention
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <br/> <strong>{{ intervention }} </strong>
+                </div>
+                <div class="modal-footer">
+                    <form method="post" action="{{ path('intervention_archive_set', {'id': intervention.id}) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('archive' ~ intervention.id) }}">
+                        <button type="button" class="btn btn-secondary"
+                                data-bs-dismiss="modal">Annuler
+                        </button>
+                        <button type="submit" class="btn btn-warning">Archiver l'intervention</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}

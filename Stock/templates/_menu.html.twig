@@ -1,0 +1,26 @@
+{% set action = app.request.attributes.get("_route") %}
+<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    {% if is_granted('ROLE_TRAVAUX_AVALOIR') %}
+        <li>
+            <a href="{{ path('stock_categorie_index') }}" class="nav-link px-2 link-dark">
+                Catégories</a>
+        </li>
+        <li>
+            <a href="{{ path('stock_produit_index') }}" class="nav-link">
+                Produits
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('stock_produit_new') }}" class="nav-link">
+                <i class="fas fa-plus"></i> Nouveau produit
+            </a>
+        </li>
+    {% endif %}
+    {% if routeExists('intervention') %}
+        {% if is_granted('ROLE_TRAVAUX') %}
+            <li class="nav-item">
+                <a href="{{ path('intervention') }}" class="nav-link">Interventions</a>
+            </li>
+        {% endif %}
+    {% endif %}
+</ul>

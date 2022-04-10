@@ -1,0 +1,104 @@
+{{ form_start(form, { 'attr': {'class': 'well'} }) }}
+{{ form_errors(form) }}
+<div class="row">
+    <div class="col-md-6">
+        {{ form_row(form.intitule) }}
+    </div>
+    <div class="col-md-6">
+        {% if form.priorite is defined %}
+            {{ form_row(form.priorite) }}
+        {% endif %}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+
+        <div class="row">
+
+            <div class="col-md-6">
+                {{ form_row(form.categorie) }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form_row(form.domaine) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        {{ form_row(form.date_rappel) }}
+    </div>
+
+</div>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="row">
+
+            <div class="col-md-6">
+                {{ form_row(form.service) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.batiment) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+
+        {{ form_row(form.date_execution) }}
+        {{ form_row(form.transmis) }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        {% if form.etat is defined %}
+            {{ form_row(form.etat) }}
+        {% endif %}
+    </div>
+
+    <div class="col-md-6">
+
+        {{ form_row(form.affectation) }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        {% if not is_granted('ROLE_TRAVAUX_ADMIN') %}
+            <div class="alert alert-warning">
+                Pour le descriptif, pensez à bien détailler<br/>
+                (Metré, quantités...)
+            </div>
+        {% endif %}
+        {{ form_row(form.descriptif) }}
+    </div>
+    <div class="col-md-6">
+        {{ form_row(form.affectePrive) }}
+        {{ form_row(form.soumis_le) }}
+
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_row(form.cout_main) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.cout_materiel) }}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        {{ form_row(form.solution) }}
+    </div>
+    <div class="col-md-6">
+        {{ form_row(form.date_solution) }}
+    </div>
+</div>
+
+{{ form_end(form) }}

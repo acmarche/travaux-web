@@ -1,0 +1,15 @@
+{% extends '@AcMarcheTravaux/layout.html.twig' %}
+
+{% block body -%}
+    <div class="card">
+        <h3 class="card-header">{{ utilisateur }}</h3>
+        <div class="card-body">
+            {{ form(edit_form) }}
+            <a href="{{ path('actravaux_utilisateur') }}">
+                <span class="fas fa-list"></span> Annuler et retour à la liste
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
+

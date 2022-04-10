@@ -1,0 +1,85 @@
+{% extends '@AcMarcheTravaux/layout.html.twig' %}
+{% block body %}
+
+    <div class="card">
+        <h3 class="card-header">Liste des interventions ({{ interventions | length }})</h3>
+        <div class="card-body">
+
+            {% include '@AcMarcheTravaux/search/intervention.html.twig' %}
+
+            {% if interventions | length > 0 %}
+
+                <table class='table table-bordered table-hover'>
+                    <thead>
+                    <tr>
+                        <th scope="col">Numéro</th>
+                        <th scope="col">Intitule</th>
+                        <th scope="col">Dernier suivis</th>
+                        <th scope="col">Type</th>
+                        <th scope="col" class="hidden-xs">Etat</th>
+                        <th scope="col" class="hidden-xs">Transmis</th>
+                        <th scope="col">Priorité</th>
+                        <th scope="col" class="hidden-xs" style="width: 10%;">Validé le</th>
+                        <th scope="col">Encodé par</th>
+                        <th scope="col" class="hidden-xs">Affection</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for intervention in interventions %}
+
+                        {% set class = '' %}
+                        {% set title = '' %}
+                        {% if intervention.priorite == 'Haute' and intervention.etat != 'Clôturé' %}
+                            {% set class = 'table-danger' %}
+                        {% endif %}
+
+                        {% if workflow_has_marked_place(intervention, 'auteur_checking') %}
+                            {% set class = 'table-info' %}
+                            {% set title = 'Intervention doit être validée par un auteur' %}
+                        {% endif %}
+                        {% if workflow_has_marked_place(intervention, 'admin_checking') %}
+                            {% set class = 'table-info' %}
+                            {% set title = 'Intervention doit être validée par un admin' %}
+                        {% endif %}
+
+                        <tr class="{{ class }}" id="{{ intervention.id }}" title="{{ title }}">
+                            <td>
+                                {% if anchor == intervention.id %}
+                                    <i class="fas fa-arrow-right"></i>
+                                {% endif %}
+
+                                {{ intervention.id }}
+
+                                {% if intervention.etat == 'En attente' %}
+                                    <br/>  <i class="far fa-hourglass" title="{{ intervention.etat }}"></i>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ path('intervention_show', { 'id': intervention.id }) }}"
+                                   title="Détail de l'intervention">{{ intervention.intitule }}</a>
+                            </td>
+                            <td>{{ intervention.lastsuivi | slice(0, 200) }}</td>
+                            <td>{{ intervention.domaine }}</td>
+                            <td class="hidden-xs">{{ intervention.etat }}</td>
+                            <td class="hidden-xs">
+                                {% if intervention.transmis %}
+                                    <i class="fas fa-check"></i>
+                                {% endif %}
+                            </td>
+                            <td>{{ intervention.priorite }}</td>
+                            <td class="hidden-xs">
+                                {% if intervention.dateValidation %}
+                                    {{ intervention.dateValidation | date('d-m-Y') }}
+                                {% endif %}
+                            </td>
+                            <td>{{ intervention.useradd }}</td>
+                            <td class="hidden-xs">{{ intervention.affectation }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

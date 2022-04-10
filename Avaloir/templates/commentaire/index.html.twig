@@ -1,0 +1,32 @@
+{% extends '@AcMarcheAvaloir/layout_avaloir.html.twig' %}
+
+{% block body -%}
+    <div class="card">
+        <h3 class="card-header">Liste des commentaires</h3>
+        <div class="card-body">
+            <div class="alert alert-warning">
+                La liste des commentaires est générées automatiquement suivant les coordonnées gps des avaloirs
+            </div>
+            {% if commentaires | length > 0 %}
+                <table class='table table-bordered table-hover'>
+                    <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Nbre d'avaloirs</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for commentaire in commentaires %}
+                        <tr>
+                            <td>{{ commentaire }}</td>
+                            <td>todo</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                Aucune
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

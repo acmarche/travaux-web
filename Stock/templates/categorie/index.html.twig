@@ -1,0 +1,37 @@
+{% extends '@AcMarcheStock/layout.html.twig' %}
+
+{% block title %}Categorie index{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <h3 class="card-header">Liste des catégories</h3>
+        <div class="card-body">
+
+            <a class="btn btn-primary" href="{{ path('stock_categorie_new') }}">
+                <i class="fas fa-plus"></i> Nouvelle catégorie</a>
+            <br/> <br/>
+
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Nombre de produits</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for categorie in categories %}
+                    <tr>
+                        <td><a href="{{ path('stock_categorie_show', {'id': categorie.id}) }}">{{ categorie.nom }}</a>
+                        </td>
+                        <td>{{ categorie.produits|length }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td>no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

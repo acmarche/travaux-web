@@ -1,0 +1,31 @@
+{% extends '@AcMarcheStock/layout.html.twig' %}
+
+{% block title %}Produit{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <h3 class="card-header">{{ produit.nom }}</h3>
+        <div class="card-body">
+            {% include '@AcMarcheStock/produit/_actions.html.twig' %}
+
+            {{ produit.description | nl2br }}
+
+            <table class="table table-bordered">
+                <tr>
+                    <th>Quantite</th>
+                    <td>{{ produit.quantite }}</td>
+                </tr>
+                <tr>
+                    <th>Catégorie</th>
+                    <td>{{ produit.categorie }}</td>
+                </tr>
+                <tr>
+                    <th>Reference</th>
+                    <td>{{ produit.reference }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    {{ include('@AcMarcheStock/produit/_delete_form.html.twig') }}
+{% endblock %}

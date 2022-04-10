@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link href="{{ absolute_url(asset('bundles/travaux/css/pdf.css')) }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ bootcdn }}">
+    <title>{{ title }}</title>
+</head>
+<body>
+
+<div class="container">
+
+    {% block content %}
+
+    {% endblock %}
+
+</div>
+</body>
+</html>

@@ -1,0 +1,32 @@
+{% if intervention.documents | length > 0 %}
+    <div class="d-print-none">
+        <h3>Document(s) joint(s)</h3>
+
+        {% if intervention.documents | length > 0 %}
+            <table class='table table-bordered table-hover'>
+                <tr>
+                    {% for document in intervention.documents %}
+                    <td>
+                        <a href="{{ path('document_show', { 'id': document.id }) }}">
+                            {% if 'image' in document.mime %}
+                                <img src="{{ document | apptravaux_download | imagine_filter('actravaux_thumb') }}"
+                                     alt="img"/>
+                            {% else %}
+                                <i class="fas fa-download"></i>
+                                <a href="{{ absolute_url(document | apptravaux_download ) }}">Télécharger</a>
+                            {% endif %}
+                        </a>
+                    </td>
+                    {% if loop.index is divisible by(2) %}
+                </tr>
+                <tr>
+                    {% endif %}
+                    {% endfor %}
+                    {% if intervention.documents | length is not divisible by(2) %}
+                        <td></td>
+                    {% endif %}
+                </tr>
+            </table>
+        {% endif %}
+    </div>
+{% endif %}

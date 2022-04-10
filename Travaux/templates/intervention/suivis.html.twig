@@ -1,0 +1,30 @@
+{% if suivis | length > 0 %}
+
+    <h3>Suivis</h3>
+    {{ form_start(form, { 'attr': {'class': 'well'} }) }}
+    {{ form_errors(form, { 'attr': {'class': 'well'} }) }}
+
+    <button type="submit" name="delete" class="btn btn-danger btn-sm float-right d-print-none">
+        <i class="fas fa-trash"></i> Supprimer le(s) suivi(s)
+    </button>
+    <br/>
+    <div class="clear-fix"></div>
+    <br/>
+    {% for suivi in suivis %}
+        <div class="card bg-light mb-3">
+
+            <div class="card-body">
+                <p class="card-text">
+                    {{ suivi.descriptif }}
+                </p>
+            </div>
+
+            <div class="card-footer text-muted">
+                {{ 'Created' | trans }} {{ suivi.createdAt|date('d-m-Y H:i:s') }} par {{ suivi.useradd }}
+                . {{ 'Updated' | trans }} {{ suivi.updatedAt|date('d-m-Y H:i:s') }}
+                {% include '@AcMarcheTravaux/intervention/actions_suvi.html.twig' %}
+            </div>
+        </div>
+    {% endfor %}
+    {{ form_end(form) }}
+{% endif %}

@@ -1,0 +1,44 @@
+{% extends '@AcMarcheTravaux/layout.html.twig' %}
+
+{% block body -%}
+
+    <div class="card">
+        <h3 class="card-header">Interventions reportées</h3>
+        <div class="card-body">
+            {% if interventions | length > 0 %}
+                <table class='table table-bordered table-hover'>
+                    <thead>
+                    <tr>
+                        <th>Intitule</th>
+                        <th>Reporté le</th>
+                        <th>Demandé le</th>
+                        <th>Par</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for intervention in interventions %}
+                        <tr>
+                            <td>
+                                <a title="Détails" href="{{ path('intervention_show', { 'id': intervention.id }) }}">
+                                    {{ intervention }}
+                                </a>
+                            </td>
+                            <td>
+                                {{ intervention.dateExecution | date('d-m-Y') }}
+                            </td>
+                            <td>
+                                {{ intervention.dateintroduction | date('d-m-Y') }}
+                            </td>
+                            <td>
+                                {{ intervention.useradd }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Aucune</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

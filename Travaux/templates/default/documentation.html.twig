@@ -1,0 +1,61 @@
+{% extends '@AcMarcheTravaux/layout.html.twig' %}
+
+{% block body %}
+    <div class="card">
+        <h3 class="card-header">Documentation</h3>
+        <div class="card-body">
+            <h4>Les droits</h4>
+
+            <h5 class="text-success">Ajout d'une nouvelle intervention</h5>
+
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Ajouté par un</th>
+                    <th>Validé par ROLE_TRAVAUX_AUTEUR</th>
+                    <th>Validé par ROLE_TRAVAUX_REDACTEUR</th>
+                    <th>Validé par ROLE_TRAVAUX_ADMIN</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Contributeur</td>
+                    <td>X</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Auteur</td>
+                    <td></td>
+                    <td></td>
+                    <td>X</td>
+                </tr>
+                <tr>
+                    <td>Rédacteur</td>
+                    <td></td>
+                    <td></td>
+                    <td>X</td>
+                </tr>
+                <tr>
+                    <td>Administrateur</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <h4>Les notifications par mail</h4>
+            <p>Lors de l'ajout d'une intervention</p>
+
+            TRAVAUX_ADMIN
+
+            <p>Lors de l'archivage d'une intervention</p>
+            TRAVAUX_REDACTEUR et TRAVAUX_ADMIN
+
+            <p>Lors de l'ajout d'un suivis</p>
+
+        </div>
+    </div>
+
+{% endblock %}

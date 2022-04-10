@@ -1,0 +1,18 @@
+{% if interventions | length > 0 or reportees | length > 0 %}
+    <div class="alert alert-warning">
+
+        {% if is_granted("ROLE_TRAVAUX_VALIDATION") %}
+            <a href="{{ path('validation') }}" class="alert-link">
+                <span class="badge badge-secondary">{{ interventions | length }}</span>
+                intervention(s) à traiter
+            </a>
+        {% endif %}
+
+        {% if (is_granted("ROLE_TRAVAUX_ADMIN") or is_granted("ROLE_TRAVAUX_REDACTEUR")) and reportees | length > 0 %}
+            <a href="{{ path('intervention_reporte') }}" class="alert-link"><span class="badge badge-secondary">
+                {{ reportees | length }}</span> intervention(s) reportées
+            </a>
+        {% endif %}
+
+    </div>
+{% endif %}

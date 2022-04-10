@@ -1,0 +1,58 @@
+{% extends '@AcMarcheAvaloir/layout_avaloir.html.twig' %}
+
+{% block body -%}
+
+    <div class="card">
+        <h3 class="card-header">Détail du quartier <strong>{{ quartier }}</strong></h3>
+        <div class="card-body">
+            {% include '@AcMarcheAvaloir/quartier/actions.html.twig' with {'quartier': quartier } %}
+            <h4>Liste des rues</h4>
+            <table class='table table-bordered table-hover'>
+                <thead>
+                <tr>
+                    <th>Rue</th>
+                    <th>Avaloirs</th>
+                    <th>Dernière date de nettoyage</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for village, rues in data %}
+                    {% for rue in rues %}
+                        <tr>
+                            <td>
+                                <a href="{{ path('rue_show', { 'id': rue.id }) }}">
+                                    {{ rue }}
+                                </a>
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        {% for avaloir in rue.avaloirs %}
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <a href="{{ path('avaloir_show', { 'id': avaloir.id }) }}">
+                                        Avaloir {{ avaloir.id }} au {{ avaloir }} </a>
+                                </td>
+                                <td>
+                                    {% if avaloir.dates | length > 0 %}
+                                        {% set jour = avaloir.dates | first %}
+                                        {{ jour }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td>Aucne</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% include '@AcMarcheAvaloir/quartier/delete.html.twig' %}
+{% endblock %}

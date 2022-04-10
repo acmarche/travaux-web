@@ -1,0 +1,17 @@
+{% extends '@AcMarcheTravaux/layout.html.twig' %}
+
+{% block body -%}
+
+    <div class="card">
+        <h3 class="card-header">Edition de <strong>{{ entity }}</strong></h3>
+        <div class="card-body">
+
+            {% include '@AcMarcheTravaux/intervention/form.html.twig' %}
+
+            <br/>
+            <a href="{{ path('intervention_show',{'id':entity.id}) }}"><i
+                        class="fas fa-arrow-left"></i> Annuler</a>
+        </div>
+    </div>
+
+{% endblock %}

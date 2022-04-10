@@ -1,0 +1,13 @@
+{% extends '@AcMarcheTravaux/layout.html.twig' %}
+
+{% block body -%}
+    <div class="card">
+        <h3 class="card-header">Détail du bâtiment <strong>{{ entity.intitule }}</strong></h3>
+        <div class="card-body">
+            {% include '@AcMarcheTravaux/domaine/actions.html.twig' %}
+
+            {% include '@AcMarcheTravaux/default/intervention.html.twig' with {'intervention': entity.intervention } %}
+        </div>
+    </div>
+    {% include '@AcMarcheTravaux/domaine/delete.html.twig' %}
+{% endblock %}

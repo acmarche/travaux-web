@@ -1,0 +1,37 @@
+{% extends '@AcMarcheAvaloir/layout_avaloir.html.twig' %}
+
+{% block body -%}
+    <div class="card">
+        <h3 class="card-header">Liste des rues</h3>
+        <div class="card-body">
+            {% if is_granted('ROLE_TRAVAUX_AVALOIR') %}
+                <a href="{{ path('rue_new') }}" class="btn btn-primary" role="button"><i
+                            class="fas fa-plus"></i> Ajouter</a>
+                <br/><br/>
+            {% endif %}
+
+            {% if rues | length > 0 %}
+                <table class='table table-bordered table-hover'>
+                    <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Village</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for rue in rues %}
+                        <tr>
+                            <td>
+                                <a href="{{ path('rue_show', {'id': rue.id}) }}">{{ rue.nom }}</a>
+                            </td>
+                            <td>{{ rue.village }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                Aucune
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

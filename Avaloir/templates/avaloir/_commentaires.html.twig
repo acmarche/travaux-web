@@ -1,0 +1,14 @@
+<h4>Liste des commentaires</h4>
+
+<table class="table table-border">
+    {% for commentaire in avaloir.commentaires %}
+        <tr>
+            <td>
+                {{ commentaire.content | nl2br }}
+            </td>
+            <td>
+                {{ commentaire.createdAt | format_date('full') }}
+            </td>
+        </tr>
+    {% endfor %}
+</table>

@@ -1,0 +1,15 @@
+<div class="d-print-none">
+
+    {{ form_start(search_form, { 'attr': {'class': 'form-inline'}}) }}
+    {{ form_errors(search_form) }}
+
+    {{ form_row(search_form.nom, {label_attr: {class: 'sr-only'} }) }}
+
+    {{ form_row(search_form.categorie, {label_attr: {class: 'sr-only'}, attr:{'class': 'custom-select  my-1 ml-sm-2 mr-sm-2'}}) }}
+
+    <input type="submit" class="btn btn-primary ml-1 mr-1" value="Rechercher" name="submit">
+    {{ form_row(search_form.raz) }}
+
+    {{ form_end(search_form) }}
+</div>
+<br/>

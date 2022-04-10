@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="fr" class="h-100">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}AppTravaux{% endblock %}</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('bundles/travaux/favicon.ico') }}"/>
+    {% block stylesheets %}{% endblock %}
+
+    {{ encore_entry_link_tags('app') }}
+    {{ encore_entry_script_tags('app') }}
+
+</head>
+<body class="d-flex flex-column h-100">
+{% set action = app.request.attributes.get("_route") %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm border-bottom">
+    <div class="container">
+        {% block brand %}
+            <a class="navbar-brand" href="{{ path('intervention') }}">
+                <i class="fas fa-store icon-rose"></i>
+                <span class="ms-2 fs-4 navbar-text">Intervention</span>
+            </a>
+        {% endblock %}
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            {% block menu_top %}
+                {% include '@AcMarcheTravaux/_menu.html.twig' %}
+            {% endblock %}
+        </div>
+    </div>
+</nav>
+
+<main role="main" {% block main_class %}class="container pt-3"{% endblock %}>
+
+    {% include '@AcMarcheTravaux/_flash_messages.html.twig' %}
+
+    {% block notifications %}
+
+    {% endblock %}
+
+    {% block body %}
+
+    {% endblock %}
+</main>
+
+{% block footer %}
+    <footer class="footer mt-auto py-3 bg-light">
+        <div class="container d-flex justify-content-center">
+            <div class="text-muted">
+                Marche.Be
+            </div>
+        </div>
+    </footer>
+{% endblock %}
+{% block scripts %}{% endblock %}
+</body>
+</html>

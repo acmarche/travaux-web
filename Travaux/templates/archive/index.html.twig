@@ -1,0 +1,57 @@
+{% extends '@AcMarcheTravaux/layout.html.twig' %}
+
+{% block body %}
+    <div class="card">
+        <h3 class="card-header">Archive des interventions ({{ entities | length }})</h3>
+        <div class="card-body">
+
+            {% include '@AcMarcheTravaux/search/intervention.html.twig' %}
+
+            {% if entities | length > 0 %}
+
+                <table class='table table-bordered table-hover'>
+                    <thead>
+                    <tr>
+                        <th scope="col">Numéro</th>
+                        <th scope="col">Intitule</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Etat</th>
+                        <th scope="col">Transmis</th>
+                        <th scope="col">Priorité</th>
+                        <th scope="col">Demandé le</th>
+                        <th scope="col">Encodé par</th>
+                        <th scope="col">Affection</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for entity in entities %}
+                        {% set class = '' %}
+                        {% if entity.priorite == 'Haute' and entity.etat != 'Clôturé' %}
+                            {% set class = 'danger' %}
+                        {% endif %}
+
+                        <tr class="{{ class }}">
+                            <td>{{ entity.id }}</td>
+                            <td>
+                                <a href="{{ path('intervention_show', { 'id': entity.id }) }}"
+                                   title="Détail de l'intervention">{{ entity.intitule }}</a>
+                            </td>
+                            <td>{{ entity.domaine }}</td>
+                            <td>{{ entity.etat }}</td>
+                            <td>{{ entity.transmis }}</td>
+                            <td>{{ entity.priorite }}</td>
+                            <td>
+                                {% if entity.dateintroduction %}
+                                    {{ entity.dateintroduction | date('d-m-Y') }}
+                                {% endif %}
+                            </td>
+                            <td>{{ entity.useradd }}</td>
+                            <td>{{ entity.affectation }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

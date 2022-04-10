@@ -1,0 +1,8 @@
+{% if app.user.username == suivi.useradd %}
+    <div class="float-right d-print-none">
+
+        <a href="{{ path('suivi_edit', { 'id': suivi.id }) }}"
+           class="btn btn-primary btn-sm"
+           role="button"><i class="far fa-edit"></i> Editer</a> | <input type="checkbox" name="suivis[]" value="{{ suivi.id }}" class="checkbox"/>
+    </div>
+{% endif %}

@@ -1,0 +1,9 @@
+{% extends '@AcMarcheTravaux/pdf/basePdf.html.twig' %}
+
+{% block content %}
+
+    {% for intervention in interventions %}
+        {{ include('@AcMarcheTravaux/pdf/_panel.html.twig') }}
+    {% endfor %}
+
+{% endblock %}

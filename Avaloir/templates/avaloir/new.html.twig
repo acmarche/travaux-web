@@ -1,0 +1,21 @@
+{% extends '@AcMarcheAvaloir/layout_avaloir.html.twig' %}
+
+{% block body -%}
+    <div class="card">
+        <h3 class="card-header">Nouvel avaloir</h3>
+        <div class="card-body">
+            {{ form_start(form, { 'attr': {'class': 'well'} }) }}
+            {{ form_errors(form) }}
+            {{ stimulus_controller('autocomplete', {url: path('rue_suggestion')}) }}>
+            {{ form_row(form.rue) }}
+            <ul class="list-group" data-autocomplete-target="results" style="position: absolute;z-index: 1000;"></ul>
+            {{ form_row(form.numero) }}
+            {% for dateField in form.dates %}
+                {{ form_errors(dateField) }}
+                {{ form_widget(dateField) }}
+            {% endfor %}
+            {{ form_row(form.descriptif) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

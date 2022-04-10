@@ -1,0 +1,28 @@
+{% extends '@AcMarcheTravaux/layout.html.twig' %}
+
+{% block body %}
+    <div class="card">
+        <h3 class="card-header">{{ utilisateur }}</h3>
+        <div class="card-body">
+            {% include '@AcMarcheTravaux/utilisateur/actions.html.twig' with {'utilisateur': utilisateur } %}
+            <br/>
+            <table class="table table-bordered table-hover">
+                <tbody>
+                <tr>
+                    <th>Nom prénom</th>
+                    <td>
+                        {{ utilisateur.nom }} {{ utilisateur.prenom }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>
+                        {{ utilisateur.email }}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% include '@AcMarcheTravaux/utilisateur/delete.html.twig' %}
+{% endblock %}

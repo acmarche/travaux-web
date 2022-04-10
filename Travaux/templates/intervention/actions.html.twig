@@ -1,0 +1,42 @@
+<div class="gy-2 gx-1 d-print-none">
+
+    <a href="{{ path('intervention_anchor', {'anchor' : intervention.id }) }}#{{ intervention.id }}"
+       class="btn btn-primary"
+       role="button"><i class="fas fa-list"></i> Retour à la liste</a>
+
+    {% if is_granted('ROLE_TRAVAUX_ADD') %}
+
+        <a href="{{ path('intervention_edit', { 'id': intervention.id }) }}" class="btn btn-primary"
+           role="button"><i class="far fa-edit"></i> Editer</a>
+
+        <a href="{{ path('document_new', { 'id': intervention.id }) }}" class="btn btn-primary" role="button"><i
+                    class="fa fa-plus"></i> Joindre un fichier</a>
+    {% endif %}
+
+    <a href="{{ path('suivi_new', { 'id': intervention.id }) }}" class="btn btn-primary" role="button"><i
+                class="fa fa-plus"></i> Ajouter un suivi</a>
+
+    <a href="javascript:window.print();" class="btn btn-primary" role="button">
+        <i class="fas fa-print"></i> Imprimer</a>
+
+    {% if is_granted('ROLE_TRAVAUX_ADMIN') or is_granted('ROLE_TRAVAUX_REDACTEUR') %}
+
+        {% if intervention.archive %}
+            <a href="#" class="btn btn-warning" role="button" data-bs-toggle="modal"
+               data-bs-target="#archiveModal">
+                <i class="far fa-file-archive"></i> Désarchiver
+            </a>
+        {% else %}
+            <a href="#" class="btn btn-warning" role="button" data-bs-toggle="modal"
+               data-bs-target="#archiveModal">
+                <i class="fas fa-archive"></i> Archiver
+            </a>
+        {% endif %}
+
+        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+            <i class="fas fa-trash"></i> Supprimer l'intervention
+        </button>
+
+    {% endif %}
+</div>
+<br/>

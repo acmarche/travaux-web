@@ -1,0 +1,38 @@
+<h4 class="text-success">Avaloir(s)</h4>
+{% if avaloirs | length > 0 %}
+    <table class='table table-bordered table-hover'>
+        <thead>
+        <tr>
+            <th>Numéro</th>
+            <th>Village</th>
+            <th>Quartier</th>
+            <th>Rue et numéro</th>
+            <th>Dernière date de nettoyage</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for avaloir in avaloirs %}
+            <tr>
+                <td>
+                    <a title="Consulter l'avaloir" href="{{ path('avaloir_show', { 'id': avaloir.id }) }}">
+                        {{ avaloir.id }}
+                    </a>
+                </td>
+                <td>{{ avaloir.localite }}</td>
+                <td>
+
+                </td>
+                <td>
+                        {{ avaloir.rue }} {{ avaloir.numero }}
+                </td>
+                <td>
+                    {% if avaloir.dates | length > 0 %}
+                        {% set jour = avaloir.dates | first %}
+                        {{ jour }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}

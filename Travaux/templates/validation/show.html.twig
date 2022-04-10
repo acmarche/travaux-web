@@ -1,0 +1,42 @@
+{% extends '@AcMarcheTravaux/layout.html.twig' %}
+
+{% block body -%}
+
+    <div class="card">
+        <h3 class="card-header">Intervention <strong>{{ entity }}</strong> à traiter</h3>
+        <div class="card-body">
+            <p class="text-muted">{{ entity.descriptif | nl2br }}</p>
+
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+
+            {{ form_row(form.message) }}
+
+            {% if form.date_execution is defined %}
+                {{ form_row(form.date_execution) }}
+            {% endif %}
+
+            <div class="row">
+                <div class="col">
+                    {{ form_row(form.accepter) }}
+                </div>
+
+                {% if form.plusinfo is defined %}
+                    <div class="col">
+                        {{ form_row(form.plusinfo) }}
+                    </div>
+                {% endif %}
+
+                {% if form.reporter is defined %}
+                    <div class="col">{{ form_row(form.reporter) }}
+                    </div>
+                {% endif %}
+
+                <div class="col">
+                    {{ form_row(form.refuser) }}
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

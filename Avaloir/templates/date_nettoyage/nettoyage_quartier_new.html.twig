@@ -1,0 +1,10 @@
+{% extends '@AcMarcheAvaloir/layout_avaloir.html.twig' %}
+
+{% block body -%}
+    <div class="card">
+        <h3 class="card-header">Nouvelle date de nettoyage pour le quartier <strong>{{ quartier }}</strong></h3>
+        <div class="card-body">
+            {{ form(form) }}
+        </div>
+    </div>
+{% endblock %}

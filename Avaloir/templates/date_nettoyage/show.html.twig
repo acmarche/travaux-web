@@ -1,0 +1,15 @@
+{% extends '@AcMarcheAvaloir/layout_avaloir.html.twig' %}
+
+{% block body -%}
+
+    <div class="card">
+        <h3 class="card-header">Avaloir <strong>{{ date.avaloir }}</strong> au <strong>{{ date }}</strong></h3>
+        <div class="card-body">
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                <i class="fas fa-trash"></i> Supprimer la date de nettoyage
+            </button>
+        </div>
+    </div>
+    {% include '@AcMarcheAvaloir/date_nettoyage/delete.html.twig' %}
+
+{% endblock %}

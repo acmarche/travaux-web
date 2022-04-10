@@ -1,0 +1,23 @@
+{% if is_granted('ROLE_TRAVAUX_AVALOIR') %}
+
+    <a href="{{ path('avaloir') }}" class="btn btn-primary" role="button"><i
+                class="fas fa-arrow-left"></i>
+        Retour à la liste</a>
+
+    <a href="{{ path('datenettoyage_new', { 'id': avaloir.id }) }}" class="btn btn-primary" role="button"><i
+                class="far fa-calendar-alt"></i>
+        Ajouter une date de nettoyage</a>
+
+    <a href="{{ path('commentaire_new', { 'id': avaloir.id }) }}" class="btn btn-primary" role="button">
+        <i class="far fa-comment-dots"></i>
+        Ajouter un commentaire</a>
+
+    <a href="{{ path('avaloir_edit', { 'id': avaloir.id }) }}" class="btn btn-primary" role="button"><i
+                class="far fa-edit"></i>
+        Editer</a>
+
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+        <i class="fas fa-trash"></i> Supprimer l'avaloir
+    </button>
+    <br/>
+{% endif %}

@@ -1,0 +1,35 @@
+{% extends '@AcMarcheTravaux/layout.html.twig' %}
+
+{% block body -%}
+    <div class="card">
+        <h3 class="card-header">Liste des utilisateurs</h3>
+        <div class="card-body">
+            <a href="{{ path('actravaux_utilisateur_new') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Ajouter un utilisateur
+            </a> <br/><br/>
+
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Groupe</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for utilisateur in users %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('actravaux_utilisateur_show', { 'id': utilisateur.id }) }}">
+                                {{ utilisateur.nom }} {{ utilisateur.prenom }}
+                            </a>
+                        </td>
+                        <td>{{ utilisateur.email }}</td>
+                        <td>{{ utilisateur.groups | join(',') }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

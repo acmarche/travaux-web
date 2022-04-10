@@ -1,0 +1,160 @@
+<?php
+
+namespace AcMarche\Avaloir\Repository;
+
+use Doctrine\ORM\QueryBuilder;
+use AcMarche\Avaloir\Entity\Village;
+use AcMarche\Avaloir\Entity\Avaloir;
+use AcMarche\Avaloir\Entity\Rue;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
+
+/**
+ * @method Avaloir|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Avaloir|null findOneBy(array $criteria, array $orderBy = null)
+ * method Avaloir[]    findAll()
+ * @method Avaloir[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ */
+class AvaloirRepository extends ServiceEntityRepository
+{
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Avaloir::class);
+    }
+
+    public function flush(): void
+    {
+        $this->_em->flush();
+    }
+
+    public function persist(Avaloir $avaloir): void
+    {
+        $this->_em->persist($avaloir);
+    }
+
+    /**
+     * @return Avaloir[]
+     */
+    public function findAll(): array
+    {
+        return $this->findBy(array(), array('id' => 'DESC'));
+    }
+
+    /**
+     * @return Avaloir[]
+     */
+    public function findLast(int $max = 300):array
+    {
+        return $this->createQueryBuilder('avaloir')
+            ->leftJoin('avaloir.dates', 'dates', 'WITH')
+            ->leftJoin('avaloir.commentaires', 'commentaires', 'WITH')
+            ->addSelect('dates', 'commentaires')
+            ->setMaxResults($max)
+            ->addOrderBy('avaloir.createdAt', 'DESC')
+            ->getQuery()->getResult();
+    }
+
+    /**
+     * @param array $args
+     * @return Avaloir[]
+     */
+    public function search($args): array
+    {
+        $qb = $this->setCriteria($args);
+        $query = $qb->getQuery();
+
+        //echo  $query->getSQL();
+
+        $results = $query->getResult();
+
+        return $results;
+    }
+
+    /**
+     * @param $args
+     */
+    public function setCriteria($args): QueryBuilder
+    {
+        $nom = $args['nom'] ?? null;
+        $village = $args['village'] ?? null;
+        $rue = $args['rue'] ?? null;
+        $id = $args['id'] ?? 0;
+        $date_debut = $args['date_debut'] ?? null;
+        $date_fin = $args['date_fin'] ?? null;
+        $quartier = $args['quartier'] ?? null;
+
+        $qb = $this->createQueryBuilder('avaloir');
+        $qb->leftJoin('avaloir.dates', 'dates', 'WITH');
+        $qb->leftJoin('avaloir.commentaires', 'commentaires', 'WITH');
+        $qb->addSelect('dates', 'commentaires');
+
+        if ($nom) {
+            $qb->andWhere('avaloir.descriptif LIKE :mot ')
+                ->setParameter('mot', '%'.$nom.'%');
+        }
+
+        if ($rue instanceof Rue) {
+            $qb->andWhere('avaloir.rue = :rue')
+                ->setParameter('rue', $rue->getNom());
+        }
+
+        if ($village) {
+            $qb->andWhere('avaloir.localite = :village')
+                ->setParameter('village', $village);
+        }
+
+        if ($quartier) {
+            $qb->andWhere('quartier.id = :quartier')
+                ->setParameter('quartier', $quartier);
+        }
+
+        if ($date_debut != null) {
+            $date_start = $date_debut->format('Y-m-d');
+
+            $date_end = $date_fin != null ? $date_fin->format('Y-m-d') : $date_start;
+
+            $qb->andWhere('dates.jour BETWEEN :date_start AND :date_end')
+                ->setParameter('date_start', $date_start)
+                ->setParameter('date_end', $date_end);
+        }
+
+        if ($id) {
+            $qb->andWhere("avaloir.id IN ('$id')");
+        }
+
+        $qb->addOrderBy('avaloir.createdAt', 'DESC');
+
+        //$qb->addOrderBy('rue.nom', 'ASC');
+
+        return $qb;
+    }
+
+    /**
+     * @return array|Village[]
+     */
+    public function getByVillage(?string $village): array
+    {
+        $qb = $this->createQueryBuilder('avaloir');
+        $qb->andWhere('avaloir.localite = :village')
+            ->setParameter('village', $village);
+
+        return $qb->addOrderBy('avaloir.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+    }
+
+    /**
+     * @return array|Village[]
+     */
+    public function getByRue(Rue $rue): array
+    {
+        $qb = $this->createQueryBuilder('avaloir');
+        $qb->andWhere('avaloir.localite LIKE :rue')
+            ->setParameter('rue', '%'.$rue->getNom().'%');
+
+        return $qb->addOrderBy('avaloir.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+}

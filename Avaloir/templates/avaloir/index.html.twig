@@ -1,0 +1,59 @@
+{% extends '@AcMarcheAvaloir/layout_avaloir.html.twig' %}
+
+{% block body -%}
+    <div class="card">
+        <h3 class="card-header">Liste des avaloirs ({{ avaloirs | length }})</h3>
+        <div class="card-body">
+            {% include '@AcMarcheAvaloir/search/avaloir.html.twig' %}
+
+            {% if avaloirs | length > 0 %}
+                <div class="row row-cols-1 row-cols-md-3">
+                    {% for avaloir in avaloirs %}
+                        <div class="col mb-4">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <a title="Consulter l'avaloir"
+                                       href="{{ path('avaloir_show', { 'id': avaloir.id }) }}">
+                                        {{ avaloir.rue }} {{ avaloir.numero }} {% if avaloir.rue == '' %} Pas de rue trouvée  {% endif %}
+                                    </a>
+                                </div>
+                                {% if avaloir.imageName %}
+                                    <img src="{{ vich_uploader_asset(avaloir, 'imageFile') | imagine_filter('avaloir_heighten_filter') }}"
+                                         alt="{{ avaloir.imageName }}" class="card-img-top"/>
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <a title="Consulter l'avaloir"
+                                           href="{{ path('avaloir_show', { 'id': avaloir.id }) }}">
+                                            {{ avaloir.rue }} {{ avaloir.numero }} <br/> {{ avaloir.localite }}
+                                        </a>
+                                    </h5>
+
+                                    {% if avaloir.dateRappel and avaloir.dateRappel > date('-3days') %}
+                                        <strong class="text-danger">Date de rappel
+                                            :</strong> {{ avaloir.dateRappel | format_date('full') }}
+                                    {% endif %}
+
+                                    {% if avaloir.commentaires | length > 0 %}
+                                        <p class="card-text">
+                                            <small class="text-muted">
+                                                {% set commentaire = avaloir.commentaires | first %}
+                                                {{ commentaire.content | nl2br }}
+                                            </small>
+                                        </p>
+                                    {% endif %}
+                                </div>
+                                <div class="card-footer text-muted">
+                                    {% if avaloir.dates | length > 0 %}
+                                        {% set jour = avaloir.dates | first %}
+                                        Dernier nettoyage le {{ jour | format_date('full') }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

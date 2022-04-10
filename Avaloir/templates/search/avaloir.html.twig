@@ -1,0 +1,36 @@
+{{ form_start(search_form, { 'attr': {'class': 'row gy-2 gx-1 align-items-center d-print-none'}}) }}
+    {{ form_errors(search_form) }}
+<div class="col-auto">
+    {{ form_row(search_form.rue, {label_attr: {class: 'sr-only'}, attr:{'class': ' my-1 mr-sm-2'}}) }}
+</div>
+
+<div class="col-auto">
+    {{ form_row(search_form.village, {label_attr: {class: 'sr-only'}, attr:{'class': ' my-1 mr-sm-2'}}) }}
+</div>
+
+<div class="col-auto">
+    {{ form_row(search_form.date_debut, {label_attr: {class: 'sr-only'} }) }}
+</div>
+
+<div class="col-auto">
+    {{ form_row(search_form.date_fin, {label_attr: {class: 'sr-only'} }) }}
+</div>
+
+<div class="col-auto">
+    {{ form_row(search_form.id, {label_attr: {class: 'sr-only'} }) }}
+</div>
+
+<br/><br/>
+
+<div class="row justify-content-end">
+    <div class="col-auto">
+        <input type="submit" class="btn btn-primary mr-1" value="Rechercher" name="submit">
+        <a href="{{ path('export_avaloirs_xls') }}" class="btn btn-success" role="button"><i
+                    class="fas fa-download"></i> En
+            Xls</a>
+        <br/>
+    </div>
+</div>
+
+{{ form_end(search_form) }}
+<br/>

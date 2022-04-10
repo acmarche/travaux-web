@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="1">
+                <source>Create</source>
+                <target>Ajouter</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>Intitule</source>
+                <target>Intitulé</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>Delete</source>
+                <target>Supprimer</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>Edit</source>
+                <target>Editer</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>Update</source>
+                <target>Mettre à jour</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>Created</source>
+                <target>Créé le</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>Updated</source>
+                <target>Mis à jour le</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>Bad credentials.</source>
+                <target>Erreur au niveau du mot de passe ou de l'utilisateur</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>Something has intentionally gone wrong.</source>
+                <target>Une erreur est survenue</target>
+            </trans-unit>
+            <trans-unit id="10">
+                <source>AcMarche\Travaux\Entity\Travaux object not found.</source>
+                <target>Intervention non trouvée</target>
+            </trans-unit>
+            <trans-unit id="11">
+                <source>Section</source>
+                <target>Village</target>
+            </trans-unit>
+            <trans-unit id="12">
+                <source>Numero</source>
+                <target>Numéro</target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>no.label</source>
+                <target></target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source>AcMarche\Travaux\Entity\Travaux object not found.</source>
+                <target>Intervention non trouvée</target>
+            </trans-unit>
+            <trans-unit id="15">
+                <source>Create</source>
+                <target>Ajouter</target>
+            </trans-unit>
+            <trans-unit id="16">
+                <source>Intitule</source>
+                <target>Intitulé</target>
+            </trans-unit>
+            <trans-unit id="17">
+                <source>Delete</source>
+                <target>Supprimer</target>
+            </trans-unit>
+            <trans-unit id="18">
+                <source>Edit</source>
+                <target>Editer</target>
+            </trans-unit>
+            <trans-unit id="19">
+                <source>Update</source>
+                <target>Mettre à jour</target>
+            </trans-unit>
+            <trans-unit id="20">
+                <source>Created</source>
+                <target>Créé le</target>
+            </trans-unit>
+            <trans-unit id="21">
+                <source>Updated</source>
+                <target>Mis à jour le</target>
+            </trans-unit>
+            <trans-unit id="22">
+                <source>Bad credentials.</source>
+                <target>Vous ne disposez pas des droits</target>
+            </trans-unit>
+            <trans-unit id="23">
+                <source>Something has intentionally gone wrong.</source>
+                <target>Une erreur est survenue</target>
+            </trans-unit>
+            <trans-unit id="24">
+                <source>Date nettoyage</source>
+                <target>Date de nettoyage</target>
+            </trans-unit>
+            <trans-unit id="25">
+                <source>Save</source>
+                <target>Sauvegarder</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

@@ -1,0 +1,20 @@
+{% extends '@AcMarcheStock/layout.html.twig' %}
+
+{% block title %}Categorie{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <h3 class="card-header">{{ categorie.nom }}</h3>
+        <div class="card-body">
+
+            {% include '@AcMarcheStock/categorie/_actions.html.twig' %}
+
+            {{ categorie.description|nl2br }}
+
+            {% include '@AcMarcheStock/categorie/_list_produits.html.twig' %}
+
+        </div>
+    </div>
+
+    {{ include('@AcMarcheStock/categorie/_delete_form.html.twig') }}
+{% endblock %}

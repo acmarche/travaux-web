@@ -1,0 +1,16 @@
+<br/>
+<h4>Liste des dates de nettoyages</h4>
+
+<ul class='list-group'>
+    {% for date in avaloir.dates %}
+        {% set datenettoyage = date.jour %}
+        <li class='list-group-item'>
+            <a title='' href='{{ path('datenettoyage_show', { 'id': date.id }) }}'>
+                {{ datenettoyage | date('d-m-Y') }}
+            </a>
+        </li>
+    {% else %}
+        <li class='list-group-item'>Aucune</li>
+    {% endfor %}
+</ul>
+<br/>

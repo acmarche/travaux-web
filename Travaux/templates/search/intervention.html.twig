@@ -1,0 +1,72 @@
+{{ form_start(search_form, { 'attr': {'class': 'row gy-2 gx-1 align-items-center d-print-none'}}) }}
+{{ form_errors(search_form) }}
+
+<div class="col-auto">
+    {{ form_row(search_form.id, {label_attr: {class: 'sr-only'}, attr:{'class': ' my-1 mr-sm-2'}}) }}
+</div>
+
+<div class="col-auto">
+    {{ form_row(search_form.intitule, {label_attr: {class: 'sr-only'}, attr:{'class': ' my-1 mr-sm-2'} }) }}
+</div>
+
+<div class="col-auto">
+    {{ form_row(search_form.etat, {label_attr: {class: 'sr-only'} }) }}
+</div>
+
+<div class="col-auto">
+    {{ form_row(search_form.priorite, {label_attr: {class: 'sr-only'} }) }}
+</div>
+
+<br/><br/>
+<div class="col-auto">
+    {{ form_row(search_form.affecte_prive, {label_attr: {class: 'sr-only'} }) }}
+</div>
+
+<div class="col-auto">
+    {{ form_row(search_form.date_debut, {label_attr: {class: 'sr-only'}, attr:{'class': ' my-1 mr-sm-2'} }) }}
+</div>
+
+<div class="col-auto">
+    {{ form_row(search_form.date_fin, {label_attr: {class: 'sr-only'}, attr:{'class': ' my-1 mr-sm-2'} }) }}
+</div>
+
+<br/><br/>
+
+<div class="col-auto">
+    {{ form_row(search_form.domaine, {label_attr: {class: 'sr-only'} }) }}
+</div>
+
+<div class="col-auto">
+    {{ form_row(search_form.categorie, {label_attr: {class: 'sr-only'} }) }}
+</div>
+
+<div class="col-auto">
+    {{ form_row(search_form.batiment, {label_attr: {class: 'sr-only'} }) }}
+</div>
+
+<div class="col-auto">
+    {{ form_row(search_form.sort, {label_attr: {class: 'sr-only'} }) }}
+</div>
+
+<br/><br/>
+
+<div class="row justify-content-end">
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary mr-1" value="Rechercher" name="submit">
+            <i class="fas fa-search"></i> Rechercher
+        </button>
+    </div>
+
+    <div class="col-auto">
+        {{ form_row(search_form.raz) }}
+    </div>
+
+    <div class="col-auto">
+        <a class="btn btn-sm btn-success" href="{{ path('export_pdf') }}" role="button"><i class="fas fa-file-pdf"></i>
+            Exporter en Pdf</a>
+    </div>
+</div>
+
+{{ form_end(search_form) }}
+
+<br/>

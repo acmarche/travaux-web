@@ -1,0 +1,24 @@
+{
+  "index": "avaloir",
+  "body": {
+    "properties": {
+      "id": {
+        "type": "long",
+        "index": "false"
+      },
+      "location": {
+        "type": "geo_point"
+      },
+      "description": {
+        "type": "text",
+        "analyzer": "french_light",
+        "fields": {
+          "stemmed": {
+            "type": "text",
+            "analyzer": "french_heavy"
+          }
+        }
+      }
+    }
+  }
+}

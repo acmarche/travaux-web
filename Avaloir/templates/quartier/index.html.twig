@@ -1,0 +1,48 @@
+{% extends '@AcMarcheAvaloir/layout_avaloir.html.twig' %}
+
+{% block body -%}
+    <div class="card">
+        <h3 class="card-header">Liste des quartiers</h3>
+        <div class="card-body">
+            {% if is_granted('ROLE_TRAVAUX_AVALOIR') %}
+                <a href="{{ path('quartier_new') }}" class="btn btn-primary" role="button"><i
+                            class="fas fa-plus"></i> Ajouter</a>
+                <br/><br/>
+            {% endif %}
+
+            {% if entities | length > 0 %}
+                <table class='table table-bordered table-hover'>
+                    <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Nbre de rues</th>
+                        {% if is_granted('ROLE_TRAVAUX_AVALOIR') %}
+                            <th>Actions</th>
+                        {% endif %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for entity in entities %}
+                        <tr>
+                            <td>
+                                <a href="{{ path('quartier_show', { 'id': entity.id }) }}">
+                                    {{ entity }}
+                                </a>
+                            </td>
+                            <td>{{ entity.rues | length }}</td>
+                            {% if is_granted('ROLE_TRAVAUX_AVALOIR') %}
+                                <td>
+                                    <a href="{{ path('quartier_edit', { 'id': entity.id }) }}" title="Editer"
+                                       role="button" class="btn btn-primary btn-xs"><i class="far fa-edit"></i>
+                                        Editer
+                                    </a>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

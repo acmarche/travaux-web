@@ -1,0 +1,40 @@
+{% extends '@AcMarcheTravaux/layout.html.twig' %}
+
+{% block body -%}
+    <div class="card">
+        <h3 class="card-header">Demande d'intervention en attente de validation</h3>
+        <div class="card-body">
+            {% if entities | length > 0 %}
+                <table class='table table-bordered table-hover'>
+                    <thead>
+                    <tr>
+                        <th>Intitule</th>
+                        <th>Demandé le</th>
+                        <th>Par</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for entity in entities %}
+                        <tr>
+                            <td>
+                                <a title="Détail et validation"
+                                   href="{{ path('intervention_show', { 'id': entity.id }) }}">
+                                    {{ entity }}
+                                </a>
+                            </td>
+                            <td>
+                                {{ entity.dateintroduction | date('d-m-Y') }}
+                            </td>
+                            <td>
+                                {{ entity.useradd }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Aucune</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

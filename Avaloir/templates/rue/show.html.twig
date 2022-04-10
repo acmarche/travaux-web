@@ -1,0 +1,17 @@
+{% extends '@AcMarcheAvaloir/layout_avaloir.html.twig' %}
+
+{% block body -%}
+    <div class="card">
+        <h3 class="card-header">
+            Détail de la rue <strong>{{ rue }}</strong>
+            {% if rue.quartier %}
+                dans le quartier <strong>{{ rue.quartier }}</strong>
+            {% endif %} </h3>
+        <div class="card-body">
+            {% include '@AcMarcheAvaloir/rue/actions.html.twig' %}
+
+            {% include '@AcMarcheAvaloir/rue/avaloirs.html.twig' %}
+        </div>
+    </div>
+    {% include '@AcMarcheAvaloir/rue/delete.html.twig' %}
+{% endblock %}

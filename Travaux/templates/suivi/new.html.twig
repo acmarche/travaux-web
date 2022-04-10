@@ -1,0 +1,17 @@
+{% extends '@AcMarcheTravaux/layout.html.twig' %}
+
+{% block body -%}
+
+    <div class="card">
+        <div class="card-header">
+            <h4>Nouveau suivi pour l'intervention <strong>{{ intervention }}</strong></h4>
+            <a href="{{ path('intervention_show', { 'id': intervention.id }) }}" class="btn btn-primary" role="button">
+                <i class="fas fa-list"></i> Retour à l'intervention
+            </a>
+        </div>
+        <div class="card-body">
+            {{ form(form) }}
+        </div>
+    </div>
+
+{% endblock %}

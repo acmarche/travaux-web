@@ -1,0 +1,28 @@
+{% extends '@AcMarcheAvaloir/layout_avaloir.html.twig' %}
+
+{% block body -%}
+    <div class="card">
+        <h3 class="card-header">Rues pour le quartier <strong>{{ entity }}</strong></h3>
+        <div class="card-body">
+            <div class="alert alert-info">
+                Choisissez une rue parmis les suggestions proposées
+            </div>
+            {{ form_errors(form) }}
+            {{ form_start(form) }}
+            <br/>
+            <div {{ stimulus_controller('tokenfield', {
+                selector: '.courrier_dptokenfield',
+                url: path('rue_autocomplete'),
+                itemName: 'itemsdp',
+                items: rues}) }}>
+                {{ form_row(form.dptokenfield) }}
+            </div>
+
+            {{ form_end(form) }}
+
+            <a href="{{ path('quartier_show', { 'id': entity.id } ) }}">
+                <i class="fas fa-list"></i> Annuler et retour
+            </a>
+        </div>
+    </div>
+{% endblock %}

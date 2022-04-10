@@ -1,0 +1,69 @@
+{% extends '@AcMarcheAvaloir/layout_avaloir.html.twig' %}
+
+{% block body -%}
+
+    <div class="card">
+        <div class="card-header">
+            <h3>Avaloir <strong>{{ avaloir.rue }}</strong></h3>
+        </div>
+        <div class="card-body">
+            {% include '@AcMarcheAvaloir/avaloir/actions.html.twig' %}
+            <div class="row no-gutters pl-1">
+                <div class="col-md-4 mt-4">
+                    {{ include('@AcMarcheAvaloir/avaloir/_images.html.twig') }}
+                </div>
+                <div class="col-md-7 mt-4 ml-1">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Localisation</th>
+                            <td>
+                                <a href="https://www.openstreetmap.org/#map=17/{{ avaloir.latitude }}/{{ avaloir.longitude }}"
+                                   target="_blank">
+                                    {{ avaloir.latitude }}, {{ avaloir.longitude }}
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Localité</th>
+                            <td>
+                                {{ avaloir.localite }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Date de rappel</th>
+                            <td>
+                                {% if avaloir.dateRappel %}
+                                    {{ avaloir.dateRappel | format_date('full') }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Id</th>
+                            <td>{{ avaloir.id }}</td>
+                        </tr>
+                    </table>
+
+                    <p>{{ avaloir.description | nl2br }}</p>
+                </div>
+            </div>
+
+            {% if avaloir.latitude and avaloir.longitude %}
+                <h4>Situation sur la carte</h4>
+                {{ include('@AcMarcheAvaloir/avaloir/_localisation_form.html.twig') }}
+                {{ include('@AcMarcheAvaloir/map/_openstreetmap.html.twig') }}
+            {% endif %}
+
+            {{ include('@AcMarcheAvaloir/avaloir/_dates_nettoyages.html.twig') }}
+
+            {{ include('@AcMarcheAvaloir/avaloir/_commentaires.html.twig') }}
+
+        </div>
+        <div class="card-footer text-muted">
+            {{ 'Created' | trans }} {{ avaloir.createdAt|format_date('full','full') }}
+            . {{ 'Updated' | trans }} {{ avaloir.updatedAt|format_date('full','full') }}
+        </div>
+    </div>
+
+    {% include '@AcMarcheAvaloir/avaloir/delete.html.twig' %}
+
+{% endblock %}

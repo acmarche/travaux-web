@@ -1,0 +1,14 @@
+{% extends '@AcMarcheTravaux/base.html.twig' %}
+
+{% block title %}Stocks{% endblock %}
+
+{% block brand %}
+    <a class="navbar-brand" href="{{ path('stock_home') }}">
+        <i class="fas fa-home icon-rose"></i>
+        <span class="ms-2 fs-4 navbar-text">Stocks</span>
+    </a>
+{% endblock %}
+
+{% block menu_top %}
+    {% include '@AcMarcheStock/_menu.html.twig' %}
+{% endblock %}
