@@ -1,0 +1,29 @@
+@import '~bootstrap';
+@import "~leaflet";
+@import "tokenfield.css";
+@import '~lightgallery/css/lightgallery-bundle.min.css';
+
+.icon-rose {
+    color: hotpink;
+}
+
+.search-preview {
+    position: absolute;
+    z-index: 100;
+    width: 100%;
+    top: 44px;
+}
+
+.search-preview img {
+    width: 50px;
+}
+
+#topmenu li {
+    border-color: transparent !important;
+    border-bottom: 2px solid transparent !important;
+}
+
+#topmenu li:hover {
+    border-color: #0dcaf0 !important;
+    border-bottom: 2px solid #dee2e6 !important;
+}
