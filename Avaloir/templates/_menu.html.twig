@@ -21,7 +21,7 @@
     {% if routeExists('intervention') %}
         {% if is_granted('ROLE_TRAVAUX') %}
             <li>
-                <a href="{{ path('intervention') }}" class="nav-link">Interventions</a>
+                <a href="{{ path('intervention') }}" class="nav-link"> | Interventions</a>
             </li>
         {% endif %}
     {% endif %}
@@ -29,7 +29,7 @@
     {% if routeExists('stock_home') %}
         {% if is_granted('ROLE_TRAVAUX') %}
             <li>
-                <a href="{{ path('stock_home') }}" class="nav-link">Stocks</a>
+                <a href="{{ path('stock_home') }}" class="nav-link"> | Stocks</a>
             </li>
         {% endif %}
     {% endif %}

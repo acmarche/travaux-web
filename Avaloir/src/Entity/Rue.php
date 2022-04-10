@@ -31,7 +31,7 @@ class Rue implements Stringable
     protected int $code;
     #[ORM\ManyToOne(targetEntity: Quartier::class, inversedBy: 'rues', cascade: ['remove'])]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
-    private Quartier $quartier;
+    private ?Quartier $quartier = null;
 
     private Collection|array $avaloirs = [];
 
@@ -103,7 +103,7 @@ class Rue implements Stringable
         $this->avaloirs = $avaloirs;
     }
 
-    public function getAvaloirs(): Collection
+    public function getAvaloirs(): Collection|array
     {
         return $this->avaloirs;
     }

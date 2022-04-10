@@ -143,7 +143,7 @@ class RueController extends AbstractController
      * Pour remplir l'auto completion.
      */
     #[Route(path: '/ajax/ruesuggestion', name: 'rue_suggestion', methods: ['GET'])]
-    public function expediteur(Request $request): Response
+    public function rueSuggestion(Request $request): Response
     {
         $query = $request->query->get('q');
         if (! $query) {

@@ -77,7 +77,7 @@ class QuartierController extends AbstractController
     {
         $rues = $this->rueRepository->getByQuartier($quartier);
         foreach ($rues as $rue) {
-            $avaloirs = $this->avaloirRepository->getByVillage($rue->getVillage());
+            $avaloirs = $this->avaloirRepository->getByRue($rue);
             $rue->setAvaloirs(new ArrayCollection($avaloirs));
         }
         $data = [];

@@ -1,15 +1,22 @@
-<div class="d-print-none">
+{{ form_start(search_form, { 'attr': {'class': 'row gy-2 gx-1 align-items-center d-print-none'}}) }}
+{{ form_errors(search_form) }}
 
-    {{ form_start(search_form, { 'attr': {'class': 'form-inline'}}) }}
-    {{ form_errors(search_form) }}
-
+<div class="col-auto">
     {{ form_row(search_form.nom, {label_attr: {class: 'sr-only'} }) }}
-
-    {{ form_row(search_form.categorie, {label_attr: {class: 'sr-only'}, attr:{'class': 'custom-select  my-1 ml-sm-2 mr-sm-2'}}) }}
-
-    <input type="submit" class="btn btn-primary ml-1 mr-1" value="Rechercher" name="submit">
-    {{ form_row(search_form.raz) }}
-
-    {{ form_end(search_form) }}
 </div>
+
+<div class="col-auto">
+    {{ form_row(search_form.categorie, {label_attr: {class: 'sr-only'}, attr:{'class': 'custom-select  my-1 ml-sm-2 mr-sm-2'}}) }}
+</div>
+
+<div class="col-auto">
+    <input type="submit" class="btn btn-primary ml-1 mr-1" value="Rechercher" name="submit">
+</div>
+
+<div class="col-auto">
+    {{ form_row(search_form.raz) }}
+</div>
+
+{{ form_end(search_form) }}
+
 <br/>

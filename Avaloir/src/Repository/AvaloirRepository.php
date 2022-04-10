@@ -43,7 +43,7 @@ class AvaloirRepository extends ServiceEntityRepository
     /**
      * @return Avaloir[]
      */
-    public function findLast(int $max = 300):array
+    public function findLast(int $max = 300): array
     {
         return $this->createQueryBuilder('avaloir')
             ->leftJoin('avaloir.dates', 'dates', 'WITH')
@@ -58,7 +58,7 @@ class AvaloirRepository extends ServiceEntityRepository
      * @param array $args
      * @return Avaloir[]
      */
-    public function search($args): array
+    public function search(array $args): array
     {
         $qb = $this->setCriteria($args);
         $query = $qb->getQuery();
@@ -70,10 +70,7 @@ class AvaloirRepository extends ServiceEntityRepository
         return $results;
     }
 
-    /**
-     * @param $args
-     */
-    public function setCriteria($args): QueryBuilder
+    public function setCriteria(array $args): QueryBuilder
     {
         $nom = $args['nom'] ?? null;
         $village = $args['village'] ?? null;
@@ -130,7 +127,7 @@ class AvaloirRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return array|Village[]
+     * @return Avaloir[]
      */
     public function getByVillage(?string $village): array
     {
@@ -145,15 +142,14 @@ class AvaloirRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return array|Village[]
+     * @return Avaloir[]
      */
     public function getByRue(Rue $rue): array
     {
-        $qb = $this->createQueryBuilder('avaloir');
-        $qb->andWhere('avaloir.localite LIKE :rue')
-            ->setParameter('rue', '%'.$rue->getNom().'%');
-
-        return $qb->addOrderBy('avaloir.createdAt', 'DESC')
+        return $this->createQueryBuilder('avaloir')
+            ->andWhere('avaloir.rue LIKE :rue')
+            ->setParameter('rue', '%'.$rue->getNom().'%')
+            ->addOrderBy('avaloir.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
     }
