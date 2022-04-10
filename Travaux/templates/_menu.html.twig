@@ -5,6 +5,13 @@
             <a href="{{ path('intervention') }}" class="nav-link px-2 link-dark"><i class="fa fa-search"></i>
                 Rechercher</a>
         </li>
+        {% if is_granted('ROLE_TRAVAUX_ADD') %}
+            <li>
+                <a href="{{ path('intervention_new') }}" class="nav-link px-2 link-dark">
+                    <i class="fa fa-plus"></i>
+                    Ajouter une intervention</a>
+            </li>
+        {% endif %}
         <li>
             <a href="{{ path('intervention_archive') }}" class="nav-link px-2 link-dark"><i
                         class="fa fa-list"></i> Archive</a>
@@ -17,6 +24,26 @@
             <li>
                 <a href="{{ path('stock_home') }}" class="nav-link px-2 link-dark"><i
                             class="fa fa-list"></i> Stocks</a>
+            </li>
+        {% endif %}
+        {% if is_granted('ROLE_TRAVAUX_ADMIN') %}
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                    Paramètres... <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{{ path('batiment') }}">Les bâtiments</a></li>
+                    <li><a class="dropdown-item" href="{{ path('service') }}">Les services</a></li>
+                    <li><a class="dropdown-item" href="{{ path('domaine') }}">Les types</a></li>
+                    <li><a class="dropdown-item" href="{{ path('categorie') }}">Les catégories</a></li>
+                    <li><a class="dropdown-item" href="{{ path('documentation') }}">Documentation</a></li>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <li>
+                            <a class="dropdown-item" href="{{ path('actravaux_utilisateur') }}">
+                                Gestion des utilisateurs</a>
+                        </li>
+                    {% endif %}
+                </ul>
             </li>
         {% endif %}
     </ul>
