@@ -23,12 +23,15 @@ use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 class SerializeApi
 {
+    private string $root;
+
     public function __construct(
         private UploaderHelper $uploaderHelper,
         private RequestStack $requestStack,
         private FilterService $filterService,
         private ParameterBagInterface $parameterBag
     ) {
+        $this->root = $this->parameterBag->get('ac_marche_travaux_dir_public');
     }
 
     public function getUrl(): string
@@ -66,9 +69,8 @@ class SerializeApi
         $std->description = $avaloir->getDescription();
         $std->createdAt = $avaloir->getCreatedAt()->format(DateTimeInterface::RFC3339);//'Y-m-d H:m'
         if ($avaloir->getImageName()) {
-            $root = $this->parameterBag->get('ac_marche_travaux_dir_public');
             $pathImg = $this->uploaderHelper->asset($avaloir, 'imageFile');
-            $fullPath = $root.$pathImg;
+            $fullPath = $this->root.$pathImg;
             if (is_readable($fullPath)) {
                 $thumb = $this->filterService->getUrlOfFilteredImage($pathImg, 'avaloir_heighten_filter');
                 $std->imageUrl = $thumb !== '' && $thumb !== '0' ? $thumb : $this->getUrl(

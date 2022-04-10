@@ -2,11 +2,10 @@
 
 namespace AcMarche\Avaloir\Repository;
 
-use Doctrine\ORM\QueryBuilder;
-use AcMarche\Avaloir\Entity\Village;
 use AcMarche\Avaloir\Entity\Avaloir;
 use AcMarche\Avaloir\Entity\Rue;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -149,6 +148,20 @@ class AvaloirRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('avaloir')
             ->andWhere('avaloir.rue LIKE :rue')
             ->setParameter('rue', '%'.$rue->getNom().'%')
+            ->addOrderBy('avaloir.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Avaloir[]
+     */
+    public function getAll(): array
+    {
+        return $this->createQueryBuilder('avaloir')
+            ->leftJoin('avaloir.dates', 'dates', 'WITH')
+            ->leftJoin('avaloir.commentaires', 'commentaires', 'WITH')
+            ->addSelect('dates', 'commentaires')
             ->addOrderBy('avaloir.createdAt', 'DESC')
             ->getQuery()
             ->getResult();

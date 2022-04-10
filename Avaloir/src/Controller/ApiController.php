@@ -44,7 +44,7 @@ class ApiController extends AbstractController
     #[Route(path: '/all', format: 'json')]
     public function index(): JsonResponse
     {
-        $avaloirs = $this->serializeApi->serializeAvaloirs($this->avaloirRepository->findAll());
+        $avaloirs = $this->serializeApi->serializeAvaloirs($this->avaloirRepository->getAll());
 
         return new JsonResponse($avaloirs);
     }
