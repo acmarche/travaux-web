@@ -8,9 +8,9 @@
 
 namespace AcMarche\Stock\Service;
 
-use AcMarche\Avaloir\src\Entity\Avaloir;
-use AcMarche\Avaloir\src\Entity\Commentaire;
-use AcMarche\Avaloir\src\Entity\DateNettoyage;
+use AcMarche\Avaloir\Entity\Avaloir;
+use AcMarche\Avaloir\Entity\Commentaire;
+use AcMarche\Avaloir\Entity\DateNettoyage;
 use AcMarche\Stock\Entity\Categorie;
 use AcMarche\Stock\Entity\Produit;
 use AcMarche\Travaux\Entity\Security\User;
@@ -23,8 +23,12 @@ use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 class SerializeApi
 {
-    public function __construct(private UploaderHelper $uploaderHelper, private RequestStack $requestStack, private FilterService $filterService, private ParameterBagInterface $parameterBag)
-    {
+    public function __construct(
+        private UploaderHelper $uploaderHelper,
+        private RequestStack $requestStack,
+        private FilterService $filterService,
+        private ParameterBagInterface $parameterBag
+    ) {
     }
 
     public function getUrl(): string
@@ -67,7 +71,8 @@ class SerializeApi
             $fullPath = $root.$pathImg;
             if (is_readable($fullPath)) {
                 $thumb = $this->filterService->getUrlOfFilteredImage($pathImg, 'avaloir_heighten_filter');
-                $std->imageUrl = $thumb !== '' && $thumb !== '0' ? $thumb : $this->getUrl().$this->uploaderHelper->asset($avaloir, 'imageFile');
+                $std->imageUrl = $thumb !== '' && $thumb !== '0' ? $thumb : $this->getUrl(
+                    ).$this->uploaderHelper->asset($avaloir, 'imageFile');
             }
         }
 
