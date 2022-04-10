@@ -139,10 +139,6 @@ class ApiController extends AbstractController
         return new JsonResponse($data);
     }
 
-    /**
-     * @param Avaloir $avaloir
-     * @param int $quantite
-     */
     #[Route(path: '/clean/{id}/{dateString}', format: 'json')]
     public function addCleaning(int $id, string $dateString): JsonResponse
     {
@@ -179,10 +175,6 @@ class ApiController extends AbstractController
         return new JsonResponse($data);
     }
 
-    /**
-     * @param Avaloir $avaloir
-     * @param int $quantite
-     */
     #[Route(path: '/commentaire/{id}/{content}', format: 'json')]
     public function addComment(int $id, string $content): JsonResponse
     {
