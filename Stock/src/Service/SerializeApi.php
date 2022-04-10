@@ -24,6 +24,7 @@ use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 class SerializeApi
 {
     private string $root;
+    private string $urlBase;
 
     public function __construct(
         private UploaderHelper $uploaderHelper,
@@ -32,6 +33,7 @@ class SerializeApi
         private ParameterBagInterface $parameterBag
     ) {
         $this->root = $this->parameterBag->get('ac_marche_travaux_dir_public');
+        $this->urlBase = $this->getUrl();
     }
 
     public function getUrl(): string
@@ -73,8 +75,10 @@ class SerializeApi
             $fullPath = $this->root.$pathImg;
             if (is_readable($fullPath)) {
                 $thumb = $this->filterService->getUrlOfFilteredImage($pathImg, 'avaloir_heighten_filter');
-                $std->imageUrl = $thumb !== '' && $thumb !== '0' ? $thumb : $this->getUrl(
-                    ).$this->uploaderHelper->asset($avaloir, 'imageFile');
+                $std->imageUrl = $thumb !== '' && $thumb !== '0' ? $thumb : $this->urlBase.$this->uploaderHelper->asset(
+                        $avaloir,
+                        'imageFile'
+                    );
             }
         }
 
