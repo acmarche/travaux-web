@@ -21,7 +21,7 @@ class Suivi implements TimestampableInterface, Stringable
     protected int $id;
 
     #[ORM\Column(type: 'text', nullable: false)]
-    protected string $descriptif;
+    protected string $descriptif = "";
     #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 0])]
     protected bool $smartphone = false;
     #[ORM\ManyToOne(targetEntity: Intervention::class, inversedBy: 'suivis')]
