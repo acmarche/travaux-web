@@ -46,11 +46,13 @@ class ApiController extends AbstractController
     #[Route(path: '/all', format: 'json')]
     public function index(): JsonResponse
     {
-        $last = $this->avaloirRepository->getLastAvaloir();
         $date = "";
+        $last = $this->avaloirRepository->getLastUpdatedAvaloir();
+
         if ($last) {
-            $date = $last->getUpdatedAt()->format('Y-m-d H:m');
+            $date = $last->getUpdatedAt()->format('Y-m-d H:i');
         }
+
         return $this->cache->get('allAvaloirs-'.$date, function () {
             $avaloirs = $this->serializeApi->serializeAvaloirs($this->avaloirRepository->getAll());
 
