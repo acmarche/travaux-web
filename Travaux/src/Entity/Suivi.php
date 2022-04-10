@@ -19,9 +19,7 @@ class Suivi implements TimestampableInterface, Stringable
     #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected int $id;
-    /**
-     * @var string
-     */
+
     #[ORM\Column(type: 'text', nullable: false)]
     protected string $descriptif;
     #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 0])]
@@ -30,7 +28,7 @@ class Suivi implements TimestampableInterface, Stringable
     #[ORM\JoinColumn(nullable: false)]
     protected Intervention $intervention;
     #[ORM\Column(type: 'string', nullable: false)]
-    protected string $user_add;
+    protected string $user_add = "";
 
     public function __toString(): string
     {
