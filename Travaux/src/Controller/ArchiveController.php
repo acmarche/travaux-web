@@ -25,11 +25,6 @@ class ArchiveController extends AbstractController
     {
     }
 
-    /**
-     * Liste des interventions archivées.
-     *
-     *
-     */
     #[Route(path: '/', name: 'intervention_archive', methods: ['GET'])]
     public function index(Request $request): Response
     {
@@ -77,6 +72,7 @@ class ArchiveController extends AbstractController
                 'method' => 'GET',
             )
         );
+        $entities = [];
         $search_form->handleRequest($request);
         if ($search_form->isSubmitted() && $search_form->isValid()) {
             $data = $search_form->getData();
@@ -87,15 +83,16 @@ class ArchiveController extends AbstractController
 
                 return $this->redirectToRoute('intervention_archive');
             }
+            $session->set($key, serialize($data));
+            $entities = $em->getRepository(Intervention::class)->search($data);
         }
-        $session->set($key, serialize($data));
-        $entities = $em->getRepository(Intervention::class)->search($data);
 
         return $this->render(
             '@AcMarcheTravaux/archive/index.html.twig',
             array(
                 'search_form' => $search_form->createView(),
                 'entities' => $entities,
+                'search' => $search_form->isSubmitted(),
             )
         );
     }
