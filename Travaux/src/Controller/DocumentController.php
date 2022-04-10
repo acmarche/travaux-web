@@ -101,7 +101,7 @@ class DocumentController extends AbstractController
     /**
      * Deletes a Document entity.
      */
-    #[Route(path: '/{id}', name: 'document_delete', methods: ['DELETE'])]
+    #[Route(path: '/{id}', name: 'document_delete', methods: ['POST'])]
     #[IsGranted('ROLE_TRAVAUX_ADD')]
     public function delete(Request $request, Document $document) : RedirectResponse
     {

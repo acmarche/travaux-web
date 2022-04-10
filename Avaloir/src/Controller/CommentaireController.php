@@ -99,7 +99,7 @@ class CommentaireController extends AbstractController
     /**
      * Deletes a Commentaire entity.
      */
-    #[Route(path: '/{id}', name: 'commentaire_delete', methods: ['DELETE'])]
+    #[Route(path: '/{id}', name: 'commentaire_delete', methods: ['POST'])]
     public function delete(Request $request, Commentaire $dateNettoyage): RedirectResponse
     {
         $avaloir = $dateNettoyage->getAvaloir();

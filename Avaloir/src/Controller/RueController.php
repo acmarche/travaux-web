@@ -106,7 +106,7 @@ class RueController extends AbstractController
     /**
      * Deletes a Rue entity.
      */
-    #[Route(path: '/{id}', name: 'rue_delete', methods: ['DELETE'])]
+    #[Route(path: '/{id}', name: 'rue_delete', methods: ['POST'])]
     public function delete(Request $request, Rue $rue): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$rue->getId(), $request->request->get('_token'))) {

@@ -125,7 +125,7 @@ class QuartierController extends AbstractController
     /**
      * Deletes a Quartier entity.
      */
-    #[Route(path: '/{id}', name: 'quartier_delete', methods: ['DELETE'])]
+    #[Route(path: '/{id}', name: 'quartier_delete', methods: ['POST'])]
     public function delete(Request $request, Quartier $quartier): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$quartier->getId(), $request->request->get('_token'))) {

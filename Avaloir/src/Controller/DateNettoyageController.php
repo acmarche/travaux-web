@@ -78,7 +78,7 @@ class DateNettoyageController extends AbstractController
     /**
      * Deletes a DateNettoyage entity.
      */
-    #[Route(path: '/{id}', name: 'datenettoyage_delete', methods: ['DELETE'])]
+    #[Route(path: '/{id}', name: 'datenettoyage_delete', methods: ['POST'])]
     public function delete(Request $request, DateNettoyage $dateNettoyage) : RedirectResponse
     {
         $avaloir = $dateNettoyage->getAvaloir();

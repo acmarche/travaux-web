@@ -115,7 +115,7 @@ class ServiceController extends AbstractController
     /**
      * Deletes a Service entity.
      */
-    #[Route(path: '/{id}', name: 'service_delete', methods: ['DELETE'])]
+    #[Route(path: '/{id}', name: 'service_delete', methods: ['POST'])]
     public function delete(Request $request, Service $service) : RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$service->getId(), $request->request->get('_token'))) {

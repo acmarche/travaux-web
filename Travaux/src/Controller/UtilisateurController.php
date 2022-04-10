@@ -152,7 +152,7 @@ class UtilisateurController extends AbstractController
     /**
      * Deletes a Utilisateur utilisateur.
      */
-    #[Route(path: '/{id}', name: 'actravaux_utilisateur_delete', methods: ['DELETE'])]
+    #[Route(path: '/{id}', name: 'actravaux_utilisateur_delete', methods: ['POST'])]
     public function delete(Request $request, User $user): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {

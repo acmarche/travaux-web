@@ -115,7 +115,7 @@ class DomaineController extends AbstractController
     /**
      * Deletes a Domaine entity.
      */
-    #[Route(path: '/{id}', name: 'domaine_delete', methods: ['DELETE'])]
+    #[Route(path: '/{id}', name: 'domaine_delete', methods: ['POST'])]
     public function delete(Request $request, Domaine $domaine) : RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$domaine->getId(), $request->request->get('_token'))) {

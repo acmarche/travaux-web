@@ -196,7 +196,7 @@ class InterventionController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}', name: 'intervention_delete', methods: ['DELETE'])]
+    #[Route(path: '/{id}', name: 'intervention_delete', methods: ['POST'])]
     #[IsGranted('delete', subject: 'intervention')]
     public function delete(Request $request, Intervention $intervention): RedirectResponse
     {
@@ -221,7 +221,7 @@ class InterventionController extends AbstractController
      *
      *
      */
-    #[Route(path: '/suivis/delete/{id}', name: 'suivis_delete', methods: ['DELETE'])]
+    #[Route(path: '/suivis/delete/{id}', name: 'suivis_delete', methods: ['POST'])]
     public function deleteSuivis(Request $request, Intervention $intervention): RedirectResponse
     {
         $form = $this->createSuivisDeleteForm($intervention->getId());

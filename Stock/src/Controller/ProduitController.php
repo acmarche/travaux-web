@@ -118,7 +118,7 @@ class ProduitController extends AbstractController
             ]
         );
     }
-    #[Route(path: '/{id}', name: 'stock_produit_delete', methods: ['DELETE'])]
+    #[Route(path: '/{id}', name: 'stock_produit_delete', methods: ['POST'])]
     public function delete(Request $request, Produit $produit) : RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete' . $produit->getId(), $request->request->get('_token'))) {

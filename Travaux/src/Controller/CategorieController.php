@@ -114,7 +114,7 @@ class CategorieController extends AbstractController
     /**
      * Deletes a Categorie entity.
      */
-    #[Route(path: '/{id}', name: 'categorie_delete', methods: ['DELETE'])]
+    #[Route(path: '/{id}', name: 'categorie_delete', methods: ['POST'])]
     public function delete(Request $request, Categorie $categorie) : RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$categorie->getId(), $request->request->get('_token'))) {

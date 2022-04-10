@@ -87,7 +87,7 @@ class CategorieController extends AbstractController
             ]
         );
     }
-    #[Route(path: '/{id}', name: 'stock_categorie_delete', methods: ['DELETE'])]
+    #[Route(path: '/{id}', name: 'stock_categorie_delete', methods: ['POST'])]
     public function delete(Request $request, Categorie $categorie) : RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete' . $categorie->getId(), $request->request->get('_token'))) {

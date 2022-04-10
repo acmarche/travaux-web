@@ -113,7 +113,7 @@ class BatimentController extends AbstractController
     /**
      * Deletes a Batiment entity.
      */
-    #[Route(path: '/{id}', name: 'batiment_delete', methods: ['DELETE'])]
+    #[Route(path: '/{id}', name: 'batiment_delete', methods: ['POST'])]
     public function delete(Request $request, Batiment $batiment) : RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$batiment->getId(), $request->request->get('_token'))) {

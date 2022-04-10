@@ -172,7 +172,7 @@ class AvaloirController extends AbstractController
     /**
      * Deletes a Avaloir entity.
      */
-    #[Route(path: '/{id}', name: 'avaloir_delete', methods: ['DELETE'])]
+    #[Route(path: '/{id}', name: 'avaloir_delete', methods: ['POST'])]
     public function delete(Request $request, Avaloir $avaloir): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$avaloir->getId(), $request->request->get('_token'))) {
