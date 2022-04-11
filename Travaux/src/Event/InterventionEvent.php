@@ -25,7 +25,7 @@ class InterventionEvent extends Event
 
     public function __construct(
         protected Intervention $intervention,
-        protected $message,
+        protected ?string $message,
         protected ?Suivi $suivi = null,
         protected ?DateTimeInterface $dateExecution = null
     ) {
@@ -36,12 +36,12 @@ class InterventionEvent extends Event
         return $this->intervention;
     }
 
-    public function getMessage(): string
+    public function getMessage(): ?string
     {
         return $this->message;
     }
 
-    public function getSuivi(): Suivi
+    public function getSuivi(): ?Suivi
     {
         return $this->suivi;
     }
