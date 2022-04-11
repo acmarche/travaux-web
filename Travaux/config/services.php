@@ -15,8 +15,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
     $parameters->set('locale', 'fr');
-    $parameters->set('ac_marche_travaux.upload.directory', "%kernel.project_dir%/public/files");
-    $parameters->set('ac_marche_avaloir.upload.directory:', "%kernel.project_dir%/public/avaloirs");
+    $parameters->set('ac_marche_avaloir.upload.directory', "%kernel.project_dir%/public/avaloirs");
     $parameters->set('ac_marche_travaux_dir_public', "%kernel.project_dir%/public");
     $parameters->set('ac_marche_travaux.download.directory', "/files");
     $parameters->set('acmarche_travaux.elastic.host', '%env(ELASTIC_HOST)%');

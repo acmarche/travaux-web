@@ -254,9 +254,7 @@ class ApiController extends AbstractController
                 ];
         }
 
-        if ($image instanceof UploadedFile) {
-            $this->upload($avaloir, $image);
-        }
+        $this->upload($avaloir, $image);
 
         return [];
     }
