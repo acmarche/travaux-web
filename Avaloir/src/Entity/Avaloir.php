@@ -30,7 +30,7 @@ class Avaloir implements TimestampableInterface, Stringable
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    protected int $id;
+    protected ?int $id = 0;//todo pq ???
     #[ORM\Column(type: 'decimal', precision: 10, scale: 8, nullable: false)]
     protected float $latitude = 0;
     #[ORM\Column(type: 'decimal', precision: 10, scale: 8, nullable: false)]
@@ -87,7 +87,7 @@ class Avaloir implements TimestampableInterface, Stringable
         return $this->imageFile;
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
