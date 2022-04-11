@@ -7,10 +7,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Etes vous sur de vouloir <strong>supprimer l'avaloir numéro </strong> <br/> <strong>{{ avaloir.id }} ? </strong>
+                    Etes vous sur de vouloir <strong>supprimer l'avaloir numéro </strong> <br/> <strong>{{ avaloir.id }}
+                        ? </strong>
                 </div>
                 <div class="modal-footer">
-                    <form method="post" action="{{ path('batiment_delete', {'id': avaloir.id}) }}">
+                    <form method="post" action="{{ path('avaloir_delete', {'id': avaloir.id}) }}">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ avaloir.id) }}">
                         <button type="button" class="btn btn-secondary"
                                 data-bs-dismiss="modal">Annuler
