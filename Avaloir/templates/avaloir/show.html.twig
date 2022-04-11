@@ -47,15 +47,15 @@
                 </div>
             </div>
 
+            {{ include('@AcMarcheAvaloir/avaloir/_dates_nettoyages.html.twig') }}
+
+            {{ include('@AcMarcheAvaloir/avaloir/_commentaires.html.twig') }}
+
             {% if avaloir.latitude and avaloir.longitude %}
                 <h4>Situation sur la carte</h4>
                 {{ include('@AcMarcheAvaloir/avaloir/_localisation_form.html.twig') }}
                 {{ include('@AcMarcheAvaloir/map/_openstreetmap.html.twig') }}
             {% endif %}
-
-            {{ include('@AcMarcheAvaloir/avaloir/_dates_nettoyages.html.twig') }}
-
-            {{ include('@AcMarcheAvaloir/avaloir/_commentaires.html.twig') }}
 
         </div>
         <div class="card-footer text-muted">
