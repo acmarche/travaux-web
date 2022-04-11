@@ -32,24 +32,24 @@ class Avaloir implements TimestampableInterface, Stringable
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected int $id;
     #[ORM\Column(type: 'decimal', precision: 10, scale: 8, nullable: false)]
-    protected float $latitude;
+    protected float $latitude = 0;
     #[ORM\Column(type: 'decimal', precision: 10, scale: 8, nullable: false)]
-    protected float $longitude;
+    protected float $longitude = 0;
     #[ORM\Column(type: 'text', nullable: true)]
-    protected ?string $description;
+    protected ?string $description = null;
     #[ORM\Column(type: 'string', length: 120, nullable: true)]
-    protected ?string $rue;
+    protected ?string $rue = null;
     #[ORM\Column(type: 'string', length: 120, nullable: true)]
-    protected ?string $localite;
+    protected ?string $localite = null;
     #[ORM\Column(type: 'string', nullable: true)]
-    protected ?string $numero;
+    protected ?string $numero = null;
     #[ORM\OneToMany(targetEntity: 'DateNettoyage', mappedBy: 'avaloir', cascade: ['persist', 'remove'])]
     private Collection $dates;
     #[ORM\OneToMany(targetEntity: 'Commentaire', mappedBy: 'avaloir', cascade: ['persist', 'remove'])]
     private Collection $commentaires;
     #[ORM\Column(type: 'date', nullable: true, options: ['comment' => 'date de rappel'])]
     #[Assert\Type(DateTime::class)]
-    protected ?DateTimeInterface $date_rappel;
+    protected ?DateTimeInterface $date_rappel = null;
     /**
      * @Vich\UploadableField(mapping="avaloir_image", fileNameProperty="imageName")
      */
