@@ -14,7 +14,6 @@ use AcMarche\Avaloir\Entity\DateNettoyage;
 use AcMarche\Stock\Entity\Categorie;
 use AcMarche\Stock\Entity\Produit;
 use AcMarche\Travaux\Entity\Security\User;
-use DateTimeInterface;
 use Liip\ImagineBundle\Service\FilterService;
 use stdClass;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -69,7 +68,7 @@ class SerializeApi
         $std->rue = $avaloir->getRue();
         $std->localite = $avaloir->getLocalite();
         $std->description = $avaloir->getDescription();
-        $std->createdAt = $avaloir->getCreatedAt()->format(DateTimeInterface::RFC3339);//'Y-m-d H:m'
+        $std->createdAt = $avaloir->getCreatedAt()->format('Y-m-d H:m');
         $std->imageUrl = $this->getImage($avaloir);
 
         return $std;
@@ -163,7 +162,7 @@ class SerializeApi
         $std->idReferent = $date->getId();
         $std->avaloirId = $date->getAvaloir()->getId();
         $std->date = $date->getJour()->format('Y-m-d');
-        $std->createdAt = $date->getJour()->format(DateTimeInterface::RFC3339);
+        $std->createdAt = $date->getJour()->format('Y-m-d');
 
         return $std;
     }
@@ -175,7 +174,7 @@ class SerializeApi
         $std->idReferent = $commentaire->getId();
         $std->avaloirId = $commentaire->getAvaloir()->getId();
         $std->content = $commentaire->getContent();
-        $std->createdAt = $commentaire->getCreatedAt()->format(DateTimeInterface::RFC3339);
+        $std->createdAt = $commentaire->getCreatedAt()->format('Y-m-d');
 
         return $std;
     }

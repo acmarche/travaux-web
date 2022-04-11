@@ -86,6 +86,20 @@ class ApiController extends AbstractController
             $avaloir = new Avaloir();
             $avaloir->setLatitude($data['latitude']);
             $avaloir->setLongitude($data['longitude']);
+            if (isset($data['createdAt'])) {
+                $date = $data['createdAt'];
+                $dateTime = false;
+                try {
+                    $dateTime = DateTime::createFromFormat("Y-m-d H:m", $date);
+                } catch (Exception $exception) {
+
+                }
+                if (!$dateTime) {
+                    $dateTime = new DateTime();
+                }
+                $avaloir->setCreatedAt($dateTime);
+                $avaloir->setUpdatedAt($dateTime);
+            }
             $this->avaloirRepository->persist($avaloir);
             $this->avaloirRepository->flush();
         } catch (Exception $exception) {
