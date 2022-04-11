@@ -42,12 +42,11 @@
                             <td>{{ avaloir.id }}</td>
                         </tr>
                     </table>
-
                     <p>{{ avaloir.description | nl2br }}</p>
+
+                    {{ include('@AcMarcheAvaloir/avaloir/_dates_nettoyages.html.twig') }}
                 </div>
             </div>
-
-            {{ include('@AcMarcheAvaloir/avaloir/_dates_nettoyages.html.twig') }}
 
             {{ include('@AcMarcheAvaloir/avaloir/_commentaires.html.twig') }}
 
