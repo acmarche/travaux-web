@@ -20,7 +20,6 @@ use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -39,11 +38,6 @@ class InterventionController extends AbstractController
     ) {
     }
 
-    /**
-     * Lists all Intervention entities.
-     *
-     *
-     */
     #[Route(path: '/', name: 'intervention')]
     #[Route(path: '/ancre/{anchor}/', name: 'intervention_anchor', methods: ['GET'])]
     public function index(Request $request, $anchor = null): Response
@@ -93,11 +87,6 @@ class InterventionController extends AbstractController
         );
     }
 
-    /**
-     * Displays a form to create a new Intervention entity.
-     *
-     *
-     */
     #[Route(path: '/new', name: 'intervention_new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_TRAVAUX_ADD')]
     public function new(Request $request): Response
@@ -137,11 +126,6 @@ class InterventionController extends AbstractController
         );
     }
 
-    /**
-     * Finds and displays a Intervention entity.
-     *
-     *
-     */
     #[Route(path: '/{id}', name: 'intervention_show', methods: ['GET'])]
     public function show(Intervention $intervention): Response
     {
@@ -162,12 +146,6 @@ class InterventionController extends AbstractController
         );
     }
 
-    /**
-     * Displays a form to edit an existing Intervention entity.
-     *
-     *
-     *
-     */
     #[Route(path: '/{id}/edit', name: 'intervention_edit', methods: ['GET', 'POST'])]
     #[IsGranted('edit', subject: 'intervention')]
     public function edit(Request $request, Intervention $intervention): Response
@@ -216,11 +194,6 @@ class InterventionController extends AbstractController
         return $this->redirectToRoute('intervention');
     }
 
-    /**
-     * Deletes a Suivis entity.
-     *
-     *
-     */
     #[Route(path: '/suivis/delete/{id}', name: 'suivis_delete', methods: ['POST'])]
     public function deleteSuivis(Request $request, Intervention $intervention): RedirectResponse
     {
