@@ -2,9 +2,7 @@
 
 namespace AcMarche\Avaloir\Form\Search;
 
-use AcMarche\Avaloir\Entity\Rue;
 use AcMarche\Avaloir\Repository\RueRepository;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -28,7 +26,7 @@ class SearchAvaloirType extends AbstractType
                 SearchType::class,
                 array(
                     'required' => false,
-                    'placeholder' => 'Nom de rue',
+                    'attr' => ['placeholder' => 'Nom de rue'],
                 )
             )
             ->add(
