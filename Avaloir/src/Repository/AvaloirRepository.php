@@ -60,13 +60,8 @@ class AvaloirRepository extends ServiceEntityRepository
     public function search(array $args): array
     {
         $qb = $this->setCriteria($args);
-        $query = $qb->getQuery();
 
-        //echo  $query->getSQL();
-
-        $results = $query->getResult();
-
-        return $results;
+        return $qb->getQuery()->getResult();
     }
 
     public function setCriteria(array $args): QueryBuilder
@@ -90,8 +85,8 @@ class AvaloirRepository extends ServiceEntityRepository
         }
 
         if ($rue instanceof Rue) {
-            $qb->andWhere('avaloir.rue = :rue')
-                ->setParameter('rue', $rue->getNom());
+            $qb->andWhere('avaloir.rue LIKE :rue')
+                ->setParameter('rue', '%'.$rue->getNom().'%');
         }
 
         if ($village) {

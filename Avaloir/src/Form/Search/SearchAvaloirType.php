@@ -9,6 +9,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class SearchAvaloirType extends AbstractType
@@ -24,13 +25,10 @@ class SearchAvaloirType extends AbstractType
         $builder
             ->add(
                 'rue',
-                EntityType::class,
+                SearchType::class,
                 array(
-                    'class' => Rue::class,
-                    'query_builder' => fn(RueRepository $rueRepository) => $rueRepository->getForList(),
-                    'group_by' => 'village',
                     'required' => false,
-                    'placeholder' => 'Choisissez une rue',
+                    'placeholder' => 'Nom de rue',
                 )
             )
             ->add(
