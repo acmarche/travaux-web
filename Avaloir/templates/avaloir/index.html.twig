@@ -2,7 +2,7 @@
 
 {% block body -%}
     <div class="card">
-        <h3 class="card-header">Liste des avaloirs ({{ avaloirs | length }})</h3>
+        <h3 class="card-header">Liste des avaloirs {% if search %}({{ avaloirs | length }}){% endif %}</h3>
         <div class="card-body">
             {% include '@AcMarcheAvaloir/search/avaloir.html.twig' %}
 
