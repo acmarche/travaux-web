@@ -84,9 +84,9 @@ class AvaloirRepository extends ServiceEntityRepository
                 ->setParameter('mot', '%'.$nom.'%');
         }
 
-        if ($rue instanceof Rue) {
+        if ($rue) {
             $qb->andWhere('avaloir.rue LIKE :rue')
-                ->setParameter('rue', '%'.$rue->getNom().'%');
+                ->setParameter('rue', '%'.$rue.'%');
         }
 
         if ($village) {
