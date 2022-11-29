@@ -15,7 +15,6 @@ use AcMarche\Travaux\Entity\Suivi;
 use AcMarche\Travaux\Repository\GroupRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
-use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class TravauxUtils
@@ -23,10 +22,13 @@ class TravauxUtils
     /**
      * TravauxUtils constructor.
      * @param AuthorizationChecker $authorizationChecker
-     * @param ObjectManager $em
+     * @param EntityManagerInterface $em
      */
-    public function __construct(private AuthorizationCheckerInterface $authorizationChecker, private EntityManagerInterface $em, private GroupRepository $groupRepository)
-    {
+    public function __construct(
+        private AuthorizationCheckerInterface $authorizationChecker,
+        private EntityManagerInterface $em,
+        private GroupRepository $groupRepository
+    ) {
     }
 
     public function getInterventionsEnAttentes()
@@ -109,7 +111,6 @@ class TravauxUtils
     {
         $data = [];
         /**
-         *
          * auteur doit voir demande des contributeurs et les siennes
          */
         if ($this->authorizationChecker->isGranted('ROLE_TRAVAUX_AUTEUR')) {

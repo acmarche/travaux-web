@@ -45,7 +45,7 @@ class InterventionRepository extends ServiceEntityRepository
      * @param $args
      * @throws Exception
      */
-    public function setCriteria($args): QueryBuilder
+    public function setCriteria(array $args, bool $cloture = false): QueryBuilder
     {
         $intitule = $args['intitule'] ?? null;
         $categorie = $args['categorie'] ?? 0;
@@ -100,6 +100,12 @@ class InterventionRepository extends ServiceEntityRepository
         if ($etat) {
             $qb->andWhere('intervention.etat = :etat')
                 ->setParameter('etat', $etat);
+        }
+        else {
+            if ($cloture) {
+                $qb->andWhere('intervention.etat != :etat')
+                    ->setParameter('etat', 4);//pas les clotures
+            }
         }
 
         if ($date_introduction) {
@@ -193,12 +199,12 @@ class InterventionRepository extends ServiceEntityRepository
      * @param array $args
      * @return Intervention[]
      */
-    public function search($args)
+    public function search(array $args, bool $cloture)
     {
         $user = $args['user'] ?? null;
         $role = $args['role'] ?? null;
 
-        $qb = $this->setCriteria($args);
+        $qb = $this->setCriteria($args, $cloture);
 
         if ($user && $role) {
             $this->setUserConstraint($user, $role, $qb);

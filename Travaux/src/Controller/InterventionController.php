@@ -2,22 +2,23 @@
 
 namespace AcMarche\Travaux\Controller;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Form\FormInterface;
 use AcMarche\Travaux\Entity\Intervention;
 use AcMarche\Travaux\Entity\Suivi;
 use AcMarche\Travaux\Event\InterventionEvent;
 use AcMarche\Travaux\Form\InterventionType;
 use AcMarche\Travaux\Form\Search\SearchInterventionType;
+use AcMarche\Travaux\Repository\EtatRepository;
 use AcMarche\Travaux\Service\FileHelper;
 use AcMarche\Travaux\Service\InterventionWorkflow;
 use AcMarche\Travaux\Service\TravauxUtils;
+use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -33,6 +34,7 @@ class InterventionController extends AbstractController
         private TravauxUtils $travauxUtils,
         private FileHelper $fileHelper,
         private InterventionWorkflow $workflow,
+        private EtatRepository $etatRepository,
         private EventDispatcherInterface $eventDispatcher,
         private ManagerRegistry $managerRegistry
     ) {
@@ -52,6 +54,9 @@ class InterventionController extends AbstractController
         if ($categorieIntervention = $this->travauxUtils->getCategorieDefault('Intervention')) {
             $data['categorie'] = $categorieIntervention->getId();
         }
+
+        $cloture = $this->etatRepository->find(4);
+
         $user = $this->getUser();
         $data['user'] = $user;
         $data = array_merge($data, $this->travauxUtils->getConstraintsForUser());
@@ -74,7 +79,7 @@ class InterventionController extends AbstractController
             }
         }
         $session->set($key, serialize($data));
-        $interventions = $em->getRepository(Intervention::class)->search($data);
+        $interventions = $em->getRepository(Intervention::class)->search($data, true);
         $this->travauxUtils->setLastSuivisForInterventions($interventions);
 
         return $this->render(
