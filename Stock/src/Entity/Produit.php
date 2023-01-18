@@ -3,12 +3,16 @@
 namespace AcMarche\Stock\Entity;
 
 use AcMarche\Stock\Repository\ProduitRepository;
+use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Stringable;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProduitRepository::class)]
-class Produit implements Stringable
+class Produit implements TimestampableInterface,Stringable
 {
+    use TimestampableTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]

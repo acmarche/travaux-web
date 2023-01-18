@@ -2,7 +2,6 @@
 
 namespace AcMarche\Stock\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Stock\Entity\Produit;
 use AcMarche\Stock\Repository\CategorieRepository;
 use AcMarche\Stock\Repository\ProduitRepository;
@@ -41,6 +40,7 @@ class ApiController extends AbstractController
     public function updateQuantite(Produit $produit, int $quantite): JsonResponse
     {
         $produit->setQuantite($quantite);
+        $produit->setUpdatedAt(new \DateTime());
         $this->produitRepository->flush();
         $data = ['quantite' => $quantite];
         $this->logger->log($produit, $quantite);

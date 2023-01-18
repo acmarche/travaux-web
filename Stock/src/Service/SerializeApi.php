@@ -88,6 +88,7 @@ class SerializeApi
             $std->description = $produit->getDescription();
             $std->quantite = $produit->getQuantite();
             $std->reference = $produit->getReference();
+            $std->updateAt = $produit->getUpdatedAt()?->format('Y-m-d');
             $std->image = '';
             $data[] = $std;
         }

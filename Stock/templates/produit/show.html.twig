@@ -23,6 +23,10 @@
                     <th>Reference</th>
                     <td>{{ produit.reference }}</td>
                 </tr>
+                <tr>
+                    <th>Mis à jour le</th>
+                    <td>{{ produit.updatedAt|format_date('full') }}</td>
+                </tr>
             </table>
         </div>
     </div>
