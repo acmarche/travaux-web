@@ -39,6 +39,11 @@ class ApiController extends AbstractController
     #[Route(path: '/update/{id}/{quantite}')]
     public function updateQuantite(Produit $produit, int $quantite): JsonResponse
     {
+        $now = date('Y-m-d');
+        if ($produit->getUpdatedAt()->format('Y-m-d') > $now) {
+            return new JsonResponse(['quantite' => $produit->getQuantite()]);
+        }
+
         $produit->setQuantite($quantite);
         $produit->setUpdatedAt(new \DateTime());
         $this->produitRepository->flush();
