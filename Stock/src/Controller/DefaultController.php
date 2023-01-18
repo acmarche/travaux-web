@@ -19,6 +19,6 @@ class DefaultController extends AbstractController
     #[IsGranted('ROLE_TRAVAUX_STOCK')]
     public function index() : Response
     {
-        return $this->render('@AcMarcheStock/default/index.html.twig');
+        return $this->redirectToRoute('stock_produit_index');
     }
 }
