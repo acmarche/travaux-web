@@ -7,7 +7,7 @@ use AcMarche\Avaloir\Entity\Rue;
 use AcMarche\Avaloir\Form\QuartierRueType;
 use AcMarche\Avaloir\Service\TokenService;
 use Doctrine\Persistence\ManagerRegistry;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormInterface;
@@ -15,9 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Intervention controller.
- */
+
 #[Route(path: '/quartier/rue')]
 #[IsGranted('ROLE_TRAVAUX_AVALOIR')]
 class QuartierRueController extends AbstractController

@@ -12,7 +12,7 @@ use AcMarche\Travaux\Service\FileHelper;
 use AcMarche\Travaux\Service\InterventionWorkflow;
 use AcMarche\Travaux\Service\TravauxUtils;
 use Doctrine\Persistence\ManagerRegistry;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Exception\IOException;

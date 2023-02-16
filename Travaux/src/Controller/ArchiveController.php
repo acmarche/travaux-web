@@ -6,7 +6,7 @@ use AcMarche\Travaux\Entity\Intervention;
 use AcMarche\Travaux\Event\InterventionEvent;
 use AcMarche\Travaux\Form\Search\SearchInterventionType;
 use Doctrine\Persistence\ManagerRegistry;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -14,9 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Intervention controller.
- */
 #[Route(path: '/archive')]
 #[IsGranted('ROLE_TRAVAUX')]
 class ArchiveController extends AbstractController
@@ -97,10 +94,6 @@ class ArchiveController extends AbstractController
         );
     }
 
-    /**
-     * Archivage d'une intervention
-     *
-     */
     #[Route(path: '/archiveset/{id}', name: 'intervention_archive_set', methods: ['POST'])]
     public function archiveSet(
         Request $request,

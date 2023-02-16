@@ -10,7 +10,7 @@ use AcMarche\Travaux\Entity\Document;
 use AcMarche\Travaux\Entity\Intervention;
 use AcMarche\Travaux\Form\DocumentType;
 use AcMarche\Travaux\Service\FileHelper;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;

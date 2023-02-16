@@ -24,10 +24,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Cache\CacheInterface;
 
-/**
- * Class ApiController
- * @package AcMarche\Avaloir\Controller
- */
 #[Route(path: '/api')]
 class ApiController extends AbstractController
 {

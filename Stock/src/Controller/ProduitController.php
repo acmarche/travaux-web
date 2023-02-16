@@ -9,7 +9,7 @@ use AcMarche\Stock\Form\ProduitType;
 use AcMarche\Stock\Form\SearchProduitType;
 use AcMarche\Stock\Repository\ProduitRepository;
 use AcMarche\Stock\Service\Logger;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

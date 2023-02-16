@@ -11,7 +11,7 @@ use AcMarche\Avaloir\Entity\DateNettoyage;
 use AcMarche\Avaloir\Entity\Quartier;
 use AcMarche\Avaloir\Form\DateNettoyageType;
 use AcMarche\Avaloir\Form\NettoyageQuartierType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;

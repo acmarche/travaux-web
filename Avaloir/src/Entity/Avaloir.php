@@ -17,10 +17,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
-/**
- * @Vich\Uploadable
- *
- */
+#[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: AvaloirRepository::class)]
 #[ORM\Table(name: 'avaloir')]
 class Avaloir implements TimestampableInterface, Stringable
@@ -50,12 +47,19 @@ class Avaloir implements TimestampableInterface, Stringable
     #[ORM\Column(type: 'date', nullable: true, options: ['comment' => 'date de rappel'])]
     #[Assert\Type(DateTime::class)]
     protected ?DateTimeInterface $date_rappel = null;
-    /**
-     * @Vich\UploadableField(mapping="avaloir_image", fileNameProperty="imageName")
-     */
+    #[Vich\UploadableField(mapping: 'avaloir_image', fileNameProperty: 'imageName')]
     private ?File $imageFile = null;
     #[ORM\Column(type: 'string', length: 120, nullable: true)]
     private ?string $imageName;
+
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 8, nullable: true)]
+    public ?float $cos_latitude = 0;
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 8, nullable: true)]
+    public ?float $cos_longitude = 0;
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 8, nullable: true)]
+    public ?float $sin_latitude = 0;
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 8, nullable: true)]
+    public ?float $sin_longitude = 0;
 
     public function __construct()
     {

@@ -14,11 +14,11 @@ use AcMarche\Avaloir\Form\AvaloirType;
 use AcMarche\Avaloir\Form\LocalisationType;
 use AcMarche\Avaloir\Form\Search\SearchAvaloirType;
 use AcMarche\Avaloir\Repository\AvaloirRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_TRAVAUX_AVALOIR')]
 #[Route(path: '/avaloir')]

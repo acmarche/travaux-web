@@ -6,7 +6,7 @@ use AcMarche\Avaloir\Entity\Avaloir;
 use AcMarche\Avaloir\Entity\Commentaire;
 use AcMarche\Avaloir\Form\CommentaireType;
 use Doctrine\Persistence\ManagerRegistry;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;

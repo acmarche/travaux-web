@@ -4,20 +4,15 @@
 namespace AcMarche\Avaloir\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Avaloir\Entity\Avaloir;
 use AcMarche\Avaloir\Form\LocalisationType;
 use AcMarche\Avaloir\Location\LocationUpdater;
 use AcMarche\Avaloir\Repository\AvaloirRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class LocalisationController
- * @package AcMarche\Avaloir\Controller
- */
 #[Route(path: '/localisation')]
 class LocalisationController extends AbstractController
 {

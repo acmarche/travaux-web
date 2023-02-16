@@ -5,7 +5,7 @@ namespace AcMarche\Travaux\Controller;
 use Doctrine\Persistence\ManagerRegistry;
 use AcMarche\Travaux\Entity\Intervention;
 use Knp\Snappy\Pdf;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

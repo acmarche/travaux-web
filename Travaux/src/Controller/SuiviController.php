@@ -10,7 +10,7 @@ use AcMarche\Travaux\Entity\Suivi;
 use AcMarche\Travaux\Event\InterventionEvent;
 use AcMarche\Travaux\Form\SuiviType;
 use AcMarche\Travaux\Service\SuiviService;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
