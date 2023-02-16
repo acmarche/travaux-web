@@ -32,7 +32,7 @@ class CacheCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->io = new SymfonyStyle($input, $output);
+        $io = new SymfonyStyle($input, $output);
         $this->serializeApi->serializeAvaloirs($this->avaloirRepository->getAll());
 
         return Command::SUCCESS;
