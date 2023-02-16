@@ -8,24 +8,22 @@
 
 namespace AcMarche\Travaux\Service;
 
-use Symfony\Component\Workflow\Workflow;
 use AcMarche\Travaux\Entity\Intervention;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Workflow\Exception\LogicException;
 use Symfony\Component\Workflow\Registry;
-use Symfony\Component\Workflow\StateMachine;
 use Symfony\Component\Workflow\Transition;
+use Symfony\Component\Workflow\Workflow;
 
 class InterventionWorkflow
 {
     private ?Workflow $workflow = null;
 
-    /**
-     * InterventionWorkflow constructor.
-     * @param StateMachine $workflow
-     */
-    public function __construct(private Registry $workflowRegistry, protected AuthorizationCheckerInterface $authorizationChecker, private TravauxUtils $travauxUtils)
-    {
+    public function __construct(
+        private Registry $workflowRegistry,
+        protected AuthorizationCheckerInterface $authorizationChecker,
+        private TravauxUtils $travauxUtils
+    ) {
     }
 
     /**
@@ -111,6 +109,7 @@ class InterventionWorkflow
             if (isset($result['error'])) {
                 return $result;
             }
+
             return true;
         }
 
@@ -120,6 +119,7 @@ class InterventionWorkflow
             if (isset($result['error'])) {
                 return $result;
             }
+
             return true;
         }
 

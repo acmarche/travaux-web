@@ -2,6 +2,7 @@
 
 namespace AcMarche\Travaux\Service;
 
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use AcMarche\Travaux\Entity\Intervention;
 use AcMarche\Travaux\Event\InterventionEvent;
@@ -9,12 +10,16 @@ use AcMarche\Travaux\Repository\UserRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Security;
 
 class Mailer
 {
-    public function __construct(private MailerInterface $mailer, private AuthorizationCheckerInterface $authorizationChecker, private Security $security, private UserRepository $userRepository, private TravauxUtils $travauxUtils)
-    {
+    public function __construct(
+        private MailerInterface $mailer,
+        private AuthorizationCheckerInterface $authorizationChecker,
+        private Security $security,
+        private UserRepository $userRepository,
+        private TravauxUtils $travauxUtils
+    ) {
     }
 
     /**
@@ -32,7 +37,7 @@ class Mailer
         $currentUser = $this->security->getUser();
 
         $from = $currentUser->getEmail();
-        $sujet = $intervention->getIntitule() . " a été ajoutée";
+        $sujet = $intervention->getIntitule()." a été ajoutée";
         $destinataires = array_unique(array_merge($admins, $redacteurs));
 
         $mail = (new TemplatedEmail())
@@ -141,7 +146,7 @@ class Mailer
         $currentUser = $this->security->getUser();
 
         $from = $currentUser->getEmail();
-        $sujet = $intervention->getIntitule() . " a été " . $resultat;
+        $sujet = $intervention->getIntitule()." a été ".$resultat;
 
         $mail = (new TemplatedEmail())
             ->subject($sujet)
@@ -287,7 +292,7 @@ class Mailer
         $from = $currentUser->getEmail();
 
         $mail = (new TemplatedEmail())
-            ->subject('Archivage de : ' . $intervention->getIntitule())
+            ->subject('Archivage de : '.$intervention->getIntitule())
             ->from($from)
             ->textTemplate('@AcMarcheTravaux/mail/archive.txt.twig')
             ->context(
@@ -319,7 +324,7 @@ class Mailer
         $from = $currentUser->getEmail();
 
         $mail = (new TemplatedEmail())
-            ->subject('Ajout d\'un suivi pour : ' . $intervention->getIntitule())
+            ->subject('Ajout d\'un suivi pour : '.$intervention->getIntitule())
             ->from($from)
             ->textTemplate('@AcMarcheTravaux/mail/suivis.txt.twig')
             ->context(
