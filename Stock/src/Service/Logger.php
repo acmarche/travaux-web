@@ -11,7 +11,7 @@ namespace AcMarche\Stock\Service;
 use AcMarche\Stock\Entity\Log;
 use AcMarche\Stock\Entity\Produit;
 use AcMarche\Stock\Repository\LogRepository;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class Logger
 {
@@ -19,11 +19,6 @@ class Logger
     {
     }
 
-    /**
-     * Logs with an arbitrary level.
-     *
-     *
-     */
     public function log(Produit $produit, int $quantite): void
     {
         $log = new Log();
@@ -31,10 +26,9 @@ class Logger
         $log->setQuantite($quantite);
         $user = $this->security->getUser();
         $username = $user === null ? "smartphone" : $user->getUserIdentifier();
-        
+
         $log->setUser($username);
         //$log->setCreatedAt(new \DateTime());
         $this->logRepository->insert($log);
-
     }
 }
