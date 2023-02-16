@@ -65,6 +65,10 @@ class SerializeApi
         $std->idReferent = $avaloir->getId();
         $std->latitude = $avaloir->getLatitude();
         $std->longitude = $avaloir->getLongitude();
+        $std->cosLatitude = $avaloir->cos_latitude;
+        $std->cosLongitude = $avaloir->cos_longitude;
+        $std->sinLatitude = $avaloir->sin_latitude;
+        $std->sinLongitude = $avaloir->sin_longitude;
         $std->rue = $avaloir->getRue();
         $std->localite = $avaloir->getLocalite();
         $std->description = $avaloir->getDescription();

@@ -2,12 +2,10 @@
 
 namespace AcMarche\Avaloir\Command;
 
+use AcMarche\Avaloir\Location\LocationMath;
 use AcMarche\Avaloir\Location\LocationReverseInterface;
 use AcMarche\Avaloir\Location\LocationUpdater;
-use AcMarche\Avaloir\MailerAvaloir;
 use AcMarche\Avaloir\Repository\AvaloirRepository;
-use AcMarche\Avaloir\Repository\RueRepository;
-use AcMarche\Stock\Service\SerializeApi;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -26,9 +24,9 @@ class LocationCommand extends Command
         private AvaloirRepository $avaloirRepository,
         private LocationReverseInterface $locationReverse,
         private LocationUpdater $locationUpdater,
-        string $name = null
+        private LocationMath $locationMath,
     ) {
-        parent::__construct($name);
+        parent::__construct();
     }
 
     protected function configure(): void
@@ -44,25 +42,7 @@ class LocationCommand extends Command
 
         $avaloirs = $this->avaloirRepository->findAll();
         foreach ($avaloirs as $avaloir) {
-            $latitude = $avaloir->getLatitude();
-            $longitude = $avaloir->getLongitude();
-            if ($longitude > 0 && $latitude > 0) {
-
-                $this->io->writeln($latitude);
-                $this->io->writeln($longitude);
-
-                $cos_latitude = cos($latitude * pi() / 180.0);
-                $cos_longitude = cos($longitude * pi() / 180.0);
-                $sin_latitude = sin($latitude * pi() / 180.0);
-                $sin_longitude = sin($longitude * pi() / 180.0);
-
-                $avaloir->cos_longitude = $cos_longitude;
-                $this->io->writeln($cos_latitude);
-                $avaloir->cos_latitude = $cos_latitude;
-                $avaloir->sin_longitude = $sin_longitude;
-                $avaloir->sin_latitude = $sin_latitude;
-            }
-
+            $this->locationMath->calculate($avaloir);
         }
 
         $this->avaloirRepository->flush();
