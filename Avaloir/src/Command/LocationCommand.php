@@ -42,18 +42,38 @@ class LocationCommand extends Command
     {
         $this->io = new SymfonyStyle($input, $output);
 
-      //   $avaloir = $this->avaloirRepository->find(2);
-      //   $this->locationUpdater->updateRueAndLocalite($avaloir);
+        $avaloirs = $this->avaloirRepository->findAll();
+        foreach ($avaloirs as $avaloir) {
+            $latitude = $avaloir->getLatitude();
+            $longitude = $avaloir->getLongitude();
+            if ($longitude > 0 && $latitude > 0) {
 
-    //    $this->testLocation($input->getArgument('latitude'), $input->getArgument('longitude'));
+                $this->io->writeln($latitude);
+                $this->io->writeln($longitude);
 
-        $this->reverseAll();
+                $cos_latitude = cos($latitude * pi() / 180.0);
+                $cos_longitude = cos($longitude * pi() / 180.0);
+                $sin_latitude = sin($latitude * pi() / 180.0);
+                $sin_longitude = sin($longitude * pi() / 180.0);
 
-        return 0;
+                $avaloir->cos_longitude = $cos_longitude;
+                $this->io->writeln($cos_latitude);
+                $avaloir->cos_latitude = $cos_latitude;
+                $avaloir->sin_longitude = $sin_longitude;
+                $avaloir->sin_latitude = $sin_latitude;
+            }
+
+        }
+
+        $this->avaloirRepository->flush();
+
+        return Command::SUCCESS;
     }
 
     protected function testLocation(string $latitude, string $longitude): void
     {
+        //$this->locationUpdater->updateRueAndLocalite($avaloir);
+        //$this->testLocation($input->getArgument('latitude'), $input->getArgument('longitude'));
         $result = $this->locationReverse->reverse($latitude, $longitude);
         print_r(json_encode($result, JSON_THROW_ON_ERROR));
         $this->io->writeln($this->locationReverse->getRoad());
@@ -63,7 +83,6 @@ class LocationCommand extends Command
     protected function reverseAll(): void
     {
         $avaloirs = $this->avaloirRepository->findAll();
-
         foreach ($avaloirs as $avaloir) {
             //$this->serializeApi->serializeAvaloir($avaloir);
             //  if (!$avaloir->getRue()) {
