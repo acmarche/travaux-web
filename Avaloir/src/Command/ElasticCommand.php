@@ -6,6 +6,7 @@ use Exception;
 use AcMarche\Avaloir\Repository\AvaloirRepository;
 use AcMarche\Travaux\Elastic\ElasticSearch;
 use AcMarche\Travaux\Elastic\ElasticServer;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,10 +14,12 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(
+    name: 'avaloir:elastic',
+    description: 'Mise à jour du moteur de recherche'
+)]
 class ElasticCommand extends Command
 {
-    protected static $defaultName = 'avaloir:elastic';
-
     public function __construct(
         private ElasticServer $elasticServer,
         private ElasticSearch $elasticSearch,
@@ -29,7 +32,6 @@ class ElasticCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Mise à jour du moteur de recherche')
             ->addOption('raz', null, InputOption::VALUE_NONE, 'Remise à zéro du moteur')
             ->addOption('reindex', null, InputOption::VALUE_NONE, 'Réindex tous les avaloirs')
             ->addArgument('latitude', InputArgument::OPTIONAL)

@@ -4,6 +4,7 @@ namespace AcMarche\Travaux\Command;
 
 use AcMarche\Travaux\Repository\InterventionRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -11,21 +12,17 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 
+#[AsCommand(
+    name: 'actravaux:checkfiles', description: 'Verifie les pieces jointes'
+)]
 class CheckFilesCommand extends Command
 {
-    protected static $defaultName = 'actravaux:checkfiles';
-
     public function __construct(
         private MailerInterface $mailer,
         private InterventionRepository $interventionRepository,
         private ParameterBagInterface $parameterBag
     ) {
         parent::__construct();
-    }
-
-    protected function configure(): void
-    {
-        $this->setDescription('Verifie les pieces jointes');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

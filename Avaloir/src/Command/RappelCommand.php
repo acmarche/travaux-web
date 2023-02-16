@@ -5,6 +5,7 @@ namespace AcMarche\Avaloir\Command;
 use DateTime;
 use AcMarche\Avaloir\Repository\AvaloirRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,9 +14,11 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 
+#[AsCommand(
+    name: 'avaloir:rappel', description: 'Lance les rappels'
+)]
 class RappelCommand extends Command
 {
-    protected static $defaultName = 'avaloir:rappel';
     private ?string $name;
 
     public function __construct(
@@ -26,12 +29,6 @@ class RappelCommand extends Command
     ) {
         parent::__construct($name);
         $this->name = $name;
-    }
-
-    protected function configure(): void
-    {
-        $this
-            ->setDescription('Lance les rappels');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

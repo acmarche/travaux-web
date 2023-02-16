@@ -8,18 +8,19 @@ use AcMarche\Avaloir\MailerAvaloir;
 use AcMarche\Avaloir\Repository\AvaloirRepository;
 use AcMarche\Avaloir\Repository\RueRepository;
 use AcMarche\Stock\Service\SerializeApi;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(
+    name: 'avaloir:location',
+    description: 'Reverse address'
+)]
 class LocationCommand extends Command
 {
-    protected static $defaultName = 'avaloir:location';
-    private SerializeApi $serializeApi;
     private ?SymfonyStyle $io = null;
-    private RueRepository $rueRepository;
-    private MailerAvaloir $mailerAvaloir;
 
     public function __construct(
         private AvaloirRepository $avaloirRepository,
@@ -33,7 +34,6 @@ class LocationCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Reverse address')
             ->addArgument('latitude')
             ->addArgument('longitude');
     }
