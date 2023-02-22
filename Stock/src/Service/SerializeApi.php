@@ -202,7 +202,7 @@ class SerializeApi
             $pathImg = $this->uploaderHelper->asset($avaloir, 'imageFile');
             $fullPath = $this->root.$pathImg;
             if (is_readable($fullPath)) {
-                $thumb = $this->filterService->getUrlOfFilteredImage($pathImg, 'avaloir_heighten_filter');
+                $thumb = $this->filterService->getUrlOfFilteredImage($pathImg, 'avaloir_smartphone');
                 $imageUrl = $thumb !== '' && $thumb !== '0' ? $thumb : $this->urlBase.$this->uploaderHelper->asset(
                         $avaloir,
                         'imageFile'
