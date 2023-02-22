@@ -11,6 +11,9 @@
                     {% for avaloir in avaloirs %}
                         <div class="col mb-4">
                             <div class="card h-100">
+                                <div class="card-header">
+                                    Identifiant: {{ avaloir.id }}
+                                </div>
                                 {% if avaloir.imageName %}
                                     <img src="{{ vich_uploader_asset(avaloir, 'imageFile') | imagine_filter('avaloir_smartphone') }}"
                                          alt="{{ avaloir.imageName }}" class="card-img-top"/>
