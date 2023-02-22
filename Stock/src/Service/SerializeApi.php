@@ -193,10 +193,10 @@ class SerializeApi
     {
         $imageUrl = null;
         if ($avaloir->getImageName()) {
-            $url = $this->root.'/media/cache/avaloir_heighten_filter/avaloirs/'.$avaloir->getId(
+            $url = $this->root.'/media/cache/avaloir_smartphone/avaloirs/'.$avaloir->getId(
                 ).'/aval-'.$avaloir->getId().'.jpg';
             if (is_readable($url)) {
-                return $this->urlBase.'/media/cache/avaloir_heighten_filter/avaloirs/'.$avaloir->getId(
+                return $this->urlBase.'/media/cache/avaloir_smartphone/avaloirs/'.$avaloir->getId(
                     ).'/aval-'.$avaloir->getId().'.jpg';
             }
             $pathImg = $this->uploaderHelper->asset($avaloir, 'imageFile');

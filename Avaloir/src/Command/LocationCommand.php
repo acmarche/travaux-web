@@ -42,8 +42,12 @@ class LocationCommand extends Command
 
         $avaloirs = $this->avaloirRepository->findAll();
         foreach ($avaloirs as $avaloir) {
-            $this->locationMath->calculate($avaloir);
+            if ($avaloir->cos_longitude == 0) {
+                $this->locationMath->calculate($avaloir);
+            }
         }
+
+        // $this->reverseAll();
 
         $this->avaloirRepository->flush();
 
@@ -62,12 +66,9 @@ class LocationCommand extends Command
 
     protected function reverseAll(): void
     {
-        $avaloirs = $this->avaloirRepository->findAll();
+        $avaloirs = $this->avaloirRepository->findWithOutStreet();
         foreach ($avaloirs as $avaloir) {
-            //$this->serializeApi->serializeAvaloir($avaloir);
-            //  if (!$avaloir->getRue()) {
             $this->locationUpdater->updateRueAndLocalite($avaloir);
-            // }
         }
     }
 }

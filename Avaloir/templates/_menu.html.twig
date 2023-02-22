@@ -7,6 +7,11 @@
             </a>
         </li>
         <li>
+            <a href="{{ path('avaloir_without_street') }}" class="nav-link">
+                Avaloirs sans nom de rue
+            </a>
+        </li>
+        <li>
             <a href="{{ path('rue') }}" class="nav-link">
                 Rues
             </a>
@@ -17,7 +22,6 @@
             </a>
         </li>
     {% endif %}
-
     {% if routeExists('intervention') %}
         {% if is_granted('ROLE_TRAVAUX') %}
             <li>

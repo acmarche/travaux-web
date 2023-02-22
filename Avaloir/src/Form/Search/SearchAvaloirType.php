@@ -44,7 +44,7 @@ class SearchAvaloirType extends AbstractType
                 array(
                     'required' => false,
                     'attr' => array(
-                        'placeholder' => 'Numéro',
+                        'placeholder' => 'Identifiant',
                     ),
                 )
             )
@@ -57,7 +57,6 @@ class SearchAvaloirType extends AbstractType
                     'required' => false,
                     'attr' => array(
                         'placeholder' => 'Entre le',
-
                     ),
                 )
             )

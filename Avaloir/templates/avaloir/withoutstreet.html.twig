@@ -1,0 +1,34 @@
+{% extends '@AcMarcheAvaloir/layout_avaloir.html.twig' %}
+
+{% block body -%}
+    <div class="card">
+        <h3 class="card-header">Liste des {{ avaloirs | length }} avaloirs sans nom de rue</h3>
+        <div class="card-body">
+            <div class="alert alert-info">
+                Liste des avaloirs dont le nom de rue n'a pas été trouvé automatiquement par le système
+            </div>
+            {% if avaloirs | length > 0 %}
+                <table class="table table-bordered">
+                    {% for avaloir in avaloirs %}
+                        <tr>
+                            <td>
+                                <a title="Editer l'avaloir"
+                                   href="{{ path('avaloir_edit', { 'id': avaloir.id }) }}">
+                                    Pas de rue trouvée
+                                </a>
+                            </td>
+                            <td>
+                                {% if avaloir.imageName %}
+                                    <img src="{{ vich_uploader_asset(avaloir, 'imageFile') | imagine_filter('avaloir_heighten_filter') }}"
+                                         alt="{{ avaloir.imageName }}" class="card-img-top"/>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <p>Aucun</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

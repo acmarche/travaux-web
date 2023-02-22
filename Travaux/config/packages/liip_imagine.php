@@ -30,6 +30,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'quality' => 95,
                     'filters' => ['auto_rotate' => [], 'relative_resize' => ['heighten' => 600]],
                 ],
+                'avaloir_smartphone' => [
+                    'quality' => 85,
+                    'filters' => ['auto_rotate' => [], 'relative_resize' => ['heighten' => 600]],
+                ]
             ],
         ]
     );

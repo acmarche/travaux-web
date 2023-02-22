@@ -3,20 +3,19 @@
 
 namespace AcMarche\Avaloir\Controller;
 
-use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use AcMarche\Avaloir\Entity\Avaloir;
 use AcMarche\Avaloir\Entity\DateNettoyage;
-use AcMarche\Avaloir\Entity\Rue;
 use AcMarche\Avaloir\Form\AvaloirEditType;
 use AcMarche\Avaloir\Form\AvaloirType;
 use AcMarche\Avaloir\Form\LocalisationType;
 use AcMarche\Avaloir\Form\Search\SearchAvaloirType;
 use AcMarche\Avaloir\Repository\AvaloirRepository;
+use AcMarche\Avaloir\Repository\RueRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -24,7 +23,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route(path: '/avaloir')]
 class AvaloirController extends AbstractController
 {
-    public function __construct(private AvaloirRepository $avaloirRepository, private ManagerRegistry $managerRegistry)
+    public function __construct(private AvaloirRepository $avaloirRepository, private RueRepository $rueRepository)
     {
     }
 
@@ -61,6 +60,19 @@ class AvaloirController extends AbstractController
         );
     }
 
+    #[Route(path: '/withOutStreet', name: 'avaloir_without_street', methods: ['GET'])]
+    public function withOutStreet(Request $request): Response
+    {
+        $avaloirs = $this->avaloirRepository->findWithOutStreet();
+
+        return $this->render(
+            '@AcMarcheAvaloir/avaloir/withoutstreet.html.twig',
+            array(
+                'avaloirs' => $avaloirs,
+            )
+        );
+    }
+
     public function new(Request $request): RedirectResponse|Response
     {
         $avaloir = new Avaloir();
@@ -73,7 +85,6 @@ class AvaloirController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->managerRegistry->getManager();
 
             $data = $form->getData();
             $rueId = $data->getRueId();
@@ -90,7 +101,7 @@ class AvaloirController extends AbstractController
 
             $rue = false;
             if ($rueId) {
-                $rue = $em->getRepository(Rue::class)->find($rueId);
+                $rue = $this->rueRepository->find($rueId);
             }
 
             if (!$rue) {
@@ -100,8 +111,8 @@ class AvaloirController extends AbstractController
             }
 
             $avaloir->setRue($rue);
-            $em->persist($avaloir);
-            $em->flush();
+            $this->rueRepository->persist($avaloir);
+            $this->rueRepository->flush();
             $this->addFlash("success", "L'avaloir a bien été créé");
 
             return $this->redirectToRoute('avaloir_show', ['id' => $avaloir->getId()]);
@@ -116,11 +127,6 @@ class AvaloirController extends AbstractController
         );
     }
 
-    /**
-     * Finds and displays a Avaloir entity.
-     *
-     *
-     */
     #[Route(path: '/{id}', name: 'avaloir_show', methods: ['GET'])]
     public function show(Avaloir $avaloir): Response
     {
@@ -141,20 +147,14 @@ class AvaloirController extends AbstractController
         );
     }
 
-    /**
-     * Displays a form to edit an existing Avaloir entity.
-     *
-     *
-     */
     #[Route(path: '/{id}/edit', name: 'avaloir_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Avaloir $avaloir): Response
     {
-        $em = $this->managerRegistry->getManager();
         $editForm = $this->createForm(AvaloirEditType::class, $avaloir)
             ->add('Update', SubmitType::class);
         $editForm->handleRequest($request);
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em->flush();
+            $this->avaloirRepository->flush();
             $this->addFlash("success", "L'avaloir a bien été modifié");
 
             return $this->redirectToRoute('avaloir_show', array('id' => $avaloir->getId()));
@@ -169,16 +169,12 @@ class AvaloirController extends AbstractController
         );
     }
 
-    /**
-     * Deletes a Avaloir entity.
-     */
     #[Route(path: '/{id}', name: 'avaloir_delete', methods: ['POST'])]
     public function delete(Request $request, Avaloir $avaloir): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$avaloir->getId(), $request->request->get('_token'))) {
-            $em = $this->managerRegistry->getManager();
-            $em->remove($avaloir);
-            $em->flush();
+            $this->avaloirRepository->remove($avaloir);
+            $this->avaloirRepository->flush();
             $this->addFlash("success", "L'avaloir a bien été supprimé");
         }
 

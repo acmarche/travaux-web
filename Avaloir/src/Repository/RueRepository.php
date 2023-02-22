@@ -2,6 +2,7 @@
 
 namespace AcMarche\Avaloir\Repository;
 
+use AcMarche\Travaux\Repository\OrmCrudTrait;
 use Doctrine\ORM\QueryBuilder;
 use AcMarche\Avaloir\Entity\Quartier;
 use AcMarche\Avaloir\Entity\Rue;
@@ -17,6 +18,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class RueRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Rue::class);
@@ -127,4 +130,5 @@ class RueRepository extends ServiceEntityRepository
             ->andWhere('rue.nom = :road')
             ->setParameter('road', $road)->getQuery()->getOneOrNullResult();
     }
+
 }

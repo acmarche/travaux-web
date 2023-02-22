@@ -4,6 +4,7 @@ namespace AcMarche\Avaloir\Repository;
 
 use AcMarche\Avaloir\Entity\Avaloir;
 use AcMarche\Avaloir\Entity\Rue;
+use AcMarche\Travaux\Repository\OrmCrudTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -16,19 +17,11 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class AvaloirRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Avaloir::class);
-    }
-
-    public function flush(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function persist(Avaloir $avaloir): void
-    {
-        $this->_em->persist($avaloir);
     }
 
     /**
@@ -133,6 +126,18 @@ class AvaloirRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
 
+    }
+
+    /**
+     * @return Avaloir[]
+     */
+    public function findWithOutStreet(): array
+    {
+        return $this->createQueryBuilder('avaloir')
+            ->andWhere('avaloir.rue IS NULL')
+            ->addOrderBy('avaloir.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 
     /**

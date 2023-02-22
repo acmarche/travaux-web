@@ -3,16 +3,20 @@
 
 namespace AcMarche\Avaloir\Location;
 
-use Exception;
 use AcMarche\Avaloir\Entity\Avaloir;
 use AcMarche\Avaloir\MailerAvaloir;
 use AcMarche\Avaloir\Repository\AvaloirRepository;
 use AcMarche\Avaloir\Repository\RueRepository;
+use Exception;
 
 class LocationUpdater
 {
-    public function __construct(private AvaloirRepository $avaloirRepository, private RueRepository $rueRepository, private LocationReverseInterface $locationReverse, private MailerAvaloir $mailerAvaloir)
-    {
+    public function __construct(
+        private AvaloirRepository $avaloirRepository,
+        private RueRepository $rueRepository,
+        private LocationReverseInterface $locationReverse,
+        private MailerAvaloir $mailerAvaloir
+    ) {
     }
 
     public function updateRueAndLocalite(Avaloir $avaloir): void
@@ -53,6 +57,7 @@ class LocationUpdater
         if (isset($result['status']) && $result['status'] == 'OK') {
             return true;
         }
+
         return !isset($result['error']);
     }
 }

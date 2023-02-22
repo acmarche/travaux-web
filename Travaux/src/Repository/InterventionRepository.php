@@ -2,14 +2,14 @@
 
 namespace AcMarche\Travaux\Repository;
 
-use Exception;
-use DateTime;
 use AcMarche\Travaux\Entity\Intervention;
 use AcMarche\Travaux\Entity\Security\Group;
 use AcMarche\Travaux\Entity\Security\User;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 
 /**
  * @method Intervention|null find($id, $lockMode = null, $lockVersion = null)
@@ -18,19 +18,11 @@ use Doctrine\ORM\QueryBuilder;
  */
 class InterventionRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Intervention::class);
-    }
-
-    public function persist(Intervention $intervention): void
-    {
-        $this->_em->persist($intervention);
-    }
-
-    public function flush(): void
-    {
-        $this->_em->flush();
     }
 
     /**
@@ -100,8 +92,7 @@ class InterventionRepository extends ServiceEntityRepository
         if ($etat) {
             $qb->andWhere('intervention.etat = :etat')
                 ->setParameter('etat', $etat);
-        }
-        else {
+        } else {
             if ($cloture) {
                 $qb->andWhere('intervention.etat != :etat')
                     ->setParameter('etat', 4);//pas les clotures
@@ -330,11 +321,4 @@ class InterventionRepository extends ServiceEntityRepository
 
         return $qb;
     }
-
-    public function remove(Intervention $getIntervention): void
-    {
-        $this->_em->remove($getIntervention);
-        $this->flush();
-    }
-
 }
