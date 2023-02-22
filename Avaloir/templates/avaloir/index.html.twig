@@ -11,14 +11,8 @@
                     {% for avaloir in avaloirs %}
                         <div class="col mb-4">
                             <div class="card h-100">
-                                <div class="card-header">
-                                    <a title="Consulter l'avaloir"
-                                       href="{{ path('avaloir_show', { 'id': avaloir.id }) }}">
-                                        {{ avaloir.rue }} {{ avaloir.numero }} {% if avaloir.rue == '' %} Pas de rue trouvée  {% endif %}
-                                    </a>
-                                </div>
                                 {% if avaloir.imageName %}
-                                    <img src="{{ vich_uploader_asset(avaloir, 'imageFile') | imagine_filter('avaloir_heighten_filter') }}"
+                                    <img src="{{ vich_uploader_asset(avaloir, 'imageFile') | imagine_filter('avaloir_smartphone') }}"
                                          alt="{{ avaloir.imageName }}" class="card-img-top"/>
                                 {% endif %}
                                 <div class="card-body">
@@ -44,6 +38,7 @@
                                     {% endif %}
                                 </div>
                                 <div class="card-footer text-muted">
+                                    Ajouté le {{ avaloir.createdAt|format_date('full') }}<br/>
                                     {% if avaloir.dates | length > 0 %}
                                         {% set jour = avaloir.dates | first %}
                                         Dernier nettoyage le {{ jour | format_date('full') }}
