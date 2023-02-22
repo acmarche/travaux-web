@@ -61,7 +61,7 @@ class AvaloirController extends AbstractController
     }
 
     #[Route(path: '/withOutStreet', name: 'avaloir_without_street', methods: ['GET'])]
-    public function withOutStreet(Request $request): Response
+    public function withOutStreet(): Response
     {
         $avaloirs = $this->avaloirRepository->findWithOutStreet();
 

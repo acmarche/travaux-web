@@ -108,8 +108,6 @@ class AvaloirRepository extends ServiceEntityRepository
 
         $qb->addOrderBy('avaloir.createdAt', 'DESC');
 
-        //$qb->addOrderBy('rue.nom', 'ASC');
-
         return $qb;
     }
 
