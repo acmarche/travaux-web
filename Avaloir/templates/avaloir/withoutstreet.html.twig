@@ -16,11 +16,10 @@
                                    href="{{ path('avaloir_edit', { 'id': avaloir.id }) }}">
                                     Pas de rue trouvée
                                 </a>
-                            </td>
-                            <td>
+                                <br> <br>
                                 {% if avaloir.imageName %}
                                     <img src="{{ vich_uploader_asset(avaloir, 'imageFile') | imagine_filter('avaloir_smartphone') }}"
-                                         alt="{{ avaloir.imageName }}" class="card-img-top" height="450"/>
+                                         alt="{{ avaloir.imageName }}" class="card-img-top" height="450" width="auto"/>
                                 {% endif %}
                             </td>
                         </tr>
