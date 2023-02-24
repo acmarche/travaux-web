@@ -8,6 +8,7 @@
             <thead>
             <tr>
                 <th scope="col">Numéro</th>
+                <th scope="col">Date</th>
                 <th scope="col">Intitule</th>
                 <th scope="col" class="hidden-xs">Affection</th>
             </tr>
@@ -17,6 +18,9 @@
                 <tr id="{{ intervention.id }}">
                     <td>
                         {{ intervention.id }}
+                    </td>
+                    <td>
+                        {{ intervention.createdAt| date('d-m-Y') }}
                     </td>
                     <td>
                         {{ intervention.intitule }}
