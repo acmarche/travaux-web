@@ -1,0 +1,35 @@
+{% extends '@AcMarcheTravaux/layout.html.twig' %}
+{% block body %}
+
+<div class="card">
+    <h3 class="card-header">Liste des interventions ({{ interventions | length }})</h3>
+    <div class="card-body">
+        <table class='table table-bordered table-hover'>
+            <thead>
+            <tr>
+                <th scope="col">Numéro</th>
+                <th scope="col">Intitule</th>
+                <th scope="col" class="hidden-xs">Affection</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for intervention in interventions %}
+                <tr id="{{ intervention.id }}">
+                    <td>
+                        {{ intervention.id }}
+                    </td>
+                    <td>
+                        {{ intervention.intitule }}
+                    </td>
+                    <td>
+                        {{ intervention.descriptif|nl2br }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

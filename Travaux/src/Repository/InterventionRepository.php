@@ -321,4 +321,17 @@ class InterventionRepository extends ServiceEntityRepository
 
         return $qb;
     }
+
+    /**
+     * @return array|Intervention[]
+     */
+    public function findByDates(DateTime $dateStart, DateTime $dateEnd): array
+    {
+        return $this->createQueryBuilder('intervention')
+            ->andWhere('intervention.date_introduction BETWEEN :date_start AND :date_end')
+            ->setParameter('date_start', $dateStart)
+            ->setParameter('date_end', $dateEnd)
+            ->getQuery()
+            ->getResult();
+    }
 }
