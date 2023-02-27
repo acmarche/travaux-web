@@ -10,7 +10,10 @@
                 <th scope="col">Numéro</th>
                 <th scope="col">Date</th>
                 <th scope="col">Intitule</th>
-                <th scope="col" class="hidden-xs">Affection</th>
+                <th scope="col">Affection</th>
+                <th scope="col">Type</th>
+                <th scope="col">Bâtiment</th>
+                <th scope="col">Description</th>
             </tr>
             </thead>
             <tbody>
@@ -24,6 +27,15 @@
                     </td>
                     <td>
                         {{ intervention.intitule }}
+                    </td>
+                    <td>
+                        {{ intervention.affectation }}
+                    </td>
+                    <td>
+                        {{ intervention.domaine }}
+                    </td>
+                    <td>
+                        {{ intervention.batiment }}
                     </td>
                     <td>
                         {{ intervention.descriptif|nl2br }}
