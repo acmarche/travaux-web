@@ -60,7 +60,7 @@ class LocationCommand extends Command
             $this->dateNettoyageRepository->persist($dateNettoyage);
         }
 
-        //    $this->dateNettoyageRepository->flush();
+        $this->dateNettoyageRepository->flush();
 
         // $this->reverseAll();
 
