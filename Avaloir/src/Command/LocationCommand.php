@@ -51,6 +51,7 @@ class LocationCommand extends Command
         }
 
         $avaloirs = $this->avaloirRepository->findByDate(new \DateTime());
+        $this->io->writeln(count($avaloirs).' avaloirs');
         foreach ($avaloirs as $avaloir) {
             $this->io->writeln($avaloir->getId());
             $dateNettoyage = new DateNettoyage();
@@ -59,11 +60,11 @@ class LocationCommand extends Command
             $this->dateNettoyageRepository->persist($dateNettoyage);
         }
 
-    //    $this->dateNettoyageRepository->flush();
+        //    $this->dateNettoyageRepository->flush();
 
         // $this->reverseAll();
 
-    //    $this->avaloirRepository->flush();
+        //    $this->avaloirRepository->flush();
 
         return Command::SUCCESS;
     }
