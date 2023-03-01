@@ -185,7 +185,7 @@ class AvaloirRepository extends ServiceEntityRepository
             ->leftJoin('avaloir.commentaires', 'commentaires', 'WITH')
             ->addSelect('dates', 'commentaires')
             ->andWhere('avaloir.createdAt LIKE :date')
-            ->setParameter('date', $date->format('Y-m-d'))
+            ->setParameter('date', $date->format('Y-m-d').'%')
             ->getQuery()
             ->getResult();
     }
