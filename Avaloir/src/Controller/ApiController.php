@@ -112,6 +112,13 @@ class ApiController extends AbstractController
 
             return new JsonResponse($data);
         }
+
+        $dateNettoyage = new DateNettoyage();
+        $dateNettoyage->setAvaloir($avaloir);
+        $dateNettoyage->setJour(new \DateTime());
+        $this->dateNettoyageRepository->persist($dateNettoyage);
+        $this->dateNettoyageRepository->flush();
+
         $this->locationUpdater->updateRueAndLocalite($avaloir);
         $result = $this->uploadImage($avaloir, $request);
         if ($result['error'] > 0) {

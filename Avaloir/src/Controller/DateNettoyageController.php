@@ -27,11 +27,7 @@ class DateNettoyageController extends AbstractController
     public function __construct(private ManagerRegistry $managerRegistry)
     {
     }
-    /**
-     * Finds and displays a Date nettoyage entity.
-     *
-     *
-     */
+
     #[Route(path: '/{id}', name: 'datenettoyage_show', methods: ['GET'])]
     public function show(DateNettoyage $date) : Response
     {
@@ -39,15 +35,12 @@ class DateNettoyageController extends AbstractController
             'date' => $date,
         ));
     }
-    /**
-     * Displays a form to create a new DateNettoyage entity.
-     *
-     *
-     */
+
     #[Route(path: '/new/{id}', name: 'datenettoyage_new', methods: ['GET', 'POST'])]
     public function new(Request $request, Avaloir $avaloir) : Response
     {
         $dateNettoyage = new DateNettoyage();
+        $dateNettoyage->setJour(new \DateTime());
         $dateNettoyage->setAvaloir($avaloir);
         $form = $this->createForm(
             DateNettoyageType::class,
