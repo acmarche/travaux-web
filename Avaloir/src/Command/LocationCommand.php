@@ -2,10 +2,12 @@
 
 namespace AcMarche\Avaloir\Command;
 
+use AcMarche\Avaloir\Entity\DateNettoyage;
 use AcMarche\Avaloir\Location\LocationMath;
 use AcMarche\Avaloir\Location\LocationReverseInterface;
 use AcMarche\Avaloir\Location\LocationUpdater;
 use AcMarche\Avaloir\Repository\AvaloirRepository;
+use AcMarche\Avaloir\Repository\DateNettoyageRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -24,6 +26,7 @@ class LocationCommand extends Command
         private AvaloirRepository $avaloirRepository,
         private LocationReverseInterface $locationReverse,
         private LocationUpdater $locationUpdater,
+        private DateNettoyageRepository $dateNettoyageRepository,
         private LocationMath $locationMath,
     ) {
         parent::__construct();
@@ -47,9 +50,20 @@ class LocationCommand extends Command
             }
         }
 
+        $avaloirs = $this->avaloirRepository->findByDate(new \DateTime());
+        foreach ($avaloirs as $avaloir) {
+            $this->io->writeln($avaloir->getId());
+            $dateNettoyage = new DateNettoyage();
+            $dateNettoyage->setAvaloir($avaloir);
+            $dateNettoyage->setJour(new \DateTime());
+            $this->dateNettoyageRepository->persist($dateNettoyage);
+        }
+
+    //    $this->dateNettoyageRepository->flush();
+
         // $this->reverseAll();
 
-        $this->avaloirRepository->flush();
+    //    $this->avaloirRepository->flush();
 
         return Command::SUCCESS;
     }

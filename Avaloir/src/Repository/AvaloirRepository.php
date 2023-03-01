@@ -173,4 +173,20 @@ class AvaloirRepository extends ServiceEntityRepository
             ->setMaxResults(1)
             ->getOneOrNullResult();
     }
+
+    /**
+     * @param \DateTime $date
+     * @return array|Avaloir[]
+     */
+    public function findByDate(\DateTime $date): array
+    {
+        return $this->createQueryBuilder('avaloir')
+            ->leftJoin('avaloir.dates', 'dates', 'WITH')
+            ->leftJoin('avaloir.commentaires', 'commentaires', 'WITH')
+            ->addSelect('dates', 'commentaires')
+            ->andWhere('avaloir.createdAt LIKE :date')
+            ->setParameter('date', $date->format('Y-m-d'))
+            ->getQuery()
+            ->getResult();
+    }
 }
