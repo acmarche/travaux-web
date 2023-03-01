@@ -6,7 +6,6 @@ use AcMarche\Avaloir\Location\LocationMath;
 use AcMarche\Avaloir\Location\LocationReverseInterface;
 use AcMarche\Avaloir\Location\LocationUpdater;
 use AcMarche\Avaloir\Repository\AvaloirRepository;
-use AcMarche\Avaloir\Repository\DateNettoyageRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -25,7 +24,6 @@ class LocationCommand extends Command
         private AvaloirRepository $avaloirRepository,
         private LocationReverseInterface $locationReverse,
         private LocationUpdater $locationUpdater,
-        private DateNettoyageRepository $dateNettoyageRepository,
         private LocationMath $locationMath,
     ) {
         parent::__construct();
