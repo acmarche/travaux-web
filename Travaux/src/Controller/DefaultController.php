@@ -3,17 +3,23 @@
 namespace AcMarche\Travaux\Controller;
 
 use AcMarche\Travaux\Repository\InterventionRepository;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
+use AcMarche\Travaux\Spreadsheet\SpreadsheetDownloaderTrait;
+use AcMarche\Travaux\Spreadsheet\XlsGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 class DefaultController extends AbstractController
 {
-    public function __construct(private InterventionRepository $interventionRepository)
-    {
+    use SpreadsheetDownloaderTrait;
+
+    public function __construct(
+        private InterventionRepository $interventionRepository,
+        private XlsGenerator $xlsGenerator
+    ) {
     }
 
     #[Route(path: '/', name: 'homepage')]
@@ -26,15 +32,22 @@ class DefaultController extends AbstractController
         return $this->redirectToRoute('app_login');
     }
 
-    #[Route(path: '/grh', name: 'grh')]
-    public function grh(): Response
+    #[Route(path: '/grh/{year}/{xls}', name: 'grh_export')]
+    public function grh(int $year = 2022, bool $xls = false): Response
     {
-        $debut = \DateTime::createFromFormat('Y-m-d', '2022-05-01');
-        $end = \DateTime::createFromFormat('Y-m-d', '2022-07-31');
+        $debut = \DateTime::createFromFormat('Y-m-d', $year.'-01-01');
+        $end = \DateTime::createFromFormat('Y-m-d', $year.'-12-31');
         $interventions = $this->interventionRepository->findByDates($debut, $end);
+
+        if ($xls) {
+            $spreadSheet = $this->xlsGenerator->forGrh($interventions);
+
+            return $this->downloadXls($spreadSheet, 'apptravaux-'.$year.'.xls');
+        }
 
         return $this->render('@AcMarcheTravaux/intervention/grh.html.twig', [
             'interventions' => $interventions,
+            'year' => $year,
         ]);
     }
 
