@@ -135,7 +135,6 @@ class ApiController extends AbstractController
                 'message' => 'ok',
                 'avaloir' => $this->serializeApi->serializeAvaloir($avaloir),
             ];
-            $this->mailerAvaloir->sendError('update elastic', $result);
 
             return new JsonResponse($data);
         } catch (Exception $e) {
