@@ -304,10 +304,6 @@ class ApiController extends AbstractController
             );
         }
         $result = $this->elasticSearch->search($distance, $latitude, $longitude);
-        $this->mailerAvaloir->sendError(
-            'result search elastic dist :'.$distance.' lat:'.$latitude.','.$longitude,
-            $result
-        );
         $hits = $result['hits'];
         $total = $hits['total'];
         $avaloirs = [];
