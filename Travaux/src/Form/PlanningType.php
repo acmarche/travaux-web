@@ -11,6 +11,7 @@ use AcMarche\Travaux\Repository\DomaineRepository;
 use AcMarche\Travaux\Repository\HoraireRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,6 +22,12 @@ class PlanningType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('dateIntroduction', DateType::class, [
+                'widget' => 'single_text',
+                'label' => 'Date de rappel',
+                'required' => false,
+                'attr' => array('autocomplete' => 'off'),
+            ])
             ->add('intitule', TextType::class, [
 
             ])
@@ -47,6 +54,9 @@ class PlanningType extends AbstractType
                 'placeholder' => 'Choisissez une équipe',
                 'query_builder' => fn(DomaineRepository $domaineRepository) => $domaineRepository->getQblForList(),
                 'class' => Domaine::class,
+            ])
+            ->add('employes', EmployeAutocompleteField::class,[
+
             ]);
     }
 

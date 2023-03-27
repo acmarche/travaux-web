@@ -7,15 +7,15 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Etes vous sur de vouloir <strong>supprimer</strong> <br/> <strong>{{ horaire }} ? </strong>
+                    Etes vous sûr de vouloir <strong>supprimer</strong> <br/> <strong>{{ intervention }} ? </strong>
                 </div>
                 <div class="modal-footer">
-                    <form method="post" action="{{ path('horaire_delete', {'id': horaire.id}) }}">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ horaire.id) }}">
+                    <form method="post" action="{{ path('intervention_delete', {'id': intervention.id}) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ intervention.id) }}">
                         <button type="button" class="btn btn-secondary"
                                 data-bs-dismiss="modal">Annuler
                         </button>
-                        <button type="submit" class="btn btn-danger">Supprimer l'horaire</button>
+                        <button type="submit" class="btn btn-danger">Supprimer cette intervention</button>
                     </form>
                 </div>
             </div>

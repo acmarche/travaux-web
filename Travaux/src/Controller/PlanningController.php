@@ -38,14 +38,16 @@ class PlanningController extends AbstractController
     #[IsGranted('ROLE_TRAVAUX_ADD')]
     public function new(Request $request): Response
     {
-
         $intervention = new Intervention();
         $form = $this->createForm(PlanningType::class, $intervention);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
+            $data = $form->getData();
+            dd($data);
+            $this->interventionRepository->persist($intervention);
+            $this->interventionRepository->flush();
 
             return $this->redirectToRoute('intervention_show', array('id' => $intervention->getId()));
         }
@@ -58,13 +60,37 @@ class PlanningController extends AbstractController
         );
     }
 
+    #[Route(path: '/{id}/edit', name: 'planning_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Intervention $intervention): Response
+    {
+
+        $editForm = $this->createForm(PlanningType::class, $intervention);
+
+        $editForm->handleRequest($request);
+        if ($editForm->isSubmitted() && $editForm->isValid()) {
+            $this->interventionRepository->flush();
+
+            $this->addFlash('success', 'L\'employé a bien été modifié.');
+
+            return $this->redirectToRoute('employe_show', array('id' => $intervention->getId()));
+        }
+
+        return $this->render(
+            '@AcMarcheTravaux/planning/edit.html.twig',
+            array(
+                'intervention' => $intervention,
+                'form' => $editForm->createView(),
+            )
+        );
+    }
+
     #[Route(path: '/{id}', name: 'planning_show', methods: ['GET'])]
-    public function show(Document $document): Response
+    public function show(Intervention $intervention): Response
     {
         return $this->render(
-            '@AcMarcheTravaux/document/show.html.twig',
+            '@AcMarcheTravaux/planning/show.html.twig',
             array(
-                'entity' => $document,
+                'intervention' => $intervention,
             )
         );
     }

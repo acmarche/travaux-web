@@ -93,6 +93,9 @@ class Intervention implements TimestampableInterface, Stringable
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     public ?Horaire $horaire;
 
+    #[ORM\ManyToMany(targetEntity: Employe::class)]
+    public Collection $employes;
+
     public function __toString(): string
     {
         return $this->intitule;
@@ -124,6 +127,7 @@ class Intervention implements TimestampableInterface, Stringable
         $this->date_introduction = new DateTime();
         $this->documents = new ArrayCollection();
         $this->suivis = new ArrayCollection();
+        $this->employes = new ArrayCollection();
     }
 
     public function getId(): ?int

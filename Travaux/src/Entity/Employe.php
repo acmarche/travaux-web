@@ -33,4 +33,9 @@ class Employe implements Stringable
     {
         return $this->id;
     }
+
+    public function getNomPrenom(): string
+    {
+        return $this->nom.' '.$this->prenom;
+    }
 }
