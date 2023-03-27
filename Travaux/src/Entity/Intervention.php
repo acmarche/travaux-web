@@ -101,22 +101,13 @@ class Intervention implements TimestampableInterface, Stringable
         return $this->intitule;
     }
 
-    /**
-     * @var Suivi|null
-     */
-    protected $lastSuivi;
+    protected ?Suivi $lastSuivi;
 
-    /**
-     * @return Suivi
-     */
     public function getLastSuivi(): ?Suivi
     {
         return $this->lastSuivi;
     }
 
-    /**
-     * @param Suivi $lastSuivis
-     */
     public function setLastSuivi(?Suivi $lastSuivi): void
     {
         $this->lastSuivi = $lastSuivi;
@@ -135,7 +126,7 @@ class Intervention implements TimestampableInterface, Stringable
         return $this->id;
     }
 
-    public function getIntitule(): string
+    public function getIntitule(): ?string
     {
         return $this->intitule;
     }
@@ -159,36 +150,36 @@ class Intervention implements TimestampableInterface, Stringable
         return $this;
     }
 
-    public function getDateIntroduction(): ?DateTimeInterface
+    public function getDateIntroduction(): ?\DateTimeInterface
     {
         return $this->date_introduction;
     }
 
-    public function setDateIntroduction(DateTimeInterface $date_introduction): self
+    public function setDateIntroduction(\DateTimeInterface $date_introduction): self
     {
         $this->date_introduction = $date_introduction;
 
         return $this;
     }
 
-    public function getDateRappel(): ?DateTimeInterface
+    public function getDateRappel(): ?\DateTimeInterface
     {
         return $this->date_rappel;
     }
 
-    public function setDateRappel(?DateTimeInterface $date_rappel): self
+    public function setDateRappel(?\DateTimeInterface $date_rappel): self
     {
         $this->date_rappel = $date_rappel;
 
         return $this;
     }
 
-    public function getDateExecution(): ?DateTimeInterface
+    public function getDateExecution(): ?\DateTimeInterface
     {
         return $this->date_execution;
     }
 
-    public function setDateExecution(?DateTimeInterface $date_execution): self
+    public function setDateExecution(?\DateTimeInterface $date_execution): self
     {
         $this->date_execution = $date_execution;
 
@@ -231,12 +222,12 @@ class Intervention implements TimestampableInterface, Stringable
         return $this;
     }
 
-    public function getSoumisLe(): ?DateTimeInterface
+    public function getSoumisLe(): ?\DateTimeInterface
     {
         return $this->soumis_le;
     }
 
-    public function setSoumisLe(?DateTimeInterface $soumis_le): self
+    public function setSoumisLe(?\DateTimeInterface $soumis_le): self
     {
         $this->soumis_le = $soumis_le;
 
@@ -255,12 +246,12 @@ class Intervention implements TimestampableInterface, Stringable
         return $this;
     }
 
-    public function getDateSolution(): ?DateTimeInterface
+    public function getDateSolution(): ?\DateTimeInterface
     {
         return $this->date_solution;
     }
 
-    public function setDateSolution(?DateTimeInterface $date_solution): self
+    public function setDateSolution(?\DateTimeInterface $date_solution): self
     {
         $this->date_solution = $date_solution;
 
@@ -303,12 +294,12 @@ class Intervention implements TimestampableInterface, Stringable
         return $this;
     }
 
-    public function getDateValidation(): ?DateTimeInterface
+    public function getDateValidation(): ?\DateTimeInterface
     {
         return $this->date_validation;
     }
 
-    public function setDateValidation(?DateTimeInterface $date_validation): self
+    public function setDateValidation(?\DateTimeInterface $date_validation): self
     {
         $this->date_validation = $date_validation;
 
@@ -424,9 +415,9 @@ class Intervention implements TimestampableInterface, Stringable
     }
 
     /**
-     * @return Collection|Document[]
+     * @return Collection<int, Document>
      */
-    public function getDocuments(): array|Collection
+    public function getDocuments(): Collection
     {
         return $this->documents;
     }
@@ -434,7 +425,7 @@ class Intervention implements TimestampableInterface, Stringable
     public function addDocument(Document $document): self
     {
         if (!$this->documents->contains($document)) {
-            $this->documents[] = $document;
+            $this->documents->add($document);
             $document->setIntervention($this);
         }
 
@@ -443,8 +434,7 @@ class Intervention implements TimestampableInterface, Stringable
 
     public function removeDocument(Document $document): self
     {
-        if ($this->documents->contains($document)) {
-            $this->documents->removeElement($document);
+        if ($this->documents->removeElement($document)) {
             // set the owning side to null (unless already changed)
             if ($document->getIntervention() === $this) {
                 $document->setIntervention(null);
@@ -455,9 +445,9 @@ class Intervention implements TimestampableInterface, Stringable
     }
 
     /**
-     * @return Collection|Suivi[]
+     * @return Collection<int, Suivi>
      */
-    public function getSuivis(): array|Collection
+    public function getSuivis(): Collection
     {
         return $this->suivis;
     }
@@ -465,7 +455,7 @@ class Intervention implements TimestampableInterface, Stringable
     public function addSuivi(Suivi $suivi): self
     {
         if (!$this->suivis->contains($suivi)) {
-            $this->suivis[] = $suivi;
+            $this->suivis->add($suivi);
             $suivi->setIntervention($this);
         }
 
@@ -474,13 +464,68 @@ class Intervention implements TimestampableInterface, Stringable
 
     public function removeSuivi(Suivi $suivi): self
     {
-        if ($this->suivis->contains($suivi)) {
-            $this->suivis->removeElement($suivi);
+        if ($this->suivis->removeElement($suivi)) {
             // set the owning side to null (unless already changed)
             if ($suivi->getIntervention() === $this) {
                 $suivi->setIntervention(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isTransmis(): ?bool
+    {
+        return $this->transmis;
+    }
+
+    public function isAffectePrive(): ?bool
+    {
+        return $this->affecte_prive;
+    }
+
+    public function isArchive(): ?bool
+    {
+        return $this->archive;
+    }
+
+    public function isSmartphone(): ?bool
+    {
+        return $this->smartphone;
+    }
+
+    public function getHoraire(): ?Horaire
+    {
+        return $this->horaire;
+    }
+
+    public function setHoraire(?Horaire $horaire): self
+    {
+        $this->horaire = $horaire;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Employe>
+     */
+    public function getEmployes(): Collection
+    {
+        return $this->employes;
+    }
+
+    public function addEmploye(Employe $employe): self
+    {
+        if (!$this->employes->contains($employe)) {
+            $this->employes->add($employe);
+        }
+
+        return $this;
+    }
+
+    public function removeEmploye(Employe $employe): self
+    {
+        $this->employes->removeElement($employe);
 
         return $this;
     }
