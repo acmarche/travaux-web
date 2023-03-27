@@ -1,0 +1,10 @@
+{% extends '@AcMarcheTravaux/layout.html.twig' %}
+
+{% block body -%}
+    <div class="card">
+        <h3 class="card-header">Nouvelle intervention pour le planning</h3>
+        <div class="card-body">
+          {% include '@AcMarcheTravaux/planning/_form.html.twig' %}
+        </div>
+    </div>
+{% endblock %}

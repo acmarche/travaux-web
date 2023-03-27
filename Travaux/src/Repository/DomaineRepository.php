@@ -5,6 +5,7 @@ namespace AcMarche\Travaux\Repository;
 use AcMarche\Travaux\Entity\Domaine;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -44,5 +45,11 @@ class DomaineRepository extends ServiceEntityRepository
         }
 
         return $domaines;
+    }
+
+    public function getQblForList(): QueryBuilder
+    {
+        return $this->createQueryBuilder('domaine')
+            ->orderBy('domaine.intitule');
     }
 }

@@ -4,6 +4,7 @@ namespace AcMarche\Travaux\Repository;
 
 use AcMarche\Travaux\Entity\Horaire;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 
@@ -30,5 +31,10 @@ class HoraireRepository extends ServiceEntityRepository
         return $this->findBy(array(), array('nom' => 'ASC'));
     }
 
+    public function getQblForList(): QueryBuilder
+    {
+        return $this->createQueryBuilder('horaire')
+            ->addOrderBy('horaire.nom');
+    }
 
 }

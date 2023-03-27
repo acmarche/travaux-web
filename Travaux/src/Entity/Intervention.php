@@ -89,6 +89,10 @@ class Intervention implements TimestampableInterface, Stringable
     #[ORM\Column(type: 'string', nullable: true)]
     public ?string $currentPlace;
 
+    #[ORM\ManyToOne(targetEntity: Horaire::class, inversedBy: 'intervention')]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    public ?Horaire $horaire;
+
     public function __toString(): string
     {
         return $this->intitule;
@@ -115,9 +119,6 @@ class Intervention implements TimestampableInterface, Stringable
         $this->lastSuivi = $lastSuivi;
     }
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         $this->date_introduction = new DateTime();

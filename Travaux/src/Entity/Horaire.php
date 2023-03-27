@@ -3,6 +3,8 @@
 namespace AcMarche\Travaux\Entity;
 
 use AcMarche\Travaux\Repository\HoraireRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -20,6 +22,9 @@ class Horaire implements Stringable
     #[Assert\NotBlank]
     public string $nom;
 
+    #[ORM\OneToMany(mappedBy: 'horaire', targetEntity: Intervention::class)]
+    public Collection $intervention;
+
     public function __toString()
     {
         return $this->nom;
@@ -28,5 +33,10 @@ class Horaire implements Stringable
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function __construct()
+    {
+        $this->intervention = new ArrayCollection();
     }
 }

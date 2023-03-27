@@ -1,0 +1,26 @@
+{{ form_start(form) }}
+{{ form_errors(form) }}
+{{ form_row(form.intitule) }}
+
+<div class="row">
+    <div class="col-6">
+        {{ form_row(form.horaire) }}
+    </div>
+    <div class="col-6">
+        {{ form_row(form.batiment) }}
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        {{ form_row(form.domaine) }}
+    </div>
+    <div class="col-6">
+
+    </div>
+</div>
+
+{{ form_row(form.descriptif) }}
+<button type="submit" name="save" class="btn btn-primary mb-3" role="button">
+    <i class="fas fa-save"></i> Sauvegarder
+</button>
+{{ form_end(form) }}

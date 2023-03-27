@@ -3,8 +3,8 @@
 namespace AcMarche\Travaux\Repository;
 
 use AcMarche\Travaux\Entity\Batiment;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 
@@ -47,5 +47,11 @@ class BatimentRepository extends ServiceEntityRepository
         }
 
         return $batiments;
+    }
+
+    public function getQblForList(): QueryBuilder
+    {
+        return $this->createQueryBuilder('batiment')
+            ->orderBy('batiment.intitule');
     }
 }
