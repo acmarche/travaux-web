@@ -19,9 +19,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Document controller.
- */
 #[Route(path: '/document')]
 #[IsGranted('ROLE_TRAVAUX')]
 class DocumentController extends AbstractController
@@ -29,11 +26,7 @@ class DocumentController extends AbstractController
     public function __construct(private FileHelper $fileHelper, private ManagerRegistry $managerRegistry)
     {
     }
-    /**
-     * Displays a form to create a new Document entity.
-     *
-     *
-     */
+
     #[Route(path: '/new/{id}', name: 'document_new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_TRAVAUX_ADD')]
     public function new(Request $request, Intervention $intervention) : Response
@@ -83,11 +76,7 @@ class DocumentController extends AbstractController
             )
         );
     }
-    /**
-     * Finds and displays a Document entity.
-     *
-     *
-     */
+
     #[Route(path: '/{id}', name: 'document_show', methods: ['GET'])]
     public function show(Document $document) : Response
     {
@@ -98,9 +87,7 @@ class DocumentController extends AbstractController
             )
         );
     }
-    /**
-     * Deletes a Document entity.
-     */
+
     #[Route(path: '/{id}', name: 'document_delete', methods: ['POST'])]
     #[IsGranted('ROLE_TRAVAUX_ADD')]
     public function delete(Request $request, Document $document) : RedirectResponse

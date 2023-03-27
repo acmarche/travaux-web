@@ -31,8 +31,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     /*
      * Pour envoie de mail en mode console
      */
-    $parameters->set('router.request_context.scheme', '%env(INTRANET_HTTP_SCHEME)%');
-    $parameters->set('router.request_context.host', '%env(INTRANET_HTTP_HOST)%');
+    $parameters->set('router.request_context.scheme', 'https');
+    $parameters->set('router.request_context.host', '%env(APP_URL)%');
 
     $services = $containerConfigurator->services();
 

@@ -1,0 +1,26 @@
+{% extends '@AcMarcheTravaux/layout.html.twig' %}
+
+{% block body -%}
+    <div class="card">
+        <h3 class="card-header">Liste des horaires</h3>
+        <div class="card-body">
+             {% if is_granted('ROLE_TRAVAUX_ADMIN') %}
+                <a href="{{ path('horaire_new') }}" class="btn btn-primary mb-3" role="button"><i
+                            class="fa fa-plus"></i> Ajouter</a>
+            {% endif %}
+            <table class="table table-bordered">
+                <tr>
+                    <th>Nom</th>
+                </tr>
+                {% for horaire in horaires %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('horaire_show', {'id': horaire.id}) }}">{{ horaire }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}
+

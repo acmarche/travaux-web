@@ -1,0 +1,26 @@
+{% extends '@AcMarcheTravaux/layout.html.twig' %}
+
+{% block body -%}
+    <div class="card">
+        <h3 class="card-header">Liste des ouvriers</h3>
+        <div class="card-body">
+             {% if is_granted('ROLE_TRAVAUX_ADMIN') %}
+                <a href="{{ path('employe_new') }}" class="btn btn-primary mb-3" role="button"><i
+                            class="fa fa-plus"></i> Ajouter</a>
+            {% endif %}
+            <table class="table table-bordered">
+                <tr>
+                    <th>Nom</th>
+                </tr>
+                {% for employe in employes %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('employe_show', {'id': employe.id}) }}">{{ employe }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}
+

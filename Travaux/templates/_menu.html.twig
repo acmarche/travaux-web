@@ -5,6 +5,11 @@
             <a href="{{ path('intervention') }}" class="nav-link px-2 link-dark"><i class="fa fa-search"></i>
                 Rechercher</a>
         </li>
+        <li>
+              <a href="{{ path('planning_index') }}" class="nav-link px-2 link-dark">
+                  <i class="fa fa-calendar-alt"></i>
+                Planning</a>
+        </li>
         {% if is_granted('ROLE_TRAVAUX_ADD') %}
             <li>
                 <a href="{{ path('intervention_new') }}" class="nav-link px-2 link-dark">
@@ -32,6 +37,8 @@
                     Paramètres... <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{{ path('employe') }}">Les ouvriers</a></li>
+                    <li><a class="dropdown-item" href="{{ path('horaire') }}">Les horaires</a></li>
                     <li><a class="dropdown-item" href="{{ path('batiment') }}">Les bâtiments</a></li>
                     <li><a class="dropdown-item" href="{{ path('service') }}">Les services</a></li>
                     <li><a class="dropdown-item" href="{{ path('domaine') }}">Les types</a></li>

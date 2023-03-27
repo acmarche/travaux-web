@@ -13,9 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Categorie controller.
- */
+
 #[Route(path: '/categorie')]
 #[IsGranted('ROLE_TRAVAUX_ADMIN')]
 class CategorieController extends AbstractController
