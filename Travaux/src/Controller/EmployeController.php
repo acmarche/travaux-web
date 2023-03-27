@@ -59,7 +59,7 @@ class EmployeController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}', name: 'employe_show', methods: ['GET'])]
+    #[Route(path: '/{id}/show', name: 'employe_show', methods: ['GET'])]
     public function show(Employe $employe): Response
     {
         return $this->render(
@@ -73,7 +73,6 @@ class EmployeController extends AbstractController
     #[Route(path: '/{id}/edit', name: 'employe_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Employe $employe): Response
     {
-
         $editForm = $this->createForm(EmployeType::class, $employe);
 
         $editForm->handleRequest($request);

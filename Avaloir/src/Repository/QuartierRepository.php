@@ -3,6 +3,7 @@
 namespace AcMarche\Avaloir\Repository;
 
 use AcMarche\Avaloir\Entity\Quartier;
+use AcMarche\Travaux\Repository\OrmCrudTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -15,6 +16,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class QuartierRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Quartier::class);

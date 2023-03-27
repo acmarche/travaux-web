@@ -2,9 +2,13 @@
 
 namespace AcMarche\Travaux\Controller;
 
+use AcMarche\Travaux\Entity\Etat;
 use AcMarche\Travaux\Entity\Intervention;
 use AcMarche\Travaux\Form\PlanningType;
+use AcMarche\Travaux\Repository\CategorieRepository;
+use AcMarche\Travaux\Repository\EtatRepository;
 use AcMarche\Travaux\Repository\InterventionRepository;
+use AcMarche\Travaux\Repository\PrioriteRepository;
 use AcMarche\Travaux\Spreadsheet\SpreadsheetDownloaderTrait;
 use AcMarche\Travaux\Spreadsheet\XlsGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,6 +25,9 @@ class PlanningController extends AbstractController
 
     public function __construct(
         private InterventionRepository $interventionRepository,
+        private EtatRepository $etatRepository,
+        private PrioriteRepository $prioriteRepository,
+        private CategorieRepository $categorieRepository,
         private XlsGenerator $xlsGenerator
     ) {
     }
@@ -45,11 +52,21 @@ class PlanningController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            dd($data);
+            $user = $this->getUser();
+            $intervention->setUserAdd($user->getUserIdentifier());
+            $intervention->setCurrentPlace('published');
+            $etat = $this->etatRepository->find(1);//new
+            $intervention->setEtat($etat);
+            $priorite = $this->prioriteRepository->find(1);//normal
+            $intervention->setPriorite($priorite);
+            $category = $this->categorieRepository->find(3);//intervention
+            $intervention->setCategorie($category);
+            $intervention->isPlanning = true;
+
             $this->interventionRepository->persist($intervention);
             $this->interventionRepository->flush();
 
-            return $this->redirectToRoute('intervention_show', array('id' => $intervention->getId()));
+            return $this->redirectToRoute('planning_show', array('id' => $intervention->getId()));
         }
 
         return $this->render(
@@ -63,7 +80,6 @@ class PlanningController extends AbstractController
     #[Route(path: '/{id}/edit', name: 'planning_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Intervention $intervention): Response
     {
-
         $editForm = $this->createForm(PlanningType::class, $intervention);
 
         $editForm->handleRequest($request);
@@ -72,7 +88,7 @@ class PlanningController extends AbstractController
 
             $this->addFlash('success', 'L\'employé a bien été modifié.');
 
-            return $this->redirectToRoute('employe_show', array('id' => $intervention->getId()));
+            return $this->redirectToRoute('planning_show', array('id' => $intervention->getId()));
         }
 
         return $this->render(

@@ -96,6 +96,9 @@ class Intervention implements TimestampableInterface, Stringable
     #[ORM\ManyToMany(targetEntity: Employe::class)]
     public Collection $employes;
 
+    #[ORM\Column(type: 'boolean', nullable: false)]
+    public bool $isPlanning = false;
+
     public function __toString(): string
     {
         return $this->intitule;

@@ -4,7 +4,6 @@ namespace AcMarche\Avaloir\Form;
 
 use AcMarche\Avaloir\Entity\Quartier;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -14,15 +13,11 @@ class QuartierRueType extends AbstractType
     {
         $builder
             ->add(
-                'dptokenfield',
-                TextType::class,
+                'rueIds',
+                RueAutocompleteField::class,
                 [
-                    'mapped' => false,
                     'required' => false,
                     'label' => 'Rues',
-                    'attr' => [
-                        'class' => 'courrier_dptokenfield',
-                    ],
                 ]
             );
     }
