@@ -61,20 +61,20 @@ class Intervention implements TimestampableInterface, Stringable
     #[ORM\Column(type: 'decimal', precision: 9, scale: 2, nullable: true)]
     protected ?float $cout_materiel = 0;
     #[ORM\Column(type: 'date', nullable: true)]
-    protected ?DateTimeInterface $date_validation;
+    protected ?DateTimeInterface $date_validation = null;
     #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 0])]
     protected bool $smartphone = false;
     #[ORM\Column(type: 'string', nullable: false)]
     protected string $user_add;
     #[ORM\ManyToOne(targetEntity: Domaine::class, inversedBy: 'intervention')]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
-    protected ?Domaine $domaine;
+    protected ?Domaine $domaine = null;
     #[ORM\ManyToOne(targetEntity: Batiment::class, inversedBy: 'intervention')]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
-    protected ?Batiment $batiment;
+    protected ?Batiment $batiment = null;
     #[ORM\ManyToOne(targetEntity: Service::class, inversedBy: 'intervention')]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
-    protected ?Service $service;
+    protected ?Service $service = null;
     #[ORM\ManyToOne(targetEntity: Categorie::class, inversedBy: 'intervention')]
     #[ORM\JoinColumn(nullable: false)]
     protected Categorie $categorie;
@@ -87,11 +87,11 @@ class Intervention implements TimestampableInterface, Stringable
      * This property is used by the marking store
      */
     #[ORM\Column(type: 'string', nullable: true)]
-    public ?string $currentPlace;
+    public ?string $currentPlace = null;
 
     #[ORM\ManyToOne(targetEntity: Horaire::class, inversedBy: 'intervention')]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
-    public ?Horaire $horaire;
+    public ?Horaire $horaire = null;
 
     #[ORM\ManyToMany(targetEntity: Employe::class)]
     public Collection $employes;
@@ -99,12 +99,15 @@ class Intervention implements TimestampableInterface, Stringable
     #[ORM\Column(type: 'boolean', nullable: false)]
     public bool $isPlanning = false;
 
+    #[ORM\ManyToMany(targetEntity: DateEntity::class, cascade: ['persist', 'remove'])]
+    public Collection $dates;
+
     public function __toString(): string
     {
         return $this->intitule;
     }
 
-    protected ?Suivi $lastSuivi;
+    protected ?Suivi $lastSuivi = null;
 
     public function getLastSuivi(): ?Suivi
     {
@@ -122,6 +125,7 @@ class Intervention implements TimestampableInterface, Stringable
         $this->documents = new ArrayCollection();
         $this->suivis = new ArrayCollection();
         $this->employes = new ArrayCollection();
+        $this->dates = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -529,6 +533,30 @@ class Intervention implements TimestampableInterface, Stringable
     public function removeEmploye(Employe $employe): self
     {
         $this->employes->removeElement($employe);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DateEntity>
+     */
+    public function getDates(): Collection
+    {
+        return $this->dates;
+    }
+
+    public function addDate(DateEntity $date): self
+    {
+        if (!$this->dates->contains($date)) {
+            $this->dates->add($date);
+        }
+
+        return $this;
+    }
+
+    public function removeDate(DateEntity $date): self
+    {
+        $this->dates->removeElement($date);
 
         return $this;
     }

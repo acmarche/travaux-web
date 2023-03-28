@@ -16,6 +16,14 @@
                         {% endfor %}
                     </td>
                 </tr>
+                <tr>
+                    <th>Date(s)</th>
+                    <td>
+                        {% for date in intervention.dates %}
+                            {{ date|format_date('full') }} |
+                        {% endfor %}
+                    </td>
+                </tr>
             </table>
 
         </div>

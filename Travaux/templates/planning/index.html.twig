@@ -4,8 +4,48 @@
     <div class="card">
         <h3 class="card-header">Planning des interventions</h3>
         <div class="card-body">
-
-
+            {% if is_granted('ROLE_TRAVAUX') %}
+                <a href="{{ path('planning_new') }}" class="btn btn-primary mb-3" role="button"><i
+                            class="fa fa-plus"></i> Ajouter</a>
+            {% endif %}
+            <table class='table table-bordered table-hover'>
+                <thead>
+                <tr>
+                    <th scope="col">Numéro</th>
+                    <th scope="col">Intitule</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Encodé par</th>
+                    <th scope="col">Date(s)</th>
+                    <th scope="col" class="hidden-xs">Affection</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for intervention in interventions %}
+                    <tr id="{{ intervention.id }}">
+                        <td>
+                            {{ intervention.id }}
+                        </td>
+                        <td>
+                            <a href="{{ path('planning_show', { 'id': intervention.id }) }}"
+                               title="Détail de l'intervention">{{ intervention.intitule }}
+                            </a>
+                        </td>
+                        <td>{{ intervention.domaine }}</td>
+                        <td>{{ intervention.useradd }}</td>
+                        <td>
+                            {% for date in intervention.dates %}
+                                {{ date|format_date('full') }} |
+                            {% endfor %}
+                        </td>
+                        <td class="hidden-xs">
+                            {% for employe in intervention.employes %}
+                                {{ employe.prenom }},
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 

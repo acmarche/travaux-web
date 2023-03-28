@@ -13,6 +13,7 @@ use AcMarche\Travaux\Entity\Intervention;
 use AcMarche\Travaux\Entity\Security\User;
 use AcMarche\Travaux\Entity\Suivi;
 use AcMarche\Travaux\Repository\GroupRepository;
+use AcMarche\Travaux\Repository\InterventionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -26,6 +27,7 @@ class TravauxUtils
      */
     public function __construct(
         private AuthorizationCheckerInterface $authorizationChecker,
+        private InterventionRepository $interventionRepository,
         private EntityManagerInterface $em,
         private GroupRepository $groupRepository
     ) {
@@ -42,10 +44,8 @@ class TravauxUtils
         }
 
         if ($places) {
-            return $this->em->getRepository(Intervention::class)->getInterventionsToValid(
-                array(
-                    'places' => $places,
-                )
+            return $this->interventionRepository->getInterventionsToValid(
+                $places
             );
         }
 
@@ -150,10 +150,5 @@ class TravauxUtils
                 $intervention->setLastSuivi($suivis);
             }
         }
-    }
-
-    public function getInterventionsReportees()
-    {
-        return $this->em->getRepository(Intervention::class)->getInterventionsReportees();
     }
 }

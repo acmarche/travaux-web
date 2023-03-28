@@ -11,23 +11,19 @@ use AcMarche\Travaux\Repository\DomaineRepository;
 use AcMarche\Travaux\Repository\HoraireRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Count;
 
 class PlanningType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('dateIntroduction', DateType::class, [
-                'widget' => 'single_text',
-                'label' => 'Date de rappel',
-                'required' => false,
-                'attr' => array('autocomplete' => 'off'),
-            ])
             ->add('intitule', TextType::class, [
 
             ])
@@ -55,9 +51,27 @@ class PlanningType extends AbstractType
                 'query_builder' => fn(DomaineRepository $domaineRepository) => $domaineRepository->getQblForList(),
                 'class' => Domaine::class,
             ])
-            ->add('employes', EmployeAutocompleteField::class,[
+            ->add('employes', EmployeAutocompleteField::class, [
 
+            ])
+            ->add('dates', CollectionType::class, [
+                'entry_type' => DateInputType::class,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+                'by_reference' => false,
+                'attr' => [
+                    'data-entry-add-label' => 'Ajouter une date',
+                    'data-entry-remove-label' => 'Supprimer une date',
+                ],
+                'constraints' => [
+                    new Count(min: 1, minMessage: 'Il doit y avoir au moins 1 date'),
+                ],
+            ])
+            ->add('save', SubmitType::class, [
+                'label' => 'Sauvegarder',
+                'attr' => ['class' => 'btn-success'],
             ]);
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

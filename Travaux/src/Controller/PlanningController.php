@@ -2,16 +2,18 @@
 
 namespace AcMarche\Travaux\Controller;
 
-use AcMarche\Travaux\Entity\Etat;
+use AcMarche\Travaux\Entity\DateEntity;
 use AcMarche\Travaux\Entity\Intervention;
 use AcMarche\Travaux\Form\PlanningType;
 use AcMarche\Travaux\Repository\CategorieRepository;
+use AcMarche\Travaux\Repository\DateRepository;
 use AcMarche\Travaux\Repository\EtatRepository;
 use AcMarche\Travaux\Repository\InterventionRepository;
 use AcMarche\Travaux\Repository\PrioriteRepository;
 use AcMarche\Travaux\Spreadsheet\SpreadsheetDownloaderTrait;
 use AcMarche\Travaux\Spreadsheet\XlsGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,6 +30,7 @@ class PlanningController extends AbstractController
         private EtatRepository $etatRepository,
         private PrioriteRepository $prioriteRepository,
         private CategorieRepository $categorieRepository,
+        private DateRepository $dateRepository,
         private XlsGenerator $xlsGenerator
     ) {
     }
@@ -35,23 +38,37 @@ class PlanningController extends AbstractController
     #[Route(path: '/tt', name: 'planning_index')]
     public function index(): Response
     {
+        $interventions = $this->interventionRepository->findAllPlanning();
 
         return $this->render('@AcMarcheTravaux/planning/index.html.twig', [
-
+            'interventions' => $interventions,
         ]);
     }
 
-    #[Route(path: '/new', name: 'planning_new', methods: ['GET', 'POST'])]
+    #[Route(path: '/new/{date}', name: 'planning_new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_TRAVAUX_ADD')]
-    public function new(Request $request): Response
+    public function new(Request $request, string $date = null): Response
     {
+        if (!$date) {
+            $date = new \DateTime();
+        } else {
+            $date = \DateTime::createFromFormat('Y-m-d', $date);
+        }
+
         $intervention = new Intervention();
-        $form = $this->createForm(PlanningType::class, $intervention);
+        $dateType = new DateEntity($date);
+        $intervention->dates->add($dateType);
+        $form = $this->createForm(PlanningType::class, $intervention)
+            ->add('saveAndAdd', SubmitType::class, [
+                'label' => 'Ajouter et ajouter une autre',
+                'attr' => ['class' => 'btn-success'],
+            ]);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
+
             $user = $this->getUser();
             $intervention->setUserAdd($user->getUserIdentifier());
             $intervention->setCurrentPlace('published');
@@ -66,7 +83,9 @@ class PlanningController extends AbstractController
             $this->interventionRepository->persist($intervention);
             $this->interventionRepository->flush();
 
-            return $this->redirectToRoute('planning_show', array('id' => $intervention->getId()));
+            return $form->get('saveAndAdd')->isClicked()
+                ? $this->redirectToRoute('planning_new')
+                : $this->redirectToRoute('planning_show', array('id' => $intervention->getId()));
         }
 
         return $this->render(
@@ -80,10 +99,21 @@ class PlanningController extends AbstractController
     #[Route(path: '/{id}/edit', name: 'planning_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Intervention $intervention): Response
     {
-        $editForm = $this->createForm(PlanningType::class, $intervention);
+        $form = $this->createForm(PlanningType::class, $intervention);
 
-        $editForm->handleRequest($request);
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
+            foreach ($data->dates as $date) {
+                if ($date->day == null) {
+                    $this->dateRepository->remove($date);
+                    $data->removeDate($date);
+
+                }
+            }
+
+            $intervention->dates = $data->dates;
             $this->interventionRepository->flush();
 
             $this->addFlash('success', 'L\'employé a bien été modifié.');
@@ -95,7 +125,7 @@ class PlanningController extends AbstractController
             '@AcMarcheTravaux/planning/edit.html.twig',
             array(
                 'intervention' => $intervention,
-                'form' => $editForm->createView(),
+                'form' => $form->createView(),
             )
         );
     }

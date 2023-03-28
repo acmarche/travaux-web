@@ -16,13 +16,12 @@ class EmployeAutocompleteField extends AbstractType
     {
         $resolver->setDefaults([
             'class' => Employe::class,
-            'label' => 'What sounds tasty?',
+            'label' => 'Ouvriers affectés',
             'choice_label' => 'nomPrenom',
             'multiple' => true,
             'constraints' => [
-                new Count(min: 1, minMessage: 'We need to eat *something*'),
+                new Count(min: 1, minMessage: 'Il doit y avoir au moins 1 ouvrier'),
             ],
-            // 'security' => 'ROLE_SOMETHING',
         ]);
     }
 

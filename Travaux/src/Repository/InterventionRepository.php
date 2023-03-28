@@ -59,12 +59,7 @@ class InterventionRepository extends ServiceEntityRepository
         $affecte_prive = $args['affecte_prive'] ?? false;
         $date_execution = $args['date_execution'] ?? false;
 
-        $qb = $this->createQueryBuilder('intervention');
-        $qb->leftJoin('intervention.categorie', 'categorie', 'WITH');
-        $qb->leftJoin('intervention.batiment', 'batiment', 'WITH');
-        $qb->leftJoin('intervention.domaine', 'domaine', 'WITH');
-        $qb->leftJoin('intervention.documents', 'documents', 'WITH');
-        $qb->addSelect('categorie', 'batiment', 'domaine', 'documents');
+        $qb = $this->createQbl(false);
 
         if ($intitule) {
             $qb->andWhere(
@@ -211,10 +206,10 @@ class InterventionRepository extends ServiceEntityRepository
      * @return Intervention[]
      * @throws Exception
      */
-    public function getInterventionsReportees()
+    public function getInterventionsReportees(): array
     {
         $today = new DateTime('now');
-        $qb = $this->createQueryBuilder('intervention');
+        $qb = $this->createQbl(false);
 
         $qb->andWhere('intervention.date_execution > :date ')
             ->setParameter('date', $today->format('Y-m-d'));
@@ -228,32 +223,17 @@ class InterventionRepository extends ServiceEntityRepository
 
     /**
      * Retourne La liste des interventions à valider pour l'admin ou l'auteur
-     * @param array $args
+     * @param array $places
      * @return Intervention[]
      */
-    public function getInterventionsToValid($args)
+    public function getInterventionsToValid(array $places = []): array
     {
-        $qb = $this->createQueryBuilder('intervention');
-        $qb->leftJoin('intervention.categorie', 'categorie', 'WITH');
-        $qb->leftJoin('intervention.batiment', 'batiment', 'WITH');
-        $qb->leftJoin('intervention.domaine', 'domaine', 'WITH');
-        $qb->leftJoin('intervention.documents', 'documents', 'WITH');
-        $qb->addSelect('categorie', 'batiment', 'domaine', 'documents');
-
-        $qb->where("intervention.archive = 0 ");
-
-        $places = $args['places'] ?? [];
-
-        $string = '';
-        foreach ($places as $place) {
-            $string .= "intervention.currentPlace LIKE '%$place%' OR ";
-        }
-        $string = substr($string, 0, -3);
-        $qb->andWhere($string);
-
-        $query = $qb->getQuery();
-
-        return $query->getResult();
+        return $this->createQbl(false)
+            ->andWhere("intervention.archive = 0 ")
+            ->andWhere("intervention.currentPlace IN (:places) ")
+            ->setParameter('places', $places)
+            ->getQuery()
+            ->getResult();
     }
 
     public function setUserConstraint(User $user, $role, QueryBuilder $qb): QueryBuilder
@@ -327,11 +307,35 @@ class InterventionRepository extends ServiceEntityRepository
      */
     public function findByDates(DateTime $dateStart, DateTime $dateEnd): array
     {
-        return $this->createQueryBuilder('intervention')
+        return $this->createQbl(false)
             ->andWhere('intervention.date_introduction BETWEEN :date_start AND :date_end')
             ->setParameter('date_start', $dateStart)
             ->setParameter('date_end', $dateEnd)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * @return array|Intervention[]
+     */
+    public function findAllPlanning(): array
+    {
+        return $this->createQbl(true)
+            ->andWhere('intervention.isPlanning = :plan')
+            ->setParameter('plan', true)
+            ->getQuery()
+            ->getResult();
+    }
+
+    private function createQbl(bool $isPlanning): QueryBuilder
+    {
+        return $this->createQueryBuilder('intervention')
+            ->leftJoin('intervention.categorie', 'categorie', 'WITH')
+            ->leftJoin('intervention.batiment', 'batiment', 'WITH')
+            ->leftJoin('intervention.domaine', 'domaine', 'WITH')
+            ->leftJoin('intervention.documents', 'documents', 'WITH')
+            ->addSelect('categorie', 'batiment', 'domaine', 'documents')
+            ->andWhere('intervention.isPlanning = :plan')
+            ->setParameter('plan', $isPlanning);
     }
 }
