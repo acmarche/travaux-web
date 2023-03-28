@@ -1,4 +1,13 @@
 <li class="list-group-item">
-{{ day|date('d') }}
+    <strong>{{ day|date('j') }}</strong>
+    <br/>
+    {% set plans = data[day|date('j')] %}
+
+    {% for plan in plans %}
+        <a href="{{ path('planning_show', {'id': 'x'}) }}">
+            {{ plan.intitule }}
+        </a>
+        <br/>
+    {% endfor %}
 
 </li>

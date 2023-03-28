@@ -36,24 +36,31 @@ class PlanningController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/tt', name: 'planning_index')]
-    public function index(): Response
+    #[Route(path: '/tt/{monthyear}', name: 'planning_index')]
+    public function index(string $monthyear = null): Response
     {
-        $interventions = $this->interventionRepository->findAllPlanning();
-        $currentMonth = Carbon::now()->toImmutable();
-        $days = CarbonPeriod::create($currentMonth->firstOfMonth(), $currentMonth->endOfMonth());
-        $data = [];
-        foreach ($days as $day) {
-
-            //$data[$day->day] = $this->interventionRepository->findPlanningByDay($dates);
+        $date = Carbon::now()->toImmutable();
+        if ($monthyear) {
+            $date = Carbon::createFromFormat('Y-m-d', $monthyear.'-01')->toImmutable();
         }
 
-        dump($data);
+        $interventions = $this->interventionRepository->findAllPlanning();
+        $days = CarbonPeriod::create($date->firstOfMonth(), $date->endOfMonth());
+        $data = [];
+        foreach ($days as $day) {
+            $data[$day->day] = $this->interventionRepository->findPlanningByDay($day);
+        }
+
+        $next = $date->addMonth();
+        $previous = $date->subMonth();
 
         return $this->render('@AcMarcheTravaux/planning/index.html.twig', [
             'interventions' => $interventions,
-            'curentMonth' => $currentMonth->monthName,
+            'date' => $date,
+            'next' => $next,
+            'previous' => $previous,
             'days' => $days,
+            'data' => $data,
         ]);
     }
 

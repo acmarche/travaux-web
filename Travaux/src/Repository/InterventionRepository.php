@@ -327,14 +327,14 @@ class InterventionRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param array|DateEntity[] $dates
+     * @param DateTime $date
      * @return array|Intervention[]
      */
-    public function findPlanningByDay(array $dates): array
+    public function findPlanningByDay(DateTime $date): array
     {
         return $this->createQbl(true)
-            ->andWhere('dates IN (:dates)')
-            ->setParameter('dates', $dates)
+            ->andWhere('intervention.dates LIKE :date')
+            ->setParameter('date', '%'.$date->format('Y-m-d').'%')
             ->getQuery()
             ->getResult();
     }

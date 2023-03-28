@@ -9,7 +9,18 @@
                             class="fa fa-plus"></i> Ajouter</a>
             {% endif %}
             <div class="calendar-wrapper">
-                <h3 class="text-success text-center">{{ curentMonth }}</h3>
+                <div class="d-flex justify-content-between">
+                    <a href="{{ path('planning_index', {'monthyear':previous.format('Y-m')}) }}">
+                        Précédent
+                    </a>
+                    <h3 class="text-success text-center">
+                        {{ date.monthName|trans }}  {{ date.year }}
+                    </h3>
+                    <a href="{{ path('planning_index', {'monthyear':next.format('Y-m')}) }}">
+                        Suivant
+                    </a>
+                </div>
+
                 <ul class="calendar list-group">
                     <li class="bg-info list-group-item">Lun</li>
                     <li class="bg-info list-group-item">Mar</li>
@@ -25,6 +36,7 @@
                 </ul>
             </div>
 
+            <h3 class="text-success mt-3">Listing</h3>
             <table class='table table-bordered table-hover'>
                 <thead>
                 <tr>
