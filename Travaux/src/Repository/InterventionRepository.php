@@ -2,6 +2,7 @@
 
 namespace AcMarche\Travaux\Repository;
 
+use AcMarche\Travaux\Entity\DateEntity;
 use AcMarche\Travaux\Entity\Intervention;
 use AcMarche\Travaux\Entity\Security\Group;
 use AcMarche\Travaux\Entity\Security\User;
@@ -321,8 +322,19 @@ class InterventionRepository extends ServiceEntityRepository
     public function findAllPlanning(): array
     {
         return $this->createQbl(true)
-            ->andWhere('intervention.isPlanning = :plan')
-            ->setParameter('plan', true)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @param array|DateEntity[] $dates
+     * @return array|Intervention[]
+     */
+    public function findPlanningByDay(array $dates): array
+    {
+        return $this->createQbl(true)
+            ->andWhere('dates IN (:dates)')
+            ->setParameter('dates', $dates)
             ->getQuery()
             ->getResult();
     }

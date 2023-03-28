@@ -12,6 +12,7 @@ use AcMarche\Travaux\Repository\HoraireRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -54,12 +55,14 @@ class PlanningType extends AbstractType
             ->add('employes', EmployeAutocompleteField::class, [
 
             ])
-            ->add('dates', CollectionType::class, [
-                'entry_type' => DateInputType::class,
-                'entry_options' => ['label' => false],
+            ->add('datesCollection', CollectionType::class, [
+                'entry_type' => DateType::class,
+                'required' => true,
+                'entry_options' => ['label' => false, 'widget' => 'single_text'],
                 'allow_add' => true,
                 'by_reference' => false,
                 'attr' => [
+                    'autocomplete' => 'off',
                     'data-entry-add-label' => 'Ajouter une date',
                     'data-entry-remove-label' => 'Supprimer une date',
                 ],
@@ -71,7 +74,6 @@ class PlanningType extends AbstractType
                 'label' => 'Sauvegarder',
                 'attr' => ['class' => 'btn-success'],
             ]);
-
     }
 
     public function configureOptions(OptionsResolver $resolver): void

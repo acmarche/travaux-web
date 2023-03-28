@@ -2,16 +2,18 @@
 
 namespace AcMarche\Travaux\Controller;
 
-use AcMarche\Travaux\Entity\DateEntity;
 use AcMarche\Travaux\Entity\Intervention;
 use AcMarche\Travaux\Form\PlanningType;
+use AcMarche\Travaux\Planning\TreatmentDates;
 use AcMarche\Travaux\Repository\CategorieRepository;
-use AcMarche\Travaux\Repository\DateRepository;
 use AcMarche\Travaux\Repository\EtatRepository;
 use AcMarche\Travaux\Repository\InterventionRepository;
 use AcMarche\Travaux\Repository\PrioriteRepository;
 use AcMarche\Travaux\Spreadsheet\SpreadsheetDownloaderTrait;
 use AcMarche\Travaux\Spreadsheet\XlsGenerator;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,7 +32,6 @@ class PlanningController extends AbstractController
         private EtatRepository $etatRepository,
         private PrioriteRepository $prioriteRepository,
         private CategorieRepository $categorieRepository,
-        private DateRepository $dateRepository,
         private XlsGenerator $xlsGenerator
     ) {
     }
@@ -39,9 +40,20 @@ class PlanningController extends AbstractController
     public function index(): Response
     {
         $interventions = $this->interventionRepository->findAllPlanning();
+        $currentMonth = Carbon::now()->toImmutable();
+        $days = CarbonPeriod::create($currentMonth->firstOfMonth(), $currentMonth->endOfMonth());
+        $data = [];
+        foreach ($days as $day) {
+
+            //$data[$day->day] = $this->interventionRepository->findPlanningByDay($dates);
+        }
+
+        dump($data);
 
         return $this->render('@AcMarcheTravaux/planning/index.html.twig', [
             'interventions' => $interventions,
+            'curentMonth' => $currentMonth->monthName,
+            'days' => $days,
         ]);
     }
 
@@ -56,8 +68,9 @@ class PlanningController extends AbstractController
         }
 
         $intervention = new Intervention();
-        $dateType = new DateEntity($date);
-        $intervention->dates->add($dateType);
+        $intervention->datesCollection = new ArrayCollection();
+        $intervention->datesCollection->add($date);
+
         $form = $this->createForm(PlanningType::class, $intervention)
             ->add('saveAndAdd', SubmitType::class, [
                 'label' => 'Ajouter et ajouter une autre',
@@ -80,6 +93,8 @@ class PlanningController extends AbstractController
             $intervention->setCategorie($category);
             $intervention->isPlanning = true;
 
+            TreatmentDates::setDatesFromCollection($intervention, $data);
+
             $this->interventionRepository->persist($intervention);
             $this->interventionRepository->flush();
 
@@ -96,24 +111,29 @@ class PlanningController extends AbstractController
         );
     }
 
+    #[Route(path: '/{id}', name: 'planning_show', methods: ['GET'])]
+    public function show(Intervention $intervention): Response
+    {
+        return $this->render(
+            '@AcMarcheTravaux/planning/show.html.twig',
+            [
+                'intervention' => $intervention,
+            ]
+        );
+    }
+
     #[Route(path: '/{id}/edit', name: 'planning_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Intervention $intervention): Response
     {
+        TreatmentDates::setDatesCollectionFromDates($intervention);
+
         $form = $this->createForm(PlanningType::class, $intervention);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
 
-            foreach ($data->dates as $date) {
-                if ($date->day == null) {
-                    $this->dateRepository->remove($date);
-                    $data->removeDate($date);
-
-                }
-            }
-
-            $intervention->dates = $data->dates;
+            TreatmentDates::setDatesFromCollection($intervention, $data);
             $this->interventionRepository->flush();
 
             $this->addFlash('success', 'L\'employé a bien été modifié.');
@@ -130,14 +150,4 @@ class PlanningController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}', name: 'planning_show', methods: ['GET'])]
-    public function show(Intervention $intervention): Response
-    {
-        return $this->render(
-            '@AcMarcheTravaux/planning/show.html.twig',
-            array(
-                'intervention' => $intervention,
-            )
-        );
-    }
 }

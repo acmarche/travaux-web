@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'intervention')]
 class Intervention implements TimestampableInterface, Stringable
 {
-    use TimestampableTrait;
+    use TimestampableTrait, DatesTrait;
 
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
@@ -78,9 +78,9 @@ class Intervention implements TimestampableInterface, Stringable
     #[ORM\ManyToOne(targetEntity: Categorie::class, inversedBy: 'intervention')]
     #[ORM\JoinColumn(nullable: false)]
     protected Categorie $categorie;
-    #[ORM\OneToMany(targetEntity: Document::class, mappedBy: 'intervention', cascade: ['remove'])]
+    #[ORM\OneToMany(mappedBy: 'intervention', targetEntity: Document::class, cascade: ['remove'])]
     protected Collection $documents;
-    #[ORM\OneToMany(targetEntity: Suivi::class, mappedBy: 'intervention', cascade: ['remove'])]
+    #[ORM\OneToMany(mappedBy: 'intervention', targetEntity: Suivi::class, cascade: ['remove'])]
     #[ORM\OrderBy(['id' => 'DESC'])]
     protected Collection $suivis;
     /**
@@ -98,9 +98,6 @@ class Intervention implements TimestampableInterface, Stringable
 
     #[ORM\Column(type: 'boolean', nullable: false)]
     public bool $isPlanning = false;
-
-    #[ORM\ManyToMany(targetEntity: DateEntity::class, cascade: ['persist', 'remove'])]
-    public Collection $dates;
 
     public function __toString(): string
     {
@@ -125,7 +122,7 @@ class Intervention implements TimestampableInterface, Stringable
         $this->documents = new ArrayCollection();
         $this->suivis = new ArrayCollection();
         $this->employes = new ArrayCollection();
-        $this->dates = new ArrayCollection();
+        $this->datesCollection = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -537,27 +534,4 @@ class Intervention implements TimestampableInterface, Stringable
         return $this;
     }
 
-    /**
-     * @return Collection<int, DateEntity>
-     */
-    public function getDates(): Collection
-    {
-        return $this->dates;
-    }
-
-    public function addDate(DateEntity $date): self
-    {
-        if (!$this->dates->contains($date)) {
-            $this->dates->add($date);
-        }
-
-        return $this;
-    }
-
-    public function removeDate(DateEntity $date): self
-    {
-        $this->dates->removeElement($date);
-
-        return $this;
-    }
 }

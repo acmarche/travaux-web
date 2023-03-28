@@ -8,6 +8,23 @@
                 <a href="{{ path('planning_new') }}" class="btn btn-primary mb-3" role="button"><i
                             class="fa fa-plus"></i> Ajouter</a>
             {% endif %}
+            <div class="calendar-wrapper">
+                <h3 class="text-success text-center">{{ curentMonth }}</h3>
+                <ul class="calendar list-group">
+                    <li class="bg-info list-group-item">Lun</li>
+                    <li class="bg-info list-group-item">Mar</li>
+                    <li class="bg-info list-group-item">Mer</li>
+                    <li class="bg-info list-group-item">Jeu</li>
+                    <li class="bg-info list-group-item">Ven</li>
+                    <li class="bg-info list-group-item">Sam</li>
+                    <li class="bg-info list-group-item">Dim</li>
+                    <li class="first-day list-group-item">1</li>
+                    {% for day in days %}
+                        {% include '@Travaux/planning/_cell.html.twig' %}
+                    {% endfor %}
+                </ul>
+            </div>
+
             <table class='table table-bordered table-hover'>
                 <thead>
                 <tr>
