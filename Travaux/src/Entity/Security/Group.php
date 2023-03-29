@@ -41,6 +41,10 @@ class Group implements Stringable
         $this->roles = $roles;
     }
 
+    public function nameDescription(): string {
+        return $this->name. ' <span class="text-muted">('.$this->description.')</span>';
+    }
+
     /**
      * {@inheritdoc}
      */

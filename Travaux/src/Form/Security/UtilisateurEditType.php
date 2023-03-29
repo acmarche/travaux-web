@@ -20,6 +20,8 @@ class UtilisateurEditType extends AbstractType
                 EntityType::class,
                 [
                     'class' => Group::class,
+                    'choice_label' => 'nameDescription',
+                    'label_html' => true,
                     'multiple' => true,
                     'expanded' => true,
                 ]

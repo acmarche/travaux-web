@@ -84,6 +84,7 @@ class UtilisateurController extends AbstractController
     {
         $editForm = $this->createForm(UtilisateurEditType::class, $utilisateur)
             ->add('submit', SubmitType::class, array('label' => 'Update'));
+
         $editForm->handleRequest($request);
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->userRepository->save();
