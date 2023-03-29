@@ -43,11 +43,13 @@ class GroupController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            foreach ($group->getRoles() as $key => $role) {
-                if ($role == '') {
-                    unset($group->getRoles()[$key]);
+            $roles = $group->getRoles();
+            foreach ($roles as $key => $role) {
+                if ($role == '' || $role == null) {
+                    unset($roles[$key]);
                 }
             }
+            $group->setRoles($roles);
             $this->groupRepository->persist($group);
             $this->groupRepository->flush();
 
@@ -83,6 +85,13 @@ class GroupController extends AbstractController
 
         $editForm->handleRequest($request);
         if ($editForm->isSubmitted() && $editForm->isValid()) {
+            $roles = $group->getRoles();
+            foreach ($roles as $key => $role) {
+                if ($role == '' || $role == null) {
+                    unset($roles[$key]);
+                }
+            }
+            $group->setRoles($roles);
             $this->groupRepository->flush();
 
             $this->addFlash('success', 'Le groupe a bien été modifié.');
