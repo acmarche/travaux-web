@@ -93,7 +93,9 @@ class TravauxUtils
         if ($group !== null) {
             $users = $group->getUsers();
             foreach ($users as $user) {
-                $destinataires[] = $user->getEmail();
+                if ($user->notification) {
+                    $destinataires[] = $user->getEmail();
+                }
             }
         }
 

@@ -54,6 +54,9 @@ class User implements UserInterface, Stringable, PasswordAuthenticatedUserInterf
     #[ORM\Column(type: 'string', length: 180, unique: true, nullable: true)]
     protected ?string $token;
 
+    #[ORM\Column(type: 'boolean', nullable: false)]
+    public ?bool $notification = false;
+
     public function getPlainPassword(): ?string
     {
         return $this->plainPassword;
