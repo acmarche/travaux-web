@@ -42,8 +42,8 @@ class Intervention implements TimestampableInterface, Stringable
     protected ?DateTimeInterface $date_rappel;
     #[ORM\Column(type: 'date', nullable: true)]
     protected ?DateTimeInterface $date_execution;
-    #[ORM\Column(type: 'text', nullable: false)]
-    protected string $descriptif;
+    #[ORM\Column(type: 'text', nullable: true)]
+    protected ?string $descriptif;
     #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $affectation = null;
     #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 0])]
@@ -195,7 +195,7 @@ class Intervention implements TimestampableInterface, Stringable
         return $this->descriptif;
     }
 
-    public function setDescriptif(string $descriptif): self
+    public function setDescriptif(?string $descriptif): self
     {
         $this->descriptif = $descriptif;
 

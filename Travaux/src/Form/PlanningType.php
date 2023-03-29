@@ -30,6 +30,7 @@ class PlanningType extends AbstractType
             ])
             ->add('descriptif', TextareaType::class, [
                 'label' => 'Description',
+                'required' => false,
                 'attr' => ['rows' => 8],
             ])
             ->add('horaire', EntityType::class, [
