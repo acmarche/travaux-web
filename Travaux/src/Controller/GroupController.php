@@ -43,7 +43,11 @@ class GroupController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
+            foreach ($group->getRoles() as $key => $role) {
+                if ($role == '') {
+                    unset($group->getRoles()[$key]);
+                }
+            }
             $this->groupRepository->persist($group);
             $this->groupRepository->flush();
 
