@@ -4,18 +4,22 @@
     <div class="card">
         <h3 class="card-header">Liste des groupes</h3>
         <div class="card-body">
-             {% if is_granted('ROLE_TRAVAUX_ADMIN') %}
+            {% if is_granted('ROLE_TRAVAUX_ADMIN') %}
                 <a href="{{ path('group_new') }}" class="btn btn-primary mb-3" role="button"><i
                             class="fa fa-plus"></i> Ajouter</a>
             {% endif %}
             <table class="table table-bordered">
                 <tr>
                     <th>Nom</th>
+                    <th>Description</th>
                 </tr>
                 {% for group in groups %}
                     <tr>
                         <td>
                             <a href="{{ path('group_show', {'id': group.id}) }}">{{ group }}</a>
+                        </td>
+                        <td class="text-muted">
+                            {{ group.description }}
                         </td>
                     </tr>
                 {% endfor %}
