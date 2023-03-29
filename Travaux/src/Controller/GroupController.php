@@ -38,6 +38,7 @@ class GroupController extends AbstractController
     public function new(Request $request): Response
     {
         $group = new Group('');
+        $group->addRole('');
         $form = $this->createForm(GroupType::class, $group);
 
         $form->handleRequest($request);
