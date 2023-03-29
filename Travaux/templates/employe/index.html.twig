@@ -4,10 +4,8 @@
     <div class="card">
         <h3 class="card-header">Liste des ouvriers</h3>
         <div class="card-body">
-             {% if is_granted('ROLE_TRAVAUX_ADMIN') %}
-                <a href="{{ path('employe_new') }}" class="btn btn-primary mb-3" role="button"><i
-                            class="fa fa-plus"></i> Ajouter</a>
-            {% endif %}
+            <a href="{{ path('employe_new') }}" class="btn btn-primary mb-3" role="button"><i
+                        class="fa fa-plus"></i> Ajouter</a>
             <table class="table table-bordered">
                 <tr>
                     <th>Nom</th>

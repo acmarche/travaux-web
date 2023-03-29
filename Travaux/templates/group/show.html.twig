@@ -1,0 +1,21 @@
+{% extends '@AcMarcheTravaux/layout.html.twig' %}
+
+{% block body -%}
+    <div class="card">
+        <h3 class="card-header">{{ group }}</h3>
+        <div class="card-body">
+            {% include '@AcMarcheTravaux/group/_actions.html.twig' %}
+
+            <h3 class="text-success">Rôles</h3>
+            <ul class="list-group">
+                {% for role in group.roles %}
+                    <li class="list-group-item">
+                        {{ role }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% include '@AcMarcheTravaux/group/_delete.html.twig' %}
+{% endblock %}
+

@@ -14,7 +14,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 #[Route(path: '/employe')]
-#[IsGranted('ROLE_TRAVAUX_ADMIN')]
+#[IsGranted('ROLE_TRAVAUX_PLANNING')]
 class EmployeController extends AbstractController
 {
     public function __construct(private EmployeRepository $employeRepository)

@@ -14,7 +14,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 #[Route(path: '/horaire')]
-#[IsGranted('ROLE_TRAVAUX_ADMIN')]
+#[IsGranted('ROLE_TRAVAUX_PLANNING')]
 class HoraireController extends AbstractController
 {
     public function __construct(private HoraireRepository $horaireRepository)
@@ -46,7 +46,7 @@ class HoraireController extends AbstractController
             $this->horaireRepository->persist($horaire);
             $this->horaireRepository->flush();
 
-            $this->addFlash('success', 'L\'employé a bien été créé.');
+            $this->addFlash('success', 'L\'horaire bien été créé.');
 
             return $this->redirectToRoute('horaire_show', array('id' => $horaire->getId()));
         }
@@ -80,7 +80,7 @@ class HoraireController extends AbstractController
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->horaireRepository->flush();
 
-            $this->addFlash('success', 'L\'employé a bien été modifié.');
+            $this->addFlash('success', 'L\'horaire a bien été modifié.');
 
             return $this->redirectToRoute('horaire_show', array('id' => $horaire->getId()));
         }
@@ -103,7 +103,7 @@ class HoraireController extends AbstractController
             $this->horaireRepository->remove($horaire);
             $this->horaireRepository->flush();
 
-            $this->addFlash('success', 'L\'employé a bien été supprimé.');
+            $this->addFlash('success', 'L\'horaire a bien été supprimé.');
         }
 
         return $this->redirectToRoute('horaire');

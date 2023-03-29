@@ -5,16 +5,18 @@
             <a href="{{ path('intervention') }}" class="nav-link px-2 link-dark"><i class="fa fa-search"></i>
                 Rechercher</a>
         </li>
-        <li>
-              <a href="{{ path('planning_index') }}" class="nav-link px-2 link-dark">
-                  <i class="fa fa-calendar-alt"></i>
-                Planning</a>
-        </li>
         {% if is_granted('ROLE_TRAVAUX_ADD') %}
             <li>
                 <a href="{{ path('intervention_new') }}" class="nav-link px-2 link-dark">
                     <i class="fa fa-plus"></i>
                     Ajouter une intervention</a>
+            </li>
+        {% endif %}
+        {% if is_granted('ROLE_TRAVAUX_PLANNING') %}
+            <li>
+                <a href="{{ path('planning_index') }}" class="nav-link px-2 link-dark">
+                    <i class="fa fa-calendar-alt"></i>
+                    Planning</a>
             </li>
         {% endif %}
         <li>
@@ -31,28 +33,36 @@
                             class="fa fa-list"></i> Stocks</a>
             </li>
         {% endif %}
-        {% if is_granted('ROLE_TRAVAUX_ADMIN') %}
-            <li class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                    Paramètres... <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
+        <li class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                Paramètres... <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+                {% if is_granted('ROLE_TRAVAUX_PLANNING') %}
                     <li><a class="dropdown-item" href="{{ path('employe') }}">Les ouvriers</a></li>
                     <li><a class="dropdown-item" href="{{ path('horaire') }}">Les horaires</a></li>
+                {% endif %}
+                {% if is_granted('ROLE_TRAVAUX_ADMIN') %}
                     <li><a class="dropdown-item" href="{{ path('batiment') }}">Les bâtiments</a></li>
                     <li><a class="dropdown-item" href="{{ path('service') }}">Les services</a></li>
                     <li><a class="dropdown-item" href="{{ path('domaine') }}">Les types</a></li>
                     <li><a class="dropdown-item" href="{{ path('categorie') }}">Les catégories</a></li>
-                    <li><a class="dropdown-item" href="{{ path('documentation') }}">Documentation</a></li>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <li>
-                            <a class="dropdown-item" href="{{ path('actravaux_utilisateur') }}">
-                                Gestion des utilisateurs</a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </li>
-        {% endif %}
+                {% endif %}
+                <li>
+                    <a class="dropdown-item" href="{{ path('documentation') }}">Documentation</a>
+                </li>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li>
+                        <a class="dropdown-item" href="{{ path('actravaux_utilisateur') }}">
+                            Gestion des utilisateurs</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ path('group') }}">
+                            Gestion des groupes</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </li>
     </ul>
 {% endif %}
 <ul class="navbar-nav mb-2 mb-lg-0">

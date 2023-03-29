@@ -4,8 +4,9 @@
     <div class="card">
         <h3 class="card-header">{{ horaire }}</h3>
         <div class="card-body">
-          {% include '@AcMarcheTravaux/horaire/_actions.html.twig' %}
+            {% include '@AcMarcheTravaux/horaire/_actions.html.twig' %}
         </div>
     </div>
+    {% include '@AcMarcheTravaux/horaire/_delete.html.twig' %}
 {% endblock %}
 

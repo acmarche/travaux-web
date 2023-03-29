@@ -1,24 +1,22 @@
-{% if is_granted('ROLE_TRAVAUX_ADMIN') %}
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Supprimer</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Etes vous sur de vouloir <strong>supprimer</strong> <br/> <strong>{{ employe }} ? </strong>
-                </div>
-                <div class="modal-footer">
-                    <form method="post" action="{{ path('employe_delete', {'id': employe.id}) }}">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ employe.id) }}">
-                        <button type="button" class="btn btn-secondary"
-                                data-bs-dismiss="modal">Annuler
-                        </button>
-                        <button type="submit" class="btn btn-danger">Supprimer l'ouvrier</button>
-                    </form>
-                </div>
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Supprimer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Etes vous sur de vouloir <strong>supprimer</strong> <br/> <strong>{{ employe }} ? </strong>
+            </div>
+            <div class="modal-footer">
+                <form method="post" action="{{ path('employe_delete', {'id': employe.id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ employe.id) }}">
+                    <button type="button" class="btn btn-secondary"
+                            data-bs-dismiss="modal">Annuler
+                    </button>
+                    <button type="submit" class="btn btn-danger">Supprimer l'ouvrier</button>
+                </form>
             </div>
         </div>
     </div>
-{% endif %}
+</div>

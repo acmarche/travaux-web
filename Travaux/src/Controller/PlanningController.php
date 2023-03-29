@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/planning')]
-#[IsGranted('ROLE_TRAVAUX_ADMIN')]
+#[IsGranted('ROLE_TRAVAUX_PLANNING')]
 class PlanningController extends AbstractController
 {
     use SpreadsheetDownloaderTrait;

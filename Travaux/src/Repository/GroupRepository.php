@@ -14,6 +14,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class GroupRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Group::class);

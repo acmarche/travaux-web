@@ -28,11 +28,6 @@ class UtilisateurController extends AbstractController
     ) {
     }
 
-    /**
-     * Lists all Utilisateur entities.
-     *
-     *
-     */
     #[Route(path: '/', name: 'actravaux_utilisateur', methods: ['GET'])]
     public function index(): Response
     {
@@ -46,11 +41,6 @@ class UtilisateurController extends AbstractController
         );
     }
 
-    /**
-     * Displays a form to create a new Utilisateur utilisateur.
-     *
-     *
-     */
     #[Route(path: '/new', name: 'actravaux_utilisateur_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
@@ -78,11 +68,6 @@ class UtilisateurController extends AbstractController
         );
     }
 
-    /**
-     * Finds and displays a Utilisateur utilisateur.
-     *
-     *
-     */
     #[Route(path: '/{id}', name: 'actravaux_utilisateur_show', methods: ['GET'])]
     public function show(User $utilisateur): Response
     {
@@ -94,11 +79,6 @@ class UtilisateurController extends AbstractController
         );
     }
 
-    /**
-     * Displays a form to edit an existing Utilisateur utilisateur.
-     *
-     *
-     */
     #[Route(path: '/{id}/edit', name: 'actravaux_utilisateur_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $utilisateur): Response
     {
@@ -121,37 +101,6 @@ class UtilisateurController extends AbstractController
         );
     }
 
-    /**
-     * Displays a form to edit an existing Utilisateur utilisateur.
-     *
-     * @todo
-     */
-    #[Route(path: '/{id}/password', name: 'actravaux_utilisateur_password', methods: ['GET', 'POST'])]
-    public function passord(Request $request, User $utilisateur): Response
-    {
-        $em = $this->managerRegistry->getManager();
-        $editForm = $this->createForm(UtilisateurEditType::class, $utilisateur)
-            ->add('submit', SubmitType::class, array('label' => 'Update'));
-        $editForm->handleRequest($request);
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em->flush();
-            $this->addFlash("success", "L'utilisateur a bien été modifié");
-
-            return $this->redirectToRoute('actravaux_utilisateur');
-        }
-
-        return $this->render(
-            '@AcMarcheTravaux/utilisateur/password.html.twig',
-            array(
-                'utilisateur' => $utilisateur,
-                'edit_form' => $editForm->createView(),
-            )
-        );
-    }
-
-    /**
-     * Deletes a Utilisateur utilisateur.
-     */
     #[Route(path: '/{id}', name: 'actravaux_utilisateur_delete', methods: ['POST'])]
     public function delete(Request $request, User $user): RedirectResponse
     {
@@ -165,11 +114,6 @@ class UtilisateurController extends AbstractController
         return $this->redirectToRoute('actravaux_utilisateur');
     }
 
-    /**
-     * Displays a form to edit an existing categorie entity.
-     *
-     *
-     */
     #[Route(path: '/password/{id}', name: 'actravaux_utilisateur_password', methods: ['GET', 'POST'])]
     public function password(Request $request, User $user): Response
     {

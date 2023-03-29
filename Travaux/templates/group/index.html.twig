@@ -2,18 +2,20 @@
 
 {% block body -%}
     <div class="card">
-        <h3 class="card-header">Liste des horaires</h3>
+        <h3 class="card-header">Liste des groupes</h3>
         <div class="card-body">
-            <a href="{{ path('horaire_new') }}" class="btn btn-primary mb-3" role="button"><i
-                        class="fa fa-plus"></i> Ajouter</a>
+             {% if is_granted('ROLE_TRAVAUX_ADMIN') %}
+                <a href="{{ path('group_new') }}" class="btn btn-primary mb-3" role="button"><i
+                            class="fa fa-plus"></i> Ajouter</a>
+            {% endif %}
             <table class="table table-bordered">
                 <tr>
                     <th>Nom</th>
                 </tr>
-                {% for horaire in horaires %}
+                {% for group in groups %}
                     <tr>
                         <td>
-                            <a href="{{ path('horaire_show', {'id': horaire.id}) }}">{{ horaire }}</a>
+                            <a href="{{ path('group_show', {'id': group.id}) }}">{{ group }}</a>
                         </td>
                     </tr>
                 {% endfor %}
