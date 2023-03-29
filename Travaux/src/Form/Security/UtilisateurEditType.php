@@ -6,6 +6,7 @@ use AcMarche\Travaux\Entity\Security\Group;
 use AcMarche\Travaux\Entity\Security\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -25,7 +26,11 @@ class UtilisateurEditType extends AbstractType
                     'multiple' => true,
                     'expanded' => true,
                 ]
-            );
+            )
+            ->add('notification', CheckboxType::class, [
+                'label' => 'Recevoir les notifications par mail',
+                'required' => false,
+            ]);
     }
 
     public function getParent(): ?string
