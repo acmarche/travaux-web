@@ -2,12 +2,12 @@
 
 namespace AcMarche\Travaux\Planning;
 
-use AcMarche\Travaux\Entity\Intervention;
+use AcMarche\Travaux\Entity\InterventionPlanning;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class TreatmentDates
 {
-    public static function setDatesFromCollection(Intervention $intervention, Intervention $data)
+    public static function setDatesFromCollection(InterventionPlanning $intervention, InterventionPlanning $data)
     {
         $dates = [];
         foreach ($data->datesCollection as $date) {
@@ -18,7 +18,7 @@ class TreatmentDates
         $intervention->dates = $dates;
     }
 
-    public static function setDatesCollectionFromDates(Intervention $intervention)
+    public static function setDatesCollectionFromDates(InterventionPlanning $intervention)
     {
         $intervention->datesCollection = new ArrayCollection();
         foreach ($intervention->dates as $date) {

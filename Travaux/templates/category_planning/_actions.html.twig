@@ -1,0 +1,12 @@
+<a href="{{ path('category_planning') }}" class="btn btn-primary" role="button"><i
+            class="fas fa-arrow-left"></i> Retour à la liste</a>
+
+<a href="{{ path('category_planning_edit', { 'id': category.id }) }}" class="btn btn-primary"
+   role="button"><i class="far fa-edit"></i> Editer</a>
+
+<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+    <i class="fas fa-trash"></i> Supprimer la catégorie
+</button>
+
+<br/>
+<br/>

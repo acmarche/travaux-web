@@ -41,6 +41,7 @@
                 {% if is_granted('ROLE_TRAVAUX_PLANNING') %}
                     <li><a class="dropdown-item" href="{{ path('employe') }}">Les ouvriers</a></li>
                     <li><a class="dropdown-item" href="{{ path('horaire') }}">Les horaires</a></li>
+                    <li><a class="dropdown-item" href="{{ path('category_planning') }}">Les catégories du planning</a></li>
                 {% endif %}
                 {% if is_granted('ROLE_TRAVAUX_ADMIN') %}
                     <li><a class="dropdown-item" href="{{ path('batiment') }}">Les bâtiments</a></li>

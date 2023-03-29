@@ -1,0 +1,12 @@
+{% extends '@AcMarcheTravaux/layout.html.twig' %}
+
+{% block body -%}
+    <div class="card">
+        <h3 class="card-header">{{ category }}</h3>
+        <div class="card-body">
+            {% include '@AcMarcheTravaux/category_planning/_actions.html.twig' %}
+        </div>
+    </div>
+    {% include '@AcMarcheTravaux/category_planning/_delete.html.twig' %}
+{% endblock %}
+

@@ -2,7 +2,6 @@
 
 namespace AcMarche\Travaux\Repository;
 
-use AcMarche\Travaux\Entity\DateEntity;
 use AcMarche\Travaux\Entity\Intervention;
 use AcMarche\Travaux\Entity\Security\Group;
 use AcMarche\Travaux\Entity\Security\User;
@@ -60,7 +59,7 @@ class InterventionRepository extends ServiceEntityRepository
         $affecte_prive = $args['affecte_prive'] ?? false;
         $date_execution = $args['date_execution'] ?? false;
 
-        $qb = $this->createQbl(false);
+        $qb = $this->createQbl();
 
         if ($intitule) {
             $qb->andWhere(
@@ -210,7 +209,7 @@ class InterventionRepository extends ServiceEntityRepository
     public function getInterventionsReportees(): array
     {
         $today = new DateTime('now');
-        $qb = $this->createQbl(false);
+        $qb = $this->createQbl();
 
         $qb->andWhere('intervention.date_execution > :date ')
             ->setParameter('date', $today->format('Y-m-d'));
@@ -229,7 +228,7 @@ class InterventionRepository extends ServiceEntityRepository
      */
     public function getInterventionsToValid(array $places = []): array
     {
-        return $this->createQbl(false)
+        return $this->createQbl()
             ->andWhere("intervention.archive = 0 ")
             ->andWhere("intervention.currentPlace IN (:places) ")
             ->setParameter('places', $places)
@@ -308,7 +307,7 @@ class InterventionRepository extends ServiceEntityRepository
      */
     public function findByDates(DateTime $dateStart, DateTime $dateEnd): array
     {
-        return $this->createQbl(false)
+        return $this->createQbl()
             ->andWhere('intervention.date_introduction BETWEEN :date_start AND :date_end')
             ->setParameter('date_start', $dateStart)
             ->setParameter('date_end', $dateEnd)
@@ -316,38 +315,13 @@ class InterventionRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    /**
-     * @return array|Intervention[]
-     */
-    public function findAllPlanning(): array
-    {
-        return $this->createQbl(true)
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
-     * @param DateTime $date
-     * @return array|Intervention[]
-     */
-    public function findPlanningByDay(DateTime $date): array
-    {
-        return $this->createQbl(true)
-            ->andWhere('intervention.dates LIKE :date')
-            ->setParameter('date', '%'.$date->format('Y-m-d').'%')
-            ->getQuery()
-            ->getResult();
-    }
-
-    private function createQbl(bool $isPlanning): QueryBuilder
+    private function createQbl(): QueryBuilder
     {
         return $this->createQueryBuilder('intervention')
             ->leftJoin('intervention.categorie', 'categorie', 'WITH')
             ->leftJoin('intervention.batiment', 'batiment', 'WITH')
             ->leftJoin('intervention.domaine', 'domaine', 'WITH')
             ->leftJoin('intervention.documents', 'documents', 'WITH')
-            ->addSelect('categorie', 'batiment', 'domaine', 'documents')
-            ->andWhere('intervention.isPlanning = :plan')
-            ->setParameter('plan', $isPlanning);
+            ->addSelect('categorie', 'batiment', 'domaine', 'documents');
     }
 }

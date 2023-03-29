@@ -2,11 +2,12 @@
 
 namespace AcMarche\Travaux\Controller;
 
-use AcMarche\Travaux\Entity\Intervention;
+use AcMarche\Travaux\Entity\InterventionPlanning;
 use AcMarche\Travaux\Form\PlanningType;
 use AcMarche\Travaux\Planning\TreatmentDates;
 use AcMarche\Travaux\Repository\CategorieRepository;
 use AcMarche\Travaux\Repository\EtatRepository;
+use AcMarche\Travaux\Repository\InterventionPlanningRepository;
 use AcMarche\Travaux\Repository\InterventionRepository;
 use AcMarche\Travaux\Repository\PrioriteRepository;
 use AcMarche\Travaux\Spreadsheet\SpreadsheetDownloaderTrait;
@@ -28,7 +29,7 @@ class PlanningController extends AbstractController
     use SpreadsheetDownloaderTrait;
 
     public function __construct(
-        private InterventionRepository $interventionRepository,
+        private InterventionPlanningRepository $interventionPlanningRepository,
         private EtatRepository $etatRepository,
         private PrioriteRepository $prioriteRepository,
         private CategorieRepository $categorieRepository,
@@ -44,11 +45,11 @@ class PlanningController extends AbstractController
             $date = Carbon::createFromFormat('Y-m-d', $monthyear.'-01')->toImmutable();
         }
 
-        $interventions = $this->interventionRepository->findAllPlanning();
+        $interventions = $this->interventionPlanningRepository->findAll();
         $days = CarbonPeriod::create($date->firstOfMonth(), $date->endOfMonth());
         $data = [];
         foreach ($days as $day) {
-            $data[$day->day] = $this->interventionRepository->findPlanningByDay($day);
+            $data[$day->day] = $this->interventionPlanningRepository->findPlanningByDay($day);
         }
 
         $next = $date->addMonth();
@@ -74,7 +75,7 @@ class PlanningController extends AbstractController
             $dateSelected = \DateTime::createFromFormat('Y-m-d', $date);
         }
 
-        $intervention = new Intervention();
+        $intervention = new InterventionPlanning();
         $intervention->datesCollection = new ArrayCollection();
         $intervention->datesCollection->add($dateSelected);
 
@@ -90,20 +91,12 @@ class PlanningController extends AbstractController
             $data = $form->getData();
 
             $user = $this->getUser();
-            $intervention->setUserAdd($user->getUserIdentifier());
-            $intervention->setCurrentPlace('published');
-            $etat = $this->etatRepository->find(1);//new
-            $intervention->setEtat($etat);
-            $priorite = $this->prioriteRepository->find(1);//normal
-            $intervention->setPriorite($priorite);
-            $category = $this->categorieRepository->find(3);//intervention
-            $intervention->setCategorie($category);
-            $intervention->isPlanning = true;
+            $intervention->user_add = $user->getUserIdentifier();
 
             TreatmentDates::setDatesFromCollection($intervention, $data);
 
-            $this->interventionRepository->persist($intervention);
-            $this->interventionRepository->flush();
+            $this->interventionPlanningRepository->persist($intervention);
+            $this->interventionPlanningRepository->flush();
 
             return $form->get('saveAndAdd')->isClicked()
                 ? $this->redirectToRoute('planning_new')
@@ -120,7 +113,7 @@ class PlanningController extends AbstractController
     }
 
     #[Route(path: '/{id}', name: 'planning_show', methods: ['GET'])]
-    public function show(Intervention $intervention): Response
+    public function show(InterventionPlanning $intervention): Response
     {
         return $this->render(
             '@AcMarcheTravaux/planning/show.html.twig',
@@ -131,18 +124,19 @@ class PlanningController extends AbstractController
     }
 
     #[Route(path: '/{id}/edit', name: 'planning_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Intervention $intervention): Response
+    public function edit(Request $request, InterventionPlanning $intervention): Response
     {
         TreatmentDates::setDatesCollectionFromDates($intervention);
 
         $form = $this->createForm(PlanningType::class, $intervention);
 
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
 
             TreatmentDates::setDatesFromCollection($intervention, $data);
-            $this->interventionRepository->flush();
+            $this->interventionPlanningRepository->flush();
 
             $this->addFlash('success', 'L\'employé a bien été modifié.');
 

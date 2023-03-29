@@ -2,12 +2,24 @@
 
 {% block body %}
     <div class="card">
-        <h3 class="card-header">{{ intervention.intitule }}</strong></h3>
+        <h3 class="card-header">Intervention {{ intervention.id }}</strong></h3>
         <div class="card-body">
 
             {% include '@AcMarcheTravaux/planning/_actions.html.twig' %}
 
             <table class="table table-bordered">
+                <tr>
+                    <th>Catégorie</th>
+                    <td>
+                        {{ intervention.category }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Horaire</th>
+                    <td>
+                        {{ intervention.horaire }}
+                    </td>
+                </tr>
                 <tr>
                     <th>Ouvrier(s)</th>
                     <td>
@@ -25,6 +37,8 @@
                     </td>
                 </tr>
             </table>
+
+            {{ intervention.description|nl2br }}
 
         </div>
     </div>

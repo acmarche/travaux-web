@@ -11,13 +11,13 @@
             <div class="calendar-wrapper">
                 <div class="d-flex justify-content-between">
                     <a href="{{ path('planning_index', {'monthyear':previous.format('Y-m')}) }}">
-                        Précédent
+                     <i class="fas fa-arrow-left"></i>   Précédent
                     </a>
                     <h3 class="text-success text-center">
                         {{ date.monthName|trans }}  {{ date.year }}
                     </h3>
                     <a href="{{ path('planning_index', {'monthyear':next.format('Y-m')}) }}">
-                        Suivant
+                       <i class="fas fa-arrow-right"></i>  Suivant
                     </a>
                 </div>
 
@@ -41,8 +41,8 @@
                 <thead>
                 <tr>
                     <th scope="col">Numéro</th>
-                    <th scope="col">Intitule</th>
-                    <th scope="col">Type</th>
+                    <th scope="col">Catégorie</th>
+                    <th scope="col">Horaire</th>
                     <th scope="col">Encodé par</th>
                     <th scope="col">Date(s)</th>
                     <th scope="col" class="hidden-xs">Affection</th>
@@ -52,15 +52,13 @@
                 {% for intervention in interventions %}
                     <tr id="{{ intervention.id }}">
                         <td>
-                            {{ intervention.id }}
-                        </td>
-                        <td>
                             <a href="{{ path('planning_show', { 'id': intervention.id }) }}"
-                               title="Détail de l'intervention">{{ intervention.intitule }}
+                               title="Détail de l'intervention">Num {{ intervention.id }}
                             </a>
                         </td>
-                        <td>{{ intervention.domaine }}</td>
-                        <td>{{ intervention.useradd }}</td>
+                        <td>{{ intervention.category }}</td>
+                        <td>{{ intervention.horaire }}</td>
+                        <td>{{ intervention.user_add }}</td>
                         <td>
                             {% for date in intervention.dates %}
                                 {{ date|format_date('full') }} |

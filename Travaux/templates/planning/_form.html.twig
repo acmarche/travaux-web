@@ -1,18 +1,18 @@
 {{ form_start(form) }}
 {{ form_errors(form) }}
-{{ form_row(form.intitule) }}
+{{ form_row(form.description) }}
 
 <div class="row">
     <div class="col-6">
-        {{ form_row(form.horaire) }}
+        {{ form_row(form.category) }}
     </div>
     <div class="col-6">
-        {{ form_row(form.batiment) }}
+        {{ form_row(form.horaire) }}
     </div>
 </div>
 <div class="row">
     <div class="col-6">
-        {{ form_row(form.domaine) }}
+        {{ form_row(form.lieu) }}
     </div>
     <div class="col-6">
     </div>
@@ -25,7 +25,6 @@
 </div>
 
 {{ form_row(form.employes) }}
-{{ form_row(form.descriptif) }}
 
 <div class="row">
     <div class="col-3">

@@ -1,0 +1,24 @@
+{% extends '@AcMarcheTravaux/layout.html.twig' %}
+
+{% block body -%}
+    <div class="card">
+        <h3 class="card-header">Liste des catégories pour le planning</h3>
+        <div class="card-body">
+            <a href="{{ path('category_planning_new') }}" class="btn btn-primary mb-3" role="button"><i
+                        class="fa fa-plus"></i> Ajouter</a>
+            <table class="table table-bordered">
+                <tr>
+                    <th>Nom</th>
+                </tr>
+                {% for category in categories %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('category_planning_show', {'id': horaire.id}) }}">{{ category }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}
+

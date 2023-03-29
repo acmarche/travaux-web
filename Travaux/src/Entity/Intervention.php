@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'intervention')]
 class Intervention implements TimestampableInterface, Stringable
 {
-    use TimestampableTrait, DatesTrait;
+    use TimestampableTrait;
 
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
@@ -89,16 +89,6 @@ class Intervention implements TimestampableInterface, Stringable
     #[ORM\Column(type: 'string', nullable: true)]
     public ?string $currentPlace = null;
 
-    #[ORM\ManyToOne(targetEntity: Horaire::class, inversedBy: 'intervention')]
-    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
-    public ?Horaire $horaire = null;
-
-    #[ORM\ManyToMany(targetEntity: Employe::class)]
-    public Collection $employes;
-
-    #[ORM\Column(type: 'boolean', nullable: false)]
-    public bool $isPlanning = false;
-
     public function __toString(): string
     {
         return $this->intitule;
@@ -121,8 +111,6 @@ class Intervention implements TimestampableInterface, Stringable
         $this->date_introduction = new DateTime();
         $this->documents = new ArrayCollection();
         $this->suivis = new ArrayCollection();
-        $this->employes = new ArrayCollection();
-        $this->datesCollection = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -497,41 +485,4 @@ class Intervention implements TimestampableInterface, Stringable
     {
         return $this->smartphone;
     }
-
-    public function getHoraire(): ?Horaire
-    {
-        return $this->horaire;
-    }
-
-    public function setHoraire(?Horaire $horaire): self
-    {
-        $this->horaire = $horaire;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Employe>
-     */
-    public function getEmployes(): Collection
-    {
-        return $this->employes;
-    }
-
-    public function addEmploye(Employe $employe): self
-    {
-        if (!$this->employes->contains($employe)) {
-            $this->employes->add($employe);
-        }
-
-        return $this;
-    }
-
-    public function removeEmploye(Employe $employe): self
-    {
-        $this->employes->removeElement($employe);
-
-        return $this;
-    }
-
 }
