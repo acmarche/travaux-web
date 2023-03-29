@@ -57,6 +57,7 @@ class PlanningType extends AbstractType
             ])
             ->add('datesCollection', CollectionType::class, [
                 'entry_type' => DateType::class,
+                'label' => 'Dates',
                 'required' => true,
                 'entry_options' => ['label' => false, 'widget' => 'single_text'],
                 'allow_add' => true,

@@ -69,14 +69,14 @@ class PlanningController extends AbstractController
     public function new(Request $request, string $date = null): Response
     {
         if (!$date) {
-            $date = new \DateTime();
+            $dateSelected = new \DateTime();
         } else {
-            $date = \DateTime::createFromFormat('Y-m-d', $date);
+            $dateSelected = \DateTime::createFromFormat('Y-m-d', $date);
         }
 
         $intervention = new Intervention();
         $intervention->datesCollection = new ArrayCollection();
-        $intervention->datesCollection->add($date);
+        $intervention->datesCollection->add($dateSelected);
 
         $form = $this->createForm(PlanningType::class, $intervention)
             ->add('saveAndAdd', SubmitType::class, [
@@ -114,6 +114,7 @@ class PlanningController extends AbstractController
             '@AcMarcheTravaux/planning/new.html.twig',
             array(
                 'form' => $form->createView(),
+                'dateSelected' => $dateSelected,
             )
         );
     }
