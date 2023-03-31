@@ -1,13 +1,17 @@
-<li class="list-group-item">
-    <strong>{{ day|date('j') }}</strong>
-    <br/>
-    {% set plans = data[day|date('j')] %}
-
-    {% for plan in plans %}
-        <a href="{{ path('planning_show', {'id': 'x'}) }}">
-            {{ plan.category }}
-        </a>
-        <br/>
-    {% endfor %}
-    <a href="{{ path('planning_new', {'date': day|date('Y-m-d')}) }}"><i class="fa fa-plus-square"></i> </a>
-</li>
+{% set plans = data[day|date('j')] %}
+{% set classDay = "border border-success" %}
+<div class="border">
+    {% if day.isSameMonth(dateSelected) %}
+        <a class="btn cal-btn {{ classDay }} align-self-end" role="button"
+           href="#">{{ day.day }}</a>
+        {% for plan in plans %}
+            <a href="{{ path('planning_show', {'id': plan.id}) }}">
+                {{ plan.category }}
+            </a>
+            <br/>
+        {% endfor %}
+        <a href="{{ path('planning_new', {'date': day|date('Y-m-d')}) }}"><i class="fa fa-plus-square"></i> </a>
+    {% else %}
+        <button type="button" disabled="disabled" class="btn cal-btn {{ classDay }}">{{ day.day }}</button>
+    {% endif %}
+</div>

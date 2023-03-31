@@ -9,11 +9,19 @@
             <table class="table table-bordered">
                 <tr>
                     <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Equipe</th>
                 </tr>
                 {% for employe in employes %}
                     <tr>
                         <td>
-                            <a href="{{ path('employe_show', {'id': employe.id}) }}">{{ employe }}</a>
+                            <a href="{{ path('employe_show', {'id': employe.id}) }}">{{ employe.nom }}</a>
+                        </td>
+                        <td>
+                            {{ employe.prenom }}
+                        </td>
+                        <td>
+                            {{ employe.category }}
                         </td>
                     </tr>
                 {% endfor %}

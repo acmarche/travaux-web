@@ -4,7 +4,9 @@
     <div class="card">
         <h3 class="card-header">{{ employe }}</h3>
         <div class="card-body">
-          {% include '@AcMarcheTravaux/employe/_actions.html.twig' %}
+            {% include '@AcMarcheTravaux/employe/_actions.html.twig' %}
+
+            <p class="block m-3">Equipe : {{ employe.category }}</p>
         </div>
     </div>
 {% endblock %}

@@ -24,6 +24,10 @@ class Employe implements Stringable
     #[Assert\NotBlank]
     public string $prenom;
 
+    #[ORM\ManyToOne(targetEntity: CategoryPlanning::class, inversedBy: 'employes')]
+    #[ORM\JoinColumn(nullable: true)]
+    public ?CategoryPlanning $category = null;
+
     public function __toString()
     {
         return $this->nom.' '.$this->prenom;

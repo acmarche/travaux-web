@@ -22,7 +22,7 @@ class Horaire implements Stringable
     #[Assert\NotBlank]
     public string $nom;
 
-    #[ORM\OneToMany(mappedBy: 'horaire', targetEntity: Intervention::class)]
+    #[ORM\OneToMany(mappedBy: 'horaire', targetEntity: InterventionPlanning::class)]
     public Collection $intervention;
 
     public function __toString()

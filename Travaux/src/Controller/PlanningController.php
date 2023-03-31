@@ -2,13 +2,15 @@
 
 namespace AcMarche\Travaux\Controller;
 
+use AcMarche\Travaux\Entity\CategoryPlanning;
 use AcMarche\Travaux\Entity\InterventionPlanning;
 use AcMarche\Travaux\Form\PlanningType;
+use AcMarche\Travaux\Planning\DateProvider;
 use AcMarche\Travaux\Planning\TreatmentDates;
 use AcMarche\Travaux\Repository\CategorieRepository;
+use AcMarche\Travaux\Repository\CategoryPlanningRepository;
 use AcMarche\Travaux\Repository\EtatRepository;
 use AcMarche\Travaux\Repository\InterventionPlanningRepository;
-use AcMarche\Travaux\Repository\InterventionRepository;
 use AcMarche\Travaux\Repository\PrioriteRepository;
 use AcMarche\Travaux\Spreadsheet\SpreadsheetDownloaderTrait;
 use AcMarche\Travaux\Spreadsheet\XlsGenerator;
@@ -30,38 +32,51 @@ class PlanningController extends AbstractController
 
     public function __construct(
         private InterventionPlanningRepository $interventionPlanningRepository,
+        private CategoryPlanningRepository $categoryPlanningRepository,
         private EtatRepository $etatRepository,
         private PrioriteRepository $prioriteRepository,
         private CategorieRepository $categorieRepository,
+        private DateProvider $dateProvider,
         private XlsGenerator $xlsGenerator
     ) {
     }
 
-    #[Route(path: '/tt/{monthyear}', name: 'planning_index')]
-    public function index(string $monthyear = null): Response
+    #[Route(path: '/tt/{monthyear}/{categoryPlanning}', name: 'planning_index')]
+    public function index(string $monthyear = null, CategoryPlanning $categoryPlanning = null): Response
     {
-        $date = Carbon::now()->toImmutable();
+        $dateSelected = Carbon::now()->toImmutable();
         if ($monthyear) {
-            $date = Carbon::createFromFormat('Y-m-d', $monthyear.'-01')->toImmutable();
+            $dateSelected = Carbon::createFromFormat('Y-m-d', $monthyear.'-01')->toImmutable();
         }
 
-        $interventions = $this->interventionPlanningRepository->findAll();
-        $days = CarbonPeriod::create($date->firstOfMonth(), $date->endOfMonth());
+        $interventions = $this->interventionPlanningRepository->findByCategory($categoryPlanning);
+        $days = CarbonPeriod::create($dateSelected->firstOfMonth(), $dateSelected->endOfMonth());
         $data = [];
         foreach ($days as $day) {
-            $data[$day->day] = $this->interventionPlanningRepository->findPlanningByDay($day);
+            $data[$day->day] = $this->interventionPlanningRepository->findPlanningByDayAndCategory(
+                $day,
+                $categoryPlanning
+            );
         }
 
-        $next = $date->addMonth();
-        $previous = $date->subMonth();
+        $next = $dateSelected->addMonth();
+        $previous = $dateSelected->subMonth();
+        $today = Carbon::today();
+
+        $weeks = $this->dateProvider->weeksOfMonth($dateSelected);
 
         return $this->render('@AcMarcheTravaux/planning/index.html.twig', [
             'interventions' => $interventions,
-            'date' => $date,
+            'dateSelected' => $dateSelected,
             'next' => $next,
+            'today' => $today,
+            'weekdays' => $this->dateProvider->weekDaysName(),
             'previous' => $previous,
             'days' => $days,
+            'weeks' => $weeks,
             'data' => $data,
+            'categorySelected' => $categoryPlanning,
+            'categories' => $this->categoryPlanningRepository->findAllOrdered(),
         ]);
     }
 

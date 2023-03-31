@@ -1,0 +1,42 @@
+{% extends '@AcMarcheTravaux/pdf/basePdf.html.twig' %}
+
+{% block content %}
+
+    {% for intervention in interventions %}
+        <div class="col-md-6">
+            <table class='table table-bordered table-hover'>
+                <tr>
+                    <th>
+                        Numéro:
+                    </th>
+                    <td>
+                        {{ intervention.id }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Horaire:
+                    </th>
+                    <td>
+                        {{ intervention.horaire }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Ouvriers:
+                    </th>
+                    <td>
+                        {{ intervention.employes|joint(',') }}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-12">
+            <br/>
+            {{ intervention.description | nl2br }}
+        </div>
+
+        <div class="page-breaker"></div>
+    {% endfor %}
+
+{% endblock %}

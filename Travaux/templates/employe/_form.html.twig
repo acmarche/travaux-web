@@ -1,7 +1,14 @@
 {{ form_start(form) }}
 {{ form_errors(form) }}
-{{ form_row(form.nom) }}
-{{ form_row(form.prenom) }}
+<div class="row">
+    <div class="col-6">
+        {{ form_row(form.nom) }}
+    </div>
+    <div class="col-6">
+        {{ form_row(form.prenom) }}
+    </div>
+</div>
+{{ form_row(form.category) }}
 <button type="submit" name="save" class="btn btn-primary mb-3" role="button">
     <i class="fas fa-save"></i> Sauvegarder
 </button>

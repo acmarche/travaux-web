@@ -5,27 +5,26 @@ namespace AcMarche\Travaux\Controller;
 use AcMarche\Travaux\Entity\Intervention;
 use AcMarche\Travaux\Event\InterventionEvent;
 use AcMarche\Travaux\Form\Search\SearchInterventionType;
-use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
+use AcMarche\Travaux\Repository\InterventionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/archive')]
 #[IsGranted('ROLE_TRAVAUX')]
 class ArchiveController extends AbstractController
 {
-    public function __construct(private ManagerRegistry $managerRegistry)
+    public function __construct(private InterventionRepository $interventionRepository)
     {
     }
 
     #[Route(path: '/', name: 'intervention_archive', methods: ['GET'])]
     public function index(Request $request): Response
     {
-        $em = $this->managerRegistry->getManager();
         $session = $request->getSession();
         $data = array();
         $key = "intervention_archive_search";
@@ -81,7 +80,7 @@ class ArchiveController extends AbstractController
                 return $this->redirectToRoute('intervention_archive');
             }
             $session->set($key, serialize($data));
-            $entities = $em->getRepository(Intervention::class)->search($data);
+            $entities = $this->interventionRepository->search($data, false);
         }
 
         return $this->render(
@@ -104,7 +103,6 @@ class ArchiveController extends AbstractController
             throw $this->createAccessDeniedException('Vous n\'avez pas le droit d\'archiver');
         }
         if ($this->isCsrfTokenValid('archive'.$intervention->getId(), $request->request->get('_token'))) {
-            $em = $this->managerRegistry->getManager();
 
             $event = new InterventionEvent($intervention, null);
 
@@ -118,8 +116,8 @@ class ArchiveController extends AbstractController
                 $dispatcher->dispatch($event, InterventionEvent::INTERVENTION_ARCHIVE);
             }
 
-            $em->persist($intervention);
-            $em->flush();
+            $this->interventionRepository->persist($intervention);
+            $this->interventionRepository->flush();
 
             $this->addFlash('success', "L'intervention a bien été $label");
         }

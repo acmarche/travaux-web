@@ -2,6 +2,7 @@
 
 namespace AcMarche\Travaux\Repository;
 
+use AcMarche\Travaux\Entity\CategoryPlanning;
 use AcMarche\Travaux\Entity\InterventionPlanning;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -30,16 +31,37 @@ class InterventionPlanningRepository extends ServiceEntityRepository
         return $this->findBy(array(), array('id' => 'ASC'));
     }
 
-
     /**
-     * @param DateTime $date
      * @return array|InterventionPlanning[]
      */
-    public function findPlanningByDay(DateTime $date): array
+    public function findPlanningByDayAndCategory(DateTime $date, ?CategoryPlanning $categoryPlanning = null): array
     {
-        return $this->createQbl()
+        $qbl = $this->createQbl();
+
+        if ($categoryPlanning) {
+            $qbl->andWhere('intervention_planning.category = :category')
+                ->setParameter('category', $categoryPlanning);
+        }
+
+        return $qbl
             ->andWhere('intervention_planning.dates LIKE :date')
             ->setParameter('date', '%'.$date->format('Y-m-d').'%')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return array|InterventionPlanning[]
+     */
+    public function findByCategory(?CategoryPlanning $categoryPlanning): array
+    {
+        $qbl = $this->createQbl();
+        if ($categoryPlanning) {
+            $qbl->andWhere('intervention_planning.category = :category')
+                ->setParameter('category', $categoryPlanning);
+        }
+
+        return $qbl
             ->getQuery()
             ->getResult();
     }
@@ -49,6 +71,7 @@ class InterventionPlanningRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('intervention_planning')
             ->leftJoin('intervention_planning.employes', 'employes', 'WITH')
             ->leftJoin('intervention_planning.category', 'category', 'WITH')
-            ->addSelect('employes','category');
+            ->addSelect('employes', 'category');
     }
+
 }

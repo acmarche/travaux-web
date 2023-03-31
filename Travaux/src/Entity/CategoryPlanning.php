@@ -23,10 +23,13 @@ class CategoryPlanning implements Stringable
     public string $name;
     #[ORM\OneToMany(targetEntity: InterventionPlanning::class, mappedBy: 'category')]
     public Collection $interventions;
+    #[ORM\OneToMany(targetEntity: Employe::class, mappedBy: 'category')]
+    public Collection $employes;
 
     public function __construct()
     {
         $this->interventions = new ArrayCollection();
+        $this->employes = new ArrayCollection();
     }
 
     public function __toString(): string

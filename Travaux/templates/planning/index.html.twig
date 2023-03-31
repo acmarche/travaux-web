@@ -3,40 +3,27 @@
 
     <div class="card">
         <h3 class="card-header">Planning des interventions</h3>
+
         <div class="card-body">
             {% if is_granted('ROLE_TRAVAUX') %}
                 <a href="{{ path('planning_new') }}" class="btn btn-primary mb-3" role="button"><i
                             class="fa fa-plus"></i> Ajouter</a>
             {% endif %}
-            <div class="calendar-wrapper">
-                <div class="d-flex justify-content-between">
-                    <a href="{{ path('planning_index', {'monthyear':previous.format('Y-m')}) }}">
-                     <i class="fas fa-arrow-left"></i>   Précédent
-                    </a>
-                    <h3 class="text-success text-center">
-                        {{ date.monthName|trans }}  {{ date.year }}
-                    </h3>
-                    <a href="{{ path('planning_index', {'monthyear':next.format('Y-m')}) }}">
-                       <i class="fas fa-arrow-right"></i>  Suivant
-                    </a>
-                </div>
 
-                <ul class="calendar list-group">
-                    <li class="bg-info list-group-item">Lun</li>
-                    <li class="bg-info list-group-item">Mar</li>
-                    <li class="bg-info list-group-item">Mer</li>
-                    <li class="bg-info list-group-item">Jeu</li>
-                    <li class="bg-info list-group-item">Ven</li>
-                    <li class="bg-info list-group-item">Sam</li>
-                    <li class="bg-info list-group-item">Dim</li>
-                    <li class="first-day list-group-item">1</li>
-                    {% for day in days %}
-                        {% include '@Travaux/planning/_cell.html.twig' %}
-                    {% endfor %}
-                </ul>
-            </div>
+            <ul class="mb-5 list-group list-group-horizontal">
+                {% for category in categories %}
+                    <li class="list-group-item">
+                        <a href="{{ path('planning_index', {'monthyear': dateSelected.year~'-'~dateSelected.month, 'categoryPlanning':category.id}) }}">{{ category.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
 
-            <h3 class="text-success mt-3">Listing</h3>
+            {% include '@Travaux/planning/_calendar.html.twig' %}
+
+            <h3 class="text-success mt-4">Listing du mois</h3>
+            <a class="btn btn-sm btn-success" href="{{ path('planning_export_pdf') }}" role="button">
+                <i class="fas fa-file-pdf"></i>
+                Exporter en Pdf</a>
             <table class='table table-bordered table-hover'>
                 <thead>
                 <tr>
