@@ -2,6 +2,8 @@
 
 {% block content %}
 
+    <h3>Planning pour la semaine {{ s }}</h3>
+
     {% for intervention in interventions %}
         <div class="col-md-6">
             <table class='table table-bordered table-hover'>
@@ -26,7 +28,7 @@
                         Ouvriers:
                     </th>
                     <td>
-                        {{ intervention.employes|joint(',') }}
+                        {{ intervention.employes|join(',') }}
                     </td>
                 </tr>
             </table>

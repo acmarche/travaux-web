@@ -17,12 +17,14 @@ class EmployeType extends AbstractType
         $builder
             ->add('nom')
             ->add('prenom')
-            ->add('category', EntityType::class, [
+            ->add('categories', EntityType::class, [
                 'class' => CategoryPlanning::class,
                 'query_builder' => fn(CategoryPlanningRepository $categoryPlanningRepository
                 ) => $categoryPlanningRepository->getQblForList(),
-                'label' => 'Equipe',
+                'label' => 'Equipe(s)',
                 'required' => true,
+                'multiple' => true,
+                'expanded' => true,
                 'placeholder' => 'Choisissez une équipe',
             ]);
     }

@@ -5,10 +5,11 @@ namespace AcMarche\Travaux\Entity;
 use DateTimeInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\DBAL\Types\Types;
 
 trait DatesTrait
 {
-    #[ORM\Column(type: 'json', nullable: false)]
+    #[ORM\Column(nullable: false)]
     public array $dates = [];
 
     public Collection $datesCollection;

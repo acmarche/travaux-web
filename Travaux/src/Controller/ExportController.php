@@ -2,7 +2,9 @@
 
 namespace AcMarche\Travaux\Controller;
 
+use AcMarche\Travaux\Entity\CategoryPlanning;
 use AcMarche\Travaux\Export\PdfDownloaderTrait;
+use AcMarche\Travaux\Planning\DateProvider;
 use AcMarche\Travaux\Repository\InterventionPlanningRepository;
 use AcMarche\Travaux\Repository\InterventionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,7 +21,8 @@ class ExportController extends AbstractController
 
     public function __construct(
         private InterventionRepository $interventionRepository,
-        private InterventionPlanningRepository $interventionPlanningRepository
+        private InterventionPlanningRepository $interventionPlanningRepository,
+        private DateProvider $dateProvider
     ) {
     }
 
@@ -57,14 +60,13 @@ class ExportController extends AbstractController
         );
     }
 
-    #[Route(path: '/planning/pdf', name: 'planning_export_pdf', methods: ['GET'])]
-    public function planningPdf(Request $request): Response
-    {
-        $session = $request->getSession();
-        $args = [];
-        $args = unserialize($session->get("intervention_search"));
-
-        $interventions = $this->interventionPlanningRepository->findAll();
+    #[Route(path: '/planning/pdf/{yearmonth}/{categoryPlanning}', name: 'planning_export_pdf', methods: ['GET'])]
+    public function planningPdf(
+        Request $request,
+        string $yearmonth,
+        ?CategoryPlanning $categoryPlanning = null
+    ): Response {
+        $interventions = $this->interventionPlanningRepository->findByMonthAndCategory($yearmonth, $categoryPlanning);
 
         $html = $this->renderView(
             '@AcMarcheTravaux/pdf/planning.html.twig',
@@ -77,5 +79,31 @@ class ExportController extends AbstractController
         $this->pdf->setOption('footer-right', '[page]/[toPage]');
 
         return $this->downloadPdf($html, $name);
+    }
+
+    #[Route(path: '/planning/pdf/weekly/{year}/{week}/{categoryPlanning}', name: 'planning_export_pdf_weekly', methods: ['GET'])]
+    public function planningWeeklyPdf(int $year, int $week, ?CategoryPlanning $categoryPlanning = null): Response
+    {
+        $date = $this->dateProvider->createDateFromWeek($year, $week);
+        $days = $this->dateProvider->daysOfWeek($date);
+        $dates = $this->dateProvider->convertCarbonPeriodToDatesTime($days);
+
+        $interventions = $this->interventionPlanningRepository->findPlanningByDaysAndCategory(
+            $dates,
+            $categoryPlanning
+        );
+
+        $html = $this->renderView(
+            '@AcMarcheTravaux/pdf/planning.html.twig',
+            [
+                'interventions' => $interventions,
+                'title' => 'Interventions',
+                's' => $week,
+            ]
+        );
+        $name = sprintf('planning-%s.pdf', date('Y-m-d'));
+        $this->pdf->setOption('footer-right', '[page]/[toPage]');
+
+        return $this->downloadPdf($html, $name, true);
     }
 }

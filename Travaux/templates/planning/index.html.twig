@@ -13,7 +13,7 @@
             <ul class="mb-5 list-group list-group-horizontal">
                 {% for category in categories %}
                     <li class="list-group-item">
-                        <a href="{{ path('planning_index', {'monthyear': dateSelected.year~'-'~dateSelected.month, 'categoryPlanning':category.id}) }}">{{ category.name }}</a>
+                        <a href="{{ path('planning_index', {'yearmonth': dateSelected.year~'-'~dateSelected.month, 'categoryPlanning':category.id}) }}">{{ category.name }}</a>
                     </li>
                 {% endfor %}
             </ul>
@@ -21,9 +21,12 @@
             {% include '@Travaux/planning/_calendar.html.twig' %}
 
             <h3 class="text-success mt-4">Listing du mois</h3>
-            <a class="btn btn-sm btn-success" href="{{ path('planning_export_pdf') }}" role="button">
+            <a class="btn btn-sm btn-success"
+               href="{{ path('planning_export_pdf',{'yearmonth':dateSelected.year~'-'~dateSelected.month, 'categoryPlanning':categorySelected ?categorySelected.id}) }}"
+               role="button">
                 <i class="fas fa-file-pdf"></i>
-                Exporter en Pdf</a>
+                Exporter en Pdf
+            </a>
             <table class='table table-bordered table-hover'>
                 <thead>
                 <tr>

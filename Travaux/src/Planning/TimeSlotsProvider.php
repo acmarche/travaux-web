@@ -1,14 +1,10 @@
 <?php
 
-namespace Grr\Core\Provider;
+namespace AcMarche\Travaux\Planning;
 
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Carbon\CarbonPeriod;
-use Grr\Core\Contrat\Entity\AreaInterface;
-use Grr\Core\Contrat\Entity\EntryInterface;
-use Grr\Core\Factory\CarbonFactory;
-use Grr\Core\Model\TimeSlot;
 
 class TimeSlotsProvider
 {

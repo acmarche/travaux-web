@@ -1,16 +1,21 @@
-{% set plans = data[day|date('j')] %}
+{% set plans = data[day|date('j')] ?? [] %}
 {% set classDay = "border border-success" %}
-<div class="border">
+<div class="border" style="min-height: 300px;">
     {% if day.isSameMonth(dateSelected) %}
-        <a class="btn cal-btn {{ classDay }} align-self-end" role="button"
-           href="#">{{ day.day }}</a>
+        <div class="d-flex flex-row justify-content-end align-items-center gap-2">
+            <a href="{{ path('planning_new', {'date': day|date('Y-m-d')}) }}">
+                <i class="fa fa-plus-square" style="height: 2rem;"></i>
+            </a>
+            <span class="bt1n cal-b4tn {{ classDay }} align-self-end" style="height: 2rem;" role="button">
+                {{ day.day }}
+            </span>
+        </div>
         {% for plan in plans %}
-            <a href="{{ path('planning_show', {'id': plan.id}) }}">
-                {{ plan.category }}
+            <a href="{{ path('planning_show', {'id': plan.id}) }}" class="lh-lg">
+                {{ plan.description|u.truncate(20,'...') }}
             </a>
             <br/>
         {% endfor %}
-        <a href="{{ path('planning_new', {'date': day|date('Y-m-d')}) }}"><i class="fa fa-plus-square"></i> </a>
     {% else %}
         <button type="button" disabled="disabled" class="btn cal-btn {{ classDay }}">{{ day.day }}</button>
     {% endif %}

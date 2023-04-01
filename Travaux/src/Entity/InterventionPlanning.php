@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Stringable;
+use Doctrine\DBAL\Types\Types;
 
 #[ORM\Entity(repositoryClass: InterventionPlanningRepository::class)]
 #[ORM\Table(name: 'intervention_planning')]
@@ -21,7 +22,7 @@ class InterventionPlanning implements TimestampableInterface, Stringable
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected int $id;
 
-    #[ORM\Column(type: 'text', nullable: false)]
+    #[ORM\Column(type: Types::TEXT, nullable: false)]
     public ?string $description;
     #[ORM\Column(type: 'string', nullable: false)]
     public string $user_add;

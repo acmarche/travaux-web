@@ -3,6 +3,8 @@
 namespace AcMarche\Travaux\Entity;
 
 use AcMarche\Travaux\Repository\EmployeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -24,9 +26,13 @@ class Employe implements Stringable
     #[Assert\NotBlank]
     public string $prenom;
 
-    #[ORM\ManyToOne(targetEntity: CategoryPlanning::class, inversedBy: 'employes')]
-    #[ORM\JoinColumn(nullable: true)]
-    public ?CategoryPlanning $category = null;
+    #[ORM\ManyToMany(targetEntity: CategoryPlanning::class)]
+    public Collection|null $categories;
+
+    public function __construct()
+    {
+        $this->categories = new ArrayCollection();
+    }
 
     public function __toString()
     {
@@ -41,5 +47,29 @@ class Employe implements Stringable
     public function getNomPrenom(): string
     {
         return $this->nom.' '.$this->prenom;
+    }
+
+    /**
+     * @return Collection<int, CategoryPlanning>|array<CategoryPlanning>
+     */
+    public function getCategories(): Collection|array
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(CategoryPlanning $categoryPlanning): self
+    {
+        if (!$this->categories->contains($categoryPlanning)) {
+            $this->categories->add($categoryPlanning);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(CategoryPlanning $categoryPlanning): self
+    {
+        $this->categories->removeElement($categoryPlanning);
+
+        return $this;
     }
 }

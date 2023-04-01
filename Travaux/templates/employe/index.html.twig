@@ -21,7 +21,7 @@
                             {{ employe.prenom }}
                         </td>
                         <td>
-                            {{ employe.category }}
+                            {{ employe.categories|join(',') }}
                         </td>
                     </tr>
                 {% endfor %}

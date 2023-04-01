@@ -22,10 +22,11 @@ trait PdfDownloaderTrait
         return $this->pdf;
     }
 
-    public function downloadPdf(string $html, string $fileName): Response
+    public function downloadPdf(string $html, string $fileName, bool $debug = false): Response
     {
-        //debug
-        // return new Response($html);
+        if ($debug) {
+            return new Response($html);
+        }
 
         return new PdfResponse(
             $this->pdf->getOutputFromHtml($html),

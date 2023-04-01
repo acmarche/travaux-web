@@ -6,7 +6,7 @@
                 {% include '@Travaux/planning/_calendar_navigate.html.twig' %}
             </div>
             <div class="cal-weekdays text-muted">
-                <div class="cal-weekday">{{ 'week.name'|trans[:1] }}</div>
+                <div class="cal-weekday">Semaine</div>
                 {% for weekday in weekdays %}
                     <div class="cal-weekday">{{ weekday|trans[:3] }}</div>
                 {% endfor %}
@@ -19,8 +19,11 @@
                     {% else %}
 
                     {% endif %}
-                    <a class="btn cal-btn {{ class }} align-self-end" disabled="" href="#"
+                    <a class="btn btn-sm btn-success"
+                       href="{{ path('planning_export_pdf_weekly',{'year':dateSelected.year,'week':week.startDate.weekOfYear, 'categoryPlanning':categorySelected ?categorySelected.id}) }}"
+                       title="Exporter la semaine en pdf "
                        role="button">
+                        <i class="fas fa-file-pdf"></i>
                         S{{ week.startDate.weekOfYear }}
                     </a>
                     {% for day in week %}

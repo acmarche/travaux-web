@@ -51,6 +51,70 @@ class InterventionPlanningRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param array<\DateTime> $days
+     * @return array|InterventionPlanning[]
+     */
+    public function findPlanningByDaysAndCategory(array $days, ?CategoryPlanning $categoryPlanning = null): array
+    {
+        $qbl = $this->createQbl();
+        if (count($days) == 0) {
+            return [];
+        }
+
+        if ($categoryPlanning) {
+            $qbl->andWhere('intervention_planning.category = :category')
+                ->setParameter('category', $categoryPlanning);
+        }
+
+        return $qbl
+            ->andWhere('intervention_planning.dates IN (:dates)')
+            ->setParameter('dates', $days)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @param int $week
+     * @param CategoryPlanning|null $categoryPlanning
+     * @return array|InterventionPlanning[]
+     */
+    public function findByWeekAndCategory(int $week, ?CategoryPlanning $categoryPlanning): array
+    {
+
+        $qbl = $this->createQbl();
+
+        if ($categoryPlanning) {
+            $qbl->andWhere('intervention_planning.category = :category')
+                ->setParameter('category', $categoryPlanning);
+        }
+
+        return $qbl
+            ->andWhere('intervention_planning.dates LIKE :date')
+            ->setParameter('date', '%'.$date->format('Y-m-d').'%')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @param string $yearmonth
+     * @param CategoryPlanning|null $categoryPlanning
+     * @return array|InterventionPlanning[]
+     */
+    public function findByMonthAndCategory(string $yearmonth, ?CategoryPlanning $categoryPlanning): array
+    {
+        if ($categoryPlanning) {
+            $qbl->andWhere('intervention_planning.category = :category')
+                ->setParameter('category', $categoryPlanning);
+        }
+
+        return $qbl
+            ->andWhere('intervention_planning.dates LIKE :date')
+            ->setParameter('date', '%'.$date->format('Y-m-d').'%')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * @return array|InterventionPlanning[]
      */
     public function findByCategory(?CategoryPlanning $categoryPlanning): array
@@ -73,5 +137,6 @@ class InterventionPlanningRepository extends ServiceEntityRepository
             ->leftJoin('intervention_planning.category', 'category', 'WITH')
             ->addSelect('employes', 'category');
     }
+
 
 }

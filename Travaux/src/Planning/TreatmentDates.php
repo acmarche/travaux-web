@@ -12,7 +12,7 @@ class TreatmentDates
         $dates = [];
         foreach ($data->datesCollection as $date) {
             if ($date instanceof \DateTimeInterface) {
-                $dates [] = $date->format('Y-m-d');
+                $dates[] = $date->format('Y-m-d');
             }
         }
         $intervention->dates = $dates;

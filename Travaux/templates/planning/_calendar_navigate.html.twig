@@ -3,12 +3,12 @@
         <i>{{ categorySelected ? categorySelected.name }}</i></strong>
 </a>
 
-<a href="{{ path('planning_index', {'monthyear':previous.format('Y-m'), 'categoryPlanning':categorySelected ? categorySelected.id}) }}"
+<a href="{{ path('planning_index', {'yearmonth':previous.format('Y-m'), 'categoryPlanning':categorySelected ? categorySelected.id}) }}"
    title="Mois précédent"
    class="cal-month-previous btn-sm btn btn-outline-primary" role="button">
     <i class="fas fa-arrow-left"></i>
 </a>
-<a href="{{ path('planning_index', {'monthyear':next.format('Y-m'), 'categoryPlanning':categorySelected ? categorySelected.id}) }}"
+<a href="{{ path('planning_index', {'yearmonth':next.format('Y-m'), 'categoryPlanning':categorySelected ? categorySelected.id}) }}"
    title="Mois suivant"
    class="cal-month-next btn btn-sm btn-outline-primary" role="button">
     <i class="fas fa-arrow-right"></i>

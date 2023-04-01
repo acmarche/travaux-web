@@ -14,6 +14,7 @@ class DateProvider
         private CarbonFactory $carbonFactory
     ) {
     }
+
     /**
      * Names of days of the week.
      *
@@ -53,6 +54,7 @@ class DateProvider
     {
         $carbon = $this->carbonFactory->instance($date);
 
+        //CarbonPeriod::create($dateSelected->firstOfMonth(), $dateSelected->endOfMonth());
         return Carbon::parse($carbon->firstOfMonth())->daysUntil(
             $carbon->endOfMonth()
         );
@@ -84,5 +86,27 @@ class DateProvider
         return Carbon::parse($firstDayOfWeek)->daysUntil($lastDayOffWeek)->locale(
             'fr'
         );
+    }
+
+    public function createDateFromWeek(int $year, int $week): CarbonInterface
+    {
+        $date = Carbon::now();
+        $date->year = $year;
+        $date->week = $week;
+
+        return $date;
+    }
+
+    /**
+     * @param CarbonPeriod $days
+     * @return array<\DateTime>
+     */
+    public function convertCarbonPeriodToDatesTime(CarbonPeriod $days): array
+    {
+        $dates = array_map(function ($day) {
+            return $day->format('Y-m-d');
+        }, $days->toArray());
+
+        return $dates;
     }
 }

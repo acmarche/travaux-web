@@ -6,7 +6,7 @@
         <div class="card-body">
             {% include '@AcMarcheTravaux/employe/_actions.html.twig' %}
 
-            <p class="block m-3">Equipe : {{ employe.category }}</p>
+            <p class="block m-3">Equipes : {{ employe.categories|join('') }}</p>
         </div>
     </div>
 {% endblock %}
