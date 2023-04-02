@@ -1,8 +1,9 @@
 <!-- TODO https://getbootstrap.com/docs/5.1/examples/dropdowns/ -->
-<div class="dropdown-menu-cal p-2 shadow rounded-3 mb-3" id="dropdownCalendar">
+<div class="mb-3" id="dropdownCalendar">
     <div class="d-grid gap-1">
         <div class="cal">
-            <div class="cal-month">
+            <div class="cal-month shadow-md p-3 mb-2 bg-body-tertiary rounded bg-primary-subtle text-white"
+                 style="background-color: antiquewhite">
                 {% include '@Travaux/planning/_calendar_navigate.html.twig' %}
             </div>
             <div class="cal-weekdays text-muted">
@@ -14,11 +15,6 @@
             <div class="cal-days">
                 {% set class = "border border-success" %}
                 {% for week in weeks %}
-                    {% if week.startDate.weekOfYear == dateSelected.weekOfYear %}
-
-                    {% else %}
-
-                    {% endif %}
                     <a class="btn btn-sm btn-success"
                        href="{{ path('planning_export_pdf_weekly',{'year':dateSelected.year,'week':week.startDate.weekOfYear, 'categoryPlanning':categorySelected ?categorySelected.id}) }}"
                        title="Exporter la semaine en pdf "

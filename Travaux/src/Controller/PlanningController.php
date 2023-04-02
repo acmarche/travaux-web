@@ -9,16 +9,17 @@ use AcMarche\Travaux\Planning\DateProvider;
 use AcMarche\Travaux\Planning\TreatmentDates;
 use AcMarche\Travaux\Repository\CategorieRepository;
 use AcMarche\Travaux\Repository\CategoryPlanningRepository;
+use AcMarche\Travaux\Repository\EmployeRepository;
 use AcMarche\Travaux\Repository\EtatRepository;
 use AcMarche\Travaux\Repository\InterventionPlanningRepository;
 use AcMarche\Travaux\Repository\PrioriteRepository;
 use AcMarche\Travaux\Spreadsheet\SpreadsheetDownloaderTrait;
 use AcMarche\Travaux\Spreadsheet\XlsGenerator;
 use Carbon\Carbon;
-use Carbon\CarbonPeriod;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,12 +31,15 @@ class PlanningController extends AbstractController
 {
     use SpreadsheetDownloaderTrait;
 
+    const CATEGORY_SELECTED = 'planning_category';
+
     public function __construct(
         private InterventionPlanningRepository $interventionPlanningRepository,
         private CategoryPlanningRepository $categoryPlanningRepository,
         private EtatRepository $etatRepository,
         private PrioriteRepository $prioriteRepository,
         private CategorieRepository $categorieRepository,
+        private EmployeRepository $employeRepository,
         private DateProvider $dateProvider,
         private XlsGenerator $xlsGenerator
     ) {
@@ -80,9 +84,9 @@ class PlanningController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/new/{date}', name: 'planning_new', methods: ['GET', 'POST'])]
+    #[Route(path: '/new/{date}/{category}', name: 'planning_new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_TRAVAUX_ADD')]
-    public function new(Request $request, string $date = null): Response
+    public function new(Request $request, string $date = null, ?CategoryPlanning $category = null): Response
     {
         if (!$date) {
             $dateSelected = new \DateTime();
@@ -90,13 +94,15 @@ class PlanningController extends AbstractController
             $dateSelected = \DateTime::createFromFormat('Y-m-d', $date);
         }
 
+        $request->getSession()->set(self::CATEGORY_SELECTED, $category?->getId());
         $intervention = new InterventionPlanning();
+        $intervention->category = $category;
         $intervention->datesCollection = new ArrayCollection();
         $intervention->datesCollection->add($dateSelected);
 
         $form = $this->createForm(PlanningType::class, $intervention)
             ->add('saveAndAdd', SubmitType::class, [
-                'label' => 'Ajouter et ajouter une autre',
+                'label' => 'Sauvegarder puis ajouter une autre',
                 'attr' => ['class' => 'btn-success'],
             ]);
 
@@ -167,4 +173,18 @@ class PlanningController extends AbstractController
         );
     }
 
+    #[Route(path: '/query/autocomplete', name: 'planning_auto_complete', methods: ['GET'])]
+    public function autoCompleteRequest(Request $request): JsonResponse
+    {
+        $query = $request->query->get('query');
+        $category = $request->getSession()->get(self::CATEGORY_SELECTED);
+        $employes = $this->employeRepository->searchForAutocomplete($query, $category);
+        $results = ['results' => []];
+        foreach ($employes as $employe) {
+            $results['results'][] = ['value' => $employe->getId(), 'text' => $employe->nom.' '.$employe->prenom];
+        }
+        $results['next_page'] = null;
+
+        return $this->json($results);
+    }
 }

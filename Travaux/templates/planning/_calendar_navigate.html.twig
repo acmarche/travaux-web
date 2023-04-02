@@ -1,7 +1,7 @@
-<a class="cal-month-name" href="#">
+<span class="cal-month-name text-primary">
     <strong>{{ dateSelected.monthName|capitalize }} {{ dateSelected.year }}
         <i>{{ categorySelected ? categorySelected.name }}</i></strong>
-</a>
+</span>
 
 <a href="{{ path('planning_index', {'yearmonth':previous.format('Y-m'), 'categoryPlanning':categorySelected ? categorySelected.id}) }}"
    title="Mois précédent"

@@ -24,7 +24,7 @@ class EmployeController extends AbstractController
     #[Route(path: '/', name: 'employe', methods: ['GET'])]
     public function index(): Response
     {
-        $employes = $this->employeRepository->findAll();
+        $employes = $this->employeRepository->findAllOrdered();
 
         return $this->render(
             '@AcMarcheTravaux/employe/index.html.twig',

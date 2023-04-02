@@ -26,7 +26,7 @@ class PlanningType extends AbstractType
             ->add('description', TextareaType::class, [
                 'label' => 'Description',
                 'required' => true,
-                'attr' => ['rows' => 8],
+                'attr' => ['rows' => 3],
             ])
             ->add('horaire', EntityType::class, [
                 'required' => true,
@@ -46,9 +46,6 @@ class PlanningType extends AbstractType
                 ) => $domaineRepository->getQblForList(),
                 'class' => CategoryPlanning::class,
             ])
-            ->add('employes', EmployeAutocompleteField::class, [
-
-            ])
             ->add('datesCollection', CollectionType::class, [
                 'entry_type' => DateType::class,
                 'label' => 'Dates',
@@ -64,6 +61,9 @@ class PlanningType extends AbstractType
                 'constraints' => [
                     new Count(min: 1, minMessage: 'Il doit y avoir au moins 1 date'),
                 ],
+            ])
+            ->add('employes', EmployeAutocompleteField::class, [
+
             ])
             ->add('save', SubmitType::class, [
                 'label' => 'Sauvegarder',
