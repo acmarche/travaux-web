@@ -6,7 +6,7 @@
             <a href="{{ path('planning_new', {'date': day|date('Y-m-d'),'category':categorySelected ? categorySelected.id}) }}">
                 <i class="fa fa-plus-square" style="height: 2rem;"></i>
             </a>
-            <span class="bt1n cal-b4tn {{ classDay }} align-self-end" style="height: 2rem;" role="button">
+            <span class="badge rounded-pill text-bg-secondary {{ classDay }}" role="button">
                 {{ day.day }}
             </span>
         </div>

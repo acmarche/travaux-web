@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    <h3>Planning pour la semaine {{ s }} </h3>
+    <h3 class="text-success">Planning pour la semaine {{ s }} </h3>
 
     {% for intervention in interventions %}
         <div class="col-md-6">
@@ -49,6 +49,7 @@
             <br/>
             {{ intervention.description | nl2br }}
         </div>
+        <hr/>
 
         <div class="page-breaker"></div>
     {% endfor %}

@@ -98,7 +98,6 @@ class ExportController extends AbstractController
             ]
         );
         $name = sprintf('planning-%s.pdf', date('Y-m-d'));
-        $this->pdf->setOption('footer-right', '[page]/[toPage]');
 
         return $this->downloadPdf($html, $name, false);
     }

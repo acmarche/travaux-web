@@ -81,7 +81,7 @@ class DateProvider
     public function daysOfWeek(CarbonInterface $date): CarbonPeriod
     {
         $firstDayOfWeek = $date->copy()->startOfWeek()->toMutable()->toDateString();
-        $lastDayOffWeek = $date->copy()->endOfWeek()->toDateString(); //+6
+        $lastDayOffWeek = $date->endOfWeek()->toDateString(); //+6
 
         return Carbon::parse($firstDayOfWeek)->daysUntil($lastDayOffWeek)->locale(
             'fr'
