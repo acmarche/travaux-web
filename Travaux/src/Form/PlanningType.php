@@ -32,6 +32,7 @@ class PlanningType extends AbstractType
                 'required' => true,
                 'placeholder' => 'Choisissez un horaire',
                 'class' => Horaire::class,
+                'expanded'=>true,
                 'query_builder' => fn(HoraireRepository $horaireRepository) => $horaireRepository->getQblForList(),
             ])
             ->add('lieu', TextType::class, [
