@@ -12,8 +12,12 @@
 
             <ul class="mb-5 list-group list-group-horizontal">
                 {% for category in categories %}
-                    <li class="list-group-item">
-                        <a href="{{ path('planning_index', {'yearmonth': dateSelected.year~'-'~dateSelected.month, 'categoryPlanning':category.id}) }}">{{ category.name }}</a>
+                    {% set categorySelectedId = categorySelected ? categorySelected.id : 0 %}
+                    <li class="list-group-item {% if category.id == categorySelectedId %} text-bg-success {% endif %}">
+                        <a href="{{ path('planning_index', {'yearmonth': dateSelected.year~'-'~dateSelected.month, 'categoryPlanning':category.id}) }}"
+                        class="{% if category.id == categorySelectedId %} text-white {% endif %}">
+                            {{ category.name }}
+                        </a>
                     </li>
                 {% endfor %}
             </ul>
