@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    <h3>Planning pour la semaine {{ s }}</h3>
+    <h3>Planning pour la semaine {{ s }} </h3>
 
     {% for intervention in interventions %}
         <div class="col-md-6">
@@ -13,6 +13,18 @@
                     </th>
                     <td>
                         {{ intervention.id }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Equipe</th>
+                    <td>{{ intervention.category }}</td>
+                </tr>
+                <tr>
+                    <th>Date(s)</th>
+                    <td>
+                        {% for dateInter in intervention.dates %}
+                            {{ dateInter|format_date('full') }},
+                        {% endfor %}
                     </td>
                 </tr>
                 <tr>

@@ -76,7 +76,6 @@ class PlanningController extends AbstractController
             'today' => $today,
             'weekdays' => $this->dateProvider->weekDaysName(),
             'previous' => $previous,
-            'days' => $days,
             'weeks' => $weeks,
             'data' => $data,
             'categorySelected' => $categoryPlanning,
@@ -147,6 +146,7 @@ class PlanningController extends AbstractController
     #[Route(path: '/{id}/edit', name: 'planning_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, InterventionPlanning $intervention): Response
     {
+        $request->getSession()->set(self::CATEGORY_SELECTED, $intervention->category?->getId());
         TreatmentDates::setDatesCollectionFromDates($intervention);
 
         $form = $this->createForm(PlanningType::class, $intervention);
@@ -177,7 +177,10 @@ class PlanningController extends AbstractController
     public function autoCompleteRequest(Request $request): JsonResponse
     {
         $query = $request->query->get('query');
-        $category = $request->getSession()->get(self::CATEGORY_SELECTED);
+        $category = null;
+        if ($request->getSession()->has(self::CATEGORY_SELECTED)) {
+            $category = $request->getSession()->get(self::CATEGORY_SELECTED);
+        }
         $employes = $this->employeRepository->searchForAutocomplete($query, $category);
         $results = ['results' => []];
         foreach ($employes as $employe) {

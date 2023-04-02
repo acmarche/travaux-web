@@ -4,6 +4,7 @@ namespace AcMarche\Travaux\Repository;
 
 use AcMarche\Travaux\Entity\CategoryPlanning;
 use AcMarche\Travaux\Entity\InterventionPlanning;
+use AcMarche\Travaux\Planning\DateProvider;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -18,7 +19,7 @@ class InterventionPlanningRepository extends ServiceEntityRepository
 {
     use OrmCrudTrait;
 
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, private DateProvider $dateProvider)
     {
         parent::__construct($registry, InterventionPlanning::class);
     }
@@ -74,25 +75,22 @@ class InterventionPlanningRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param int $year
      * @param int $week
      * @param CategoryPlanning|null $categoryPlanning
-     * @return array|InterventionPlanning[]
+     * @return array|InterventionPlanning
      */
-    public function findByWeekAndCategory(int $week, ?CategoryPlanning $categoryPlanning): array
+    public function findByWeekAndCategory(int $year, int $week, ?CategoryPlanning $categoryPlanning): array
     {
+        $date = $this->dateProvider->createDateFromWeek($year, $week);
+        $days = $this->dateProvider->daysOfWeek($date);
 
-        $qbl = $this->createQbl();
-
-        if ($categoryPlanning) {
-            $qbl->andWhere('intervention_planning.category = :category')
-                ->setParameter('category', $categoryPlanning);
+        $interventions = [[]];
+        foreach ($days as $date) {
+            $interventions[] = $this->findPlanningByDayAndCategory($date->toDateTime(), $categoryPlanning);
         }
 
-        return $qbl
-            ->andWhere('intervention_planning.dates LIKE :date')
-            ->setParameter('date', '%'.$date->format('Y-m-d').'%')
-            ->getQuery()
-            ->getResult();
+        return array_merge(...$interventions);
     }
 
     /**

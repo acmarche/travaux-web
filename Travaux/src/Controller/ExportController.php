@@ -84,15 +84,11 @@ class ExportController extends AbstractController
     #[Route(path: '/planning/pdf/weekly/{year}/{week}/{categoryPlanning}', name: 'planning_export_pdf_weekly', methods: ['GET'])]
     public function planningWeeklyPdf(int $year, int $week, ?CategoryPlanning $categoryPlanning = null): Response
     {
-        $date = $this->dateProvider->createDateFromWeek($year, $week);
-        $days = $this->dateProvider->daysOfWeek($date);
-        $dates = $this->dateProvider->convertCarbonPeriodToDatesTime($days);
-
-        $interventions = $this->interventionPlanningRepository->findPlanningByDaysAndCategory(
-            $dates,
+        $interventions = $this->interventionPlanningRepository->findByWeekAndCategory(
+            $year,
+            $week,
             $categoryPlanning
         );
-
         $html = $this->renderView(
             '@AcMarcheTravaux/pdf/planning.html.twig',
             [
@@ -104,6 +100,6 @@ class ExportController extends AbstractController
         $name = sprintf('planning-%s.pdf', date('Y-m-d'));
         $this->pdf->setOption('footer-right', '[page]/[toPage]');
 
-        return $this->downloadPdf($html, $name, true);
+        return $this->downloadPdf($html, $name, false);
     }
 }
