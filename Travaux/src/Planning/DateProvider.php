@@ -4,6 +4,7 @@ namespace AcMarche\Travaux\Planning;
 
 
 use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Carbon\CarbonInterface;
 use Carbon\CarbonPeriod;
 use DateTimeInterface;
@@ -107,5 +108,10 @@ class DateProvider
         }, $days->toArray());
 
         return $dates;
+    }
+
+    public function createDateFromYearMonth(string $yearMonth): CarbonImmutable
+    {
+        return Carbon::createFromFormat('Y-m-d', $yearMonth.'-01')->toImmutable();
     }
 }

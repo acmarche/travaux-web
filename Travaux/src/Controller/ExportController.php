@@ -62,7 +62,6 @@ class ExportController extends AbstractController
 
     #[Route(path: '/planning/pdf/{yearmonth}/{categoryPlanning}', name: 'planning_export_pdf', methods: ['GET'])]
     public function planningPdf(
-        Request $request,
         string $yearmonth,
         ?CategoryPlanning $categoryPlanning = null
     ): Response {
@@ -72,7 +71,7 @@ class ExportController extends AbstractController
             '@AcMarcheTravaux/pdf/planning.html.twig',
             [
                 'interventions' => $interventions,
-                'title' => 'Interventions',
+                'title' => ' pour le mois de '.$yearmonth,
             ]
         );
         $name = sprintf('planning-%s.pdf', date('Y-m-d'));
@@ -93,12 +92,22 @@ class ExportController extends AbstractController
             '@AcMarcheTravaux/pdf/planning.html.twig',
             [
                 'interventions' => $interventions,
-                'title' => 'Interventions',
-                's' => $week,
+                'title' => 'Interventions de la semaine '.$week,
             ]
         );
         $name = sprintf('planning-%s.pdf', date('Y-m-d'));
 
         return $this->downloadPdf($html, $name, false);
     }
+
+    #[Route(path: '/planning/xls/{yearmonth}/{categoryPlanning}', name: 'planning_export_xls', methods: ['GET'])]
+    public function planningMonthXls(
+        string $yearmonth,
+        ?CategoryPlanning $categoryPlanning = null
+    ): Response {
+        $interventions = $this->interventionPlanningRepository->findByMonthAndCategory($yearmonth, $categoryPlanning);
+
+        return new Response('a faire plus tard :-P');
+    }
+
 }

@@ -46,14 +46,16 @@ class PlanningController extends AbstractController
     }
 
     #[Route(path: '/listing/{yearmonth}/{categoryPlanning}', name: 'planning_index')]
-    public function index(string $yearmonth = null, CategoryPlanning $categoryPlanning = null): Response
+    public function index(string $yearmonth = null, ?CategoryPlanning $categoryPlanning = null): Response
     {
         $dateSelected = Carbon::now()->toImmutable();
         if ($yearmonth) {
-            $dateSelected = Carbon::createFromFormat('Y-m-d', $yearmonth.'-01')->toImmutable();
+            $dateSelected = $this->dateProvider->createDateFromYearMonth($yearmonth);
+        } else {
+            $yearmonth = $dateSelected->format('Y'.'-'.$dateSelected->month);
         }
 
-        $interventions = $this->interventionPlanningRepository->findByCategory($categoryPlanning);
+        $interventions = $this->interventionPlanningRepository->findByMonthAndCategory($yearmonth, $categoryPlanning);
         $days = $this->dateProvider->daysOfMonth($dateSelected);
         $data = [];
         foreach ($days as $day) {
