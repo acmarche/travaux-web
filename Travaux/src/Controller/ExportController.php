@@ -10,9 +10,8 @@ use AcMarche\Travaux\Planning\PlanningUtils;
 use AcMarche\Travaux\Repository\InterventionPlanningRepository;
 use AcMarche\Travaux\Repository\InterventionRepository;
 use AcMarche\Travaux\Spreadsheet\SpreadsheetDownloaderTrait;
-use PhpOffice\PhpSpreadsheet\Cell\CellAddress;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -153,10 +152,16 @@ class ExportController extends AbstractController
             $worksheet
                 ->setCellValue($lettre++.$ligne, (new UnicodeString($intervention->description))->truncate(120, '...'))
                 ->setCellValue($lettre++.$ligne, $intervention->lieu)
-                ->setCellValue($lettre++.$ligne, $intervention->horaire);
+                ->setCellValue($lettre++.$ligne, $intervention->horaire)
+                ->setCellValue($lettre++.$ligne, '');//under title presences
+
             foreach ($intervention->getEmployes() as $employe) {
+                $index = PlanningUtils::findIndex($employe, $ouvriers);
+                $t = 'x';
+                $lettrePosition = Coordinate::stringFromColumnIndex(5+$index);
+                //$lettre + $index;
                 $worksheet
-                    ->setCellValue($lettre++.$ligne, $employe->nom);
+                    ->setCellValue($lettrePosition.$ligne, $index.' : '.$lettrePosition);
             }
             $ligne++;
         }
@@ -187,11 +192,11 @@ class ExportController extends AbstractController
         $worksheet->mergeCells('A5:D5');
         $lettre = 'E';
 
-        foreach ($ouvriers as $ouvrier) {
+        foreach ($ouvriers as $key => $ouvrier) {
             $ligne = 2;
             $worksheet->mergeCells($lettre.$ligne.':'.$lettre.$ligne + 7);
-            $worksheet->setCellValue($lettre.'9', $ouvrier->nom.' '.$ouvrier->prenom);
-            //   $worksheet->getStyle($lettre.'9')->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
+            $worksheet->setCellValue($lettre.$ligne, $key.' '.$ouvrier->nom.' '.$ouvrier->prenom);
+            $worksheet->getStyle($lettre.$ligne)->getAlignment()->setTextRotation(90);
             $lettre++;
         }
 
@@ -210,8 +215,6 @@ class ExportController extends AbstractController
             ->setCellValue($lettre++.$ligne, 'Localisation')
             ->setCellValue($lettre++.$ligne, 'Plage horaire')
             ->setCellValue($lettre++.$ligne, 'Présences');
-
-
     }
 
 }

@@ -20,6 +20,17 @@ class PlanningUtils
             }
         }
 
-        return $ouvriers;
+        return array_values($ouvriers);//reset index
+    }
+
+    public static function findIndex(Employe $employe, array $ouvriers): int
+    {
+        foreach ($ouvriers as $key => $ouvrier) {
+            if ($ouvrier->getId() == $employe->getId()) {
+                return $key;
+            }
+        }
+
+        return 0;
     }
 }
