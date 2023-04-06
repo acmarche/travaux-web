@@ -13,7 +13,7 @@
                 {% for category in categories %}
                     <tr>
                         <td>
-                            <a href="{{ path('category_planning_show', {'id': horaire.id}) }}">{{ category }}</a>
+                            <a href="{{ path('category_planning_show', {'id': category.id}) }}">{{ category }}</a>
                         </td>
                     </tr>
                 {% endfor %}
