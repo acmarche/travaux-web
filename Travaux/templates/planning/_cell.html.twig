@@ -9,10 +9,18 @@
             <span class="badge rounded-pill text-bg-secondary {{ classDay }}" role="button">
                 {{ day.day }}
             </span>
+            <a class="btn btn-sm btn-success"
+               href="{{ path('planning_export_pdf_daily',{'date':day|date('Y-m-d'), 'categoryPlanning':categorySelected ?categorySelected.id}) }}"
+               title="Exporter la journée en pdf "
+               role="button">
+                <i class="fas fa-file-pdf"></i>
+            </a>
         </div>
         {% for plan in plans %}
             <a href="{{ path('planning_show', {'id': plan.id}) }}" class="lh-lg">
-                {{ plan.description|u.truncate(20,'...') }}
+                {% for ouvrier in plan.employes %}
+                    {{ ouvrier.nom }} {% if not loop.last %}, {% endif %}
+                {% endfor %}
             </a>
             <br/>
         {% endfor %}

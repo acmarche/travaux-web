@@ -100,6 +100,25 @@ class ExportController extends AbstractController
         return $this->downloadPdf($html, $name, false);
     }
 
+    #[Route(path: '/planning/pdf/daily/{date}/{categoryPlanning}', name: 'planning_export_pdf_daily', methods: ['GET'])]
+    public function planningDailyPdf(\DateTime $date, ?CategoryPlanning $categoryPlanning = null): Response
+    {
+        $interventions = $this->interventionPlanningRepository->findPlanningByDayAndCategory(
+            $date,
+            $categoryPlanning
+        );
+        $html = $this->renderView(
+            '@AcMarcheTravaux/pdf/planning.html.twig',
+            [
+                'interventions' => $interventions,
+                'title' => 'Interventions du jour '.$date->format('d-m-Y'),
+            ]
+        );
+        $name = sprintf('planning-%s.pdf', date('Y-m-d'));
+
+        return $this->downloadPdf($html, $name, false);
+    }
+
     #[Route(path: '/planning/xls/{yearmonth}/{categoryPlanning}', name: 'planning_export_xls', methods: ['GET'])]
     public function planningMonthXls(
         string $yearmonth,
