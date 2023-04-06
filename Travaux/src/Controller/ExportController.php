@@ -34,7 +34,7 @@ class ExportController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/intervention/pdf/{archive}', name: 'intervention_export_pdf', methods: ['GET'])]
+    #[Route(path: '/interventions/pdf/{archive}', name: 'intervention_export_pdf', methods: ['GET'])]
     public function interventionPdf(Request $request, $archive = false): Response
     {
         $session = $request->getSession();
@@ -68,7 +68,7 @@ class ExportController extends AbstractController
         );
     }
 
-    #[Route(path: '/planning/pdf/{yearmonth}/{categoryPlanning}', name: 'planning_export_pdf', methods: ['GET'])]
+    #[Route(path: '/planning/pdf/monthly/{yearmonth}/{categoryPlanning}', name: 'planning_export_pdf', methods: ['GET'])]
     public function planningPdf(
         string $yearmonth,
         ?CategoryPlanning $categoryPlanning = null
