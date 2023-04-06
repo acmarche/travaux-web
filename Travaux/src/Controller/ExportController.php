@@ -3,21 +3,30 @@
 namespace AcMarche\Travaux\Controller;
 
 use AcMarche\Travaux\Entity\CategoryPlanning;
+use AcMarche\Travaux\Entity\Employe;
 use AcMarche\Travaux\Export\PdfDownloaderTrait;
 use AcMarche\Travaux\Planning\DateProvider;
+use AcMarche\Travaux\Planning\PlanningUtils;
 use AcMarche\Travaux\Repository\InterventionPlanningRepository;
 use AcMarche\Travaux\Repository\InterventionRepository;
+use AcMarche\Travaux\Spreadsheet\SpreadsheetDownloaderTrait;
+use PhpOffice\PhpSpreadsheet\Cell\CellAddress;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\String\UnicodeString;
 
 #[Route(path: '/export')]
 #[IsGranted('ROLE_TRAVAUX')]
 class ExportController extends AbstractController
 {
     use PdfDownloaderTrait;
+    use SpreadsheetDownloaderTrait;
 
     public function __construct(
         private InterventionRepository $interventionRepository,
@@ -124,9 +133,85 @@ class ExportController extends AbstractController
         string $yearmonth,
         ?CategoryPlanning $categoryPlanning = null
     ): Response {
-        $interventions = $this->interventionPlanningRepository->findByMonthAndCategory($yearmonth, $categoryPlanning);
+        if (!$categoryPlanning) {
+            $this->addFlash('danger', 'Vous dever d\'abord choisir une équipe pour exporter.');
 
-        return new Response('a faire plus tard :-P');
+            return $this->redirectToRoute('planning_index');
+        }
+
+        $spreadsheet = new Spreadsheet();
+        $worksheet = $spreadsheet->getActiveSheet();
+
+        $interventions = $this->interventionPlanningRepository->findByMonthAndCategory($yearmonth, $categoryPlanning);
+        $ouvriers = PlanningUtils::extractOuvriers($interventions);
+
+        $this->setTitles($worksheet, $yearmonth, $ouvriers, $categoryPlanning);
+
+        $ligne = 10;
+        foreach ($interventions as $intervention) {
+            $lettre = 'A';
+            $worksheet
+                ->setCellValue($lettre++.$ligne, (new UnicodeString($intervention->description))->truncate(120, '...'))
+                ->setCellValue($lettre++.$ligne, $intervention->lieu)
+                ->setCellValue($lettre++.$ligne, $intervention->horaire);
+            foreach ($intervention->getEmployes() as $employe) {
+                $worksheet
+                    ->setCellValue($lettre++.$ligne, $employe->nom);
+            }
+            $ligne++;
+        }
+
+        $name = 'intervention-'.$yearmonth.'.xlsx';
+
+        return $this->downloadXls($spreadsheet, $name);
+    }
+
+    /**
+     * @param Worksheet $worksheet
+     * @param string $yearmonth
+     * @param array|Employe[] $ouvriers
+     * @param CategoryPlanning $categoryPlanning
+     * @return void
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
+    private function setTitles(
+        Worksheet $worksheet,
+        string $yearmonth,
+        array $ouvriers,
+        CategoryPlanning $categoryPlanning
+    ): void {
+
+        $worksheet->mergeCells('A2:D2');
+        $worksheet->mergeCells('A3:D3');
+        $worksheet->mergeCells('A4:D4');
+        $worksheet->mergeCells('A5:D5');
+        $lettre = 'E';
+
+        foreach ($ouvriers as $ouvrier) {
+            $ligne = 2;
+            $worksheet->mergeCells($lettre.$ligne.':'.$lettre.$ligne + 7);
+            $worksheet->setCellValue($lettre.'9', $ouvrier->nom.' '.$ouvrier->prenom);
+            //   $worksheet->getStyle($lettre.'9')->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
+            $lettre++;
+        }
+
+        $lettre = 'A';
+        $ligne = 2;
+        $worksheet
+            ->setCellValue($lettre.$ligne++, 'Commune: '.'Marche-en-Famenne')
+            ->setCellValue($lettre.$ligne++, 'Equipe: '.$categoryPlanning->name)
+            ->setCellValue($lettre.$ligne++, 'Date: '.$yearmonth)
+            ->setCellValue($lettre.$ligne++, 'Signature/Cachet: ');
+
+        $ligne = 6;
+
+        $worksheet
+            ->setCellValue($lettre++.$ligne, 'Description tâche')
+            ->setCellValue($lettre++.$ligne, 'Localisation')
+            ->setCellValue($lettre++.$ligne, 'Plage horaire')
+            ->setCellValue($lettre++.$ligne, 'Présences');
+
+
     }
 
 }
