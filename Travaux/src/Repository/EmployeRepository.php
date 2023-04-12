@@ -47,7 +47,7 @@ class EmployeRepository extends ServiceEntityRepository
         if ($query) {
             $queryBuilder
                 ->andWhere('employe.nom LIKE :name OR employe.prenom LIKE :name')
-                ->setParameter('name', $query);
+                ->setParameter('name', '%'.$query.'%');
         }
 
         return $queryBuilder
