@@ -34,7 +34,7 @@ class HoraireRepository extends ServiceEntityRepository
     public function getQblForList(): QueryBuilder
     {
         return $this->createQueryBuilder('horaire')
-            ->addOrderBy('horaire.nom');
+            ->addOrderBy('horaire.position','ASC');
     }
 
 }
