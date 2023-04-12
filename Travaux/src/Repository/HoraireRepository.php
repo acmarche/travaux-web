@@ -28,7 +28,7 @@ class HoraireRepository extends ServiceEntityRepository
      */
     public function findAllOrdered(): array
     {
-        return $this->findBy(array(), array('nom' => 'ASC'));
+        return $this->findBy(array(), array('position' => 'ASC'));
     }
 
     public function getQblForList(): QueryBuilder

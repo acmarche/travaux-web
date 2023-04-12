@@ -24,7 +24,7 @@ class HoraireController extends AbstractController
     #[Route(path: '/', name: 'horaire', methods: ['GET'])]
     public function index(): Response
     {
-        $horaires = $this->horaireRepository->findAll();
+        $horaires = $this->horaireRepository->findAllOrdered();
 
         return $this->render(
             '@AcMarcheTravaux/horaire/index.html.twig',
@@ -108,4 +108,27 @@ class HoraireController extends AbstractController
 
         return $this->redirectToRoute('horaire');
     }
+
+    #[Route(path: '/update/position/{id}', name: 'horaire_position', methods: ['PATCH', 'GET'])]
+    public function sort(Request $request, Horaire $horaire): Response
+    {
+        $data = $request->getContent();
+
+        $regex = '#"position"\s*(\d)#';
+        preg_match($regex, $data, $matches);
+        $position = (int)$matches[1];
+        if ($position) {
+            $horaire->position = $position;
+            $this->horaireRepository->flush();
+        }
+
+        return new Response($position);
+    }
+    /**
+     * ------WebKitFormBoundaryAtKCeJaz10WSdUfU
+     * Content-Disposition: form-data; name="position"
+     *
+     * 2
+     * ------WebKitFormBoundaryAtKCeJaz10WSdUfU--
+     */
 }

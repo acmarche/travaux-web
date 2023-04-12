@@ -22,6 +22,9 @@ class Horaire implements Stringable
     #[Assert\NotBlank]
     public string $nom;
 
+    #[ORM\Column(type: 'integer', nullable: false)]
+    public int $position = 0;
+
     #[ORM\OneToMany(mappedBy: 'horaire', targetEntity: InterventionPlanning::class)]
     public Collection $intervention;
 

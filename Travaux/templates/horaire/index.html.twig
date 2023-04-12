@@ -6,18 +6,19 @@
         <div class="card-body">
             <a href="{{ path('horaire_new') }}" class="btn btn-primary mb-3" role="button"><i
                         class="fa fa-plus"></i> Ajouter</a>
-            <table class="table table-bordered">
-                <tr>
-                    <th>Nom</th>
-                </tr>
+
+            <ul data-controller="sortable" data-sortable-animation-value="150" class="list-group">
                 {% for horaire in horaires %}
-                    <tr>
-                        <td>
-                            <a href="{{ path('horaire_show', {'id': horaire.id}) }}">{{ horaire }}</a>
-                        </td>
-                    </tr>
+                    <li data-sortable-update-url="{{ path('horaire_position',{'id':horaire.id}) }}"
+                        data-sortable-response-kind-value="json"
+                        class="list-group-item d-flex justify-content-between"
+                    >
+                        <a href="{{ path('horaire_show', {'id': horaire.id}) }}">{{ horaire }}</a>
+                     <span class="align-self-end">Position: {{ horaire.position }}</span>
+                    </li>
                 {% endfor %}
-            </table>
+            </ul>
+
         </div>
     </div>
 {% endblock %}
