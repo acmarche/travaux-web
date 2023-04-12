@@ -9,7 +9,7 @@
                 Etes vous sûr de vouloir <strong>supprimer</strong> <br/> <strong>{{ intervention }} ? </strong>
             </div>
             <div class="modal-footer">
-                <form method="post" action="{{ path('intervention_delete', {'id': intervention.id}) }}">
+                <form method="post" action="{{ path('planning_delete', {'id': intervention.id}) }}">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ intervention.id) }}">
                     <button type="button" class="btn btn-secondary"
                             data-bs-dismiss="modal">Annuler

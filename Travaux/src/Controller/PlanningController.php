@@ -20,6 +20,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -173,6 +174,19 @@ class PlanningController extends AbstractController
                 'form' => $form->createView(),
             )
         );
+    }
+
+    #[Route(path: '/{id}', name: 'planning_delete', methods: ['POST'])]
+    #[IsGranted('delete', subject: 'intervention')]
+    public function delete(Request $request, InterventionPlanning $intervention): RedirectResponse
+    {
+        if ($this->isCsrfTokenValid('delete'.$intervention->getId(), $request->request->get('_token'))) {
+            $this->interventionPlanningRepository->remove($intervention);
+            $this->interventionPlanningRepository->flush();
+            $this->addFlash('success', 'L\'intervention a bien été supprimée.');
+        }
+
+        return $this->redirectToRoute('planning_index');
     }
 
     #[Route(path: '/query/autocomplete', name: 'planning_auto_complete', methods: ['GET'])]

@@ -8,6 +8,8 @@ use AcMarche\Travaux\Event\InterventionEvent;
 use AcMarche\Travaux\Form\InterventionType;
 use AcMarche\Travaux\Form\Search\SearchInterventionType;
 use AcMarche\Travaux\Repository\EtatRepository;
+use AcMarche\Travaux\Repository\InterventionRepository;
+use AcMarche\Travaux\Repository\SuiviRepository;
 use AcMarche\Travaux\Service\FileHelper;
 use AcMarche\Travaux\Service\InterventionWorkflow;
 use AcMarche\Travaux\Service\TravauxUtils;
@@ -23,9 +25,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Intervention controller.
- */
 #[Route(path: '/intervention')]
 #[IsGranted('ROLE_TRAVAUX')]
 class InterventionController extends AbstractController
@@ -36,7 +35,8 @@ class InterventionController extends AbstractController
         private InterventionWorkflow $workflow,
         private EtatRepository $etatRepository,
         private EventDispatcherInterface $eventDispatcher,
-        private ManagerRegistry $managerRegistry
+        private InterventionRepository $interventionRepository,
+        private SuiviRepository $suiviRepository
     ) {
     }
 
@@ -44,7 +44,6 @@ class InterventionController extends AbstractController
     #[Route(path: '/ancre/{anchor}/', name: 'intervention_anchor', methods: ['GET'])]
     public function index(Request $request, $anchor = null): Response
     {
-        $em = $this->managerRegistry->getManager();
         $key = "intervention_search";
         $data = [];
         $session = $request->getSession();
@@ -79,7 +78,7 @@ class InterventionController extends AbstractController
             }
         }
         $session->set($key, serialize($data));
-        $interventions = $em->getRepository(Intervention::class)->search($data, true);
+        $interventions = $this->interventionRepository->search($data, true);
         $this->travauxUtils->setLastSuivisForInterventions($interventions);
 
         return $this->render(
@@ -96,7 +95,6 @@ class InterventionController extends AbstractController
     #[IsGranted('ROLE_TRAVAUX_ADD')]
     public function new(Request $request): Response
     {
-        $em = $this->managerRegistry->getManager();
         $intervention = new Intervention();
         $form = $this->createForm(
             InterventionType::class,
@@ -108,12 +106,12 @@ class InterventionController extends AbstractController
             $user = $this->getUser();
             $intervention->setUserAdd($user->getUserIdentifier());
 
-            $em->persist($intervention);
-            $em->flush();
+            $this->interventionRepository->persist($intervention);
+            $this->interventionRepository>flush();
 
             $this->workflow->newIntervention($intervention);
 
-            $em->flush();
+            $this->interventionRepository->flush();
             $this->addFlash('success', 'L\'intervention a bien été crée.');
 
             $event = new InterventionEvent($intervention, null);
@@ -134,9 +132,8 @@ class InterventionController extends AbstractController
     #[Route(path: '/{id}', name: 'intervention_show', methods: ['GET'])]
     public function show(Intervention $intervention): Response
     {
-        $em = $this->managerRegistry->getManager();
         $deleteFormSuivis = $this->createSuivisDeleteForm($intervention->getId());
-        $suivis = $em->getRepository(Suivi::class)->search(
+        $suivis = $this->suiviRepository->search(
             array('intervention' => $intervention)
         );
 
@@ -155,7 +152,6 @@ class InterventionController extends AbstractController
     #[IsGranted('edit', subject: 'intervention')]
     public function edit(Request $request, Intervention $intervention): Response
     {
-        $em = $this->managerRegistry->getManager();
         $editForm = $this->createForm(
             InterventionType::class,
             $intervention
@@ -163,7 +159,7 @@ class InterventionController extends AbstractController
             ->add('Update', SubmitType::class);
         $editForm->handleRequest($request);
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em->flush();
+            $this->interventionRepository->flush();
 
             $this->addFlash('success', 'L\'intervention a bien été modifiée.');
 
@@ -184,12 +180,11 @@ class InterventionController extends AbstractController
     public function delete(Request $request, Intervention $intervention): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$intervention->getId(), $request->request->get('_token'))) {
-            $em = $this->managerRegistry->getManager();
             try {
                 $this->fileHelper->deleteAllDocs($intervention);
-                $em->remove($intervention);
+                $this->interventionRepository->remove($intervention);
 
-                $em->flush();
+                $this->interventionRepository->flush();
                 $this->addFlash('success', 'L\'intervention a bien été supprimée.');
             } catch (IOException $exception) {
                 $this->addFlash("danger", "Erreur de la suppression des pièce jointes: ".$exception->getMessage());
@@ -205,7 +200,6 @@ class InterventionController extends AbstractController
         $form = $this->createSuivisDeleteForm($intervention->getId());
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->managerRegistry->getManager();
             $suivis = $request->get('suivis', array());
 
             if ((is_countable($suivis) ? count($suivis) : 0) < 1) {
@@ -217,19 +211,19 @@ class InterventionController extends AbstractController
             $user = $this->getUser();
 
             foreach ($suivis as $suivis_id) {
-                $suivi = $em->getRepository(Suivi::class)->find($suivis_id);
+                $suivi = $this->suiviRepository->find($suivis_id);
 
                 if ($suivi) {
                     $userAdd = $suivi->getUserAdd();
                     if ($userAdd == $user->getUserIdentifier()) {
-                        $em->remove($suivi);
+                        $this->suiviRepository->remove($suivi);
                     } else {
                         $this->addFlash('danger', "Seul celui qui a ajouté le suivi peut le supprimer");
                     }
                 }
             }
 
-            $em->flush();
+            $this->interventionRepository->flush();
             $this->addFlash('success', 'Le(s) suivi(s) ont bien été supprimé(s)');
 
             return $this->redirectToRoute('intervention_show', array('id' => $intervention->getId()));
