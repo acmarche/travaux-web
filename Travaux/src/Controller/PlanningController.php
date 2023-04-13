@@ -195,7 +195,7 @@ class PlanningController extends AbstractController
         $query = $request->query->get('query');
         $category = null;
         if ($request->getSession()->has(self::CATEGORY_SELECTED)) {
-            $category = $request->getSession()->get(self::CATEGORY_SELECTED);
+         //   $category = $request->getSession()->get(self::CATEGORY_SELECTED);
         }
         $employes = $this->employeRepository->searchForAutocomplete($query, $category);
         $results = ['results' => []];
