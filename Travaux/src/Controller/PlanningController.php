@@ -177,7 +177,6 @@ class PlanningController extends AbstractController
     }
 
     #[Route(path: '/{id}/delete', name: 'planning_delete', methods: ['POST'])]
-    #[IsGranted('delete', subject: 'intervention')]
     public function delete(Request $request, InterventionPlanning $intervention): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$intervention->getId(), $request->request->get('_token'))) {
