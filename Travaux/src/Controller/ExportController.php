@@ -157,7 +157,6 @@ class ExportController extends AbstractController
 
             foreach ($intervention->getEmployes() as $employe) {
                 $index = PlanningUtils::findIndex($employe, $ouvriers);
-                $t = 'x';
                 $lettrePosition = Coordinate::stringFromColumnIndex(5+$index);
                 //$lettre + $index;
                 $worksheet
