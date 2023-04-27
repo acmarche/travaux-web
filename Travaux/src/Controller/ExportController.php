@@ -160,7 +160,8 @@ class ExportController extends AbstractController
                 $lettrePosition = Coordinate::stringFromColumnIndex(5+$index);
                 //$lettre + $index;
                 $worksheet
-                    ->setCellValue($lettrePosition.$ligne, $index.' : '.$lettrePosition);
+                    ->setCellValue($lettrePosition.$ligne, 1);
+                    //->setCellValue($lettrePosition.$ligne, $index.' : '.$lettrePosition);
             }
             $ligne++;
         }
