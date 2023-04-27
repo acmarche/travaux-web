@@ -15,7 +15,7 @@
             <div class="cal-days">
                 {% set class = "border border-success" %}
                 {% for week in weeks %}
-                    <a class="btn btn-sm btn-success"
+                    <a class="btn btn-sm btn-success align-self-center"
                        href="{{ path('planning_export_pdf_weekly',{'year':dateSelected.year,'week':week.startDate.weekOfYear, 'categoryPlanning':categorySelected ?categorySelected.id}) }}"
                        title="Exporter la semaine en pdf "
                        role="button">

@@ -17,12 +17,13 @@
             </a>
         </div>
         {% for plan in plans %}
-            <a href="{{ path('planning_show', {'id': plan.id}) }}" class="lh-lg">
-                {% for ouvrier in plan.employes %}
-                    {{ ouvrier.nom }} {% if not loop.last %}, {% endif %}
-                {% endfor %}
-            </a>
-            <br/>
+            <div class="shadow p-3 mb-2 bg-body-tertiary rounded border border-success m-2" style="--bs-border-opacity: .5;">
+                <a href="{{ path('planning_show', {'id': plan.id}) }}" style="font-size: 0.7rem;">
+                    {% for ouvrier in plan.employes %}
+                        {{ ouvrier.nom }} {% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </a>
+            </div>
         {% endfor %}
     {% else %}
         <button type="button" disabled="disabled" class="btn cal-btn {{ classDay }}">{{ day.day }}</button>
