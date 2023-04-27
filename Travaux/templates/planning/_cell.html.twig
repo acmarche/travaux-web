@@ -3,12 +3,12 @@
 <div class="border" style="min-height: 300px;">
     {% if day.isSameMonth(dateSelected) %}
         <div class="d-flex flex-row justify-content-end align-items-center gap-2">
-            <a href="{{ path('planning_new', {'date': day|date('Y-m-d'),'category':categorySelected ? categorySelected.id}) }}">
-                <i class="fa fa-plus-square" style="height: 2rem;"></i>
-            </a>
             <span class="badge rounded-pill text-bg-secondary {{ classDay }}" role="button">
                 {{ day.day }}
             </span>
+            <a href="{{ path('planning_new', {'date': day|date('Y-m-d'),'category':categorySelected ? categorySelected.id}) }}">
+                <i class="fa fa-plus-square" style="height: 2rem;"></i>
+            </a>
             <a class="btn btn-sm btn-success"
                href="{{ path('planning_export_pdf_daily',{'date':day|date('Y-m-d'), 'categoryPlanning':categorySelected ?categorySelected.id}) }}"
                title="Exporter la journée en pdf "
