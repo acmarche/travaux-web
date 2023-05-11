@@ -75,7 +75,7 @@ class PlanningController extends AbstractController
         $weeks = $this->dateProvider->weeksOfMonth($dateSelected);
 
         foreach ($interventions as $intervention) {
-            $this->absenceUtils->setVacationToEmployes($intervention->employes);
+            $this->absenceUtils->setVacationToEmployes($intervention->employes->toArray());
         }
 
         return $this->render('@AcMarcheTravaux/planning/index.html.twig', [
