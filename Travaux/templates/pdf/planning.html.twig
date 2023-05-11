@@ -40,7 +40,12 @@
                         Ouvriers:
                     </th>
                     <td>
-                        {{ intervention.employes|join(',') }}
+                        {% for ouvrier in intervention.employes %}
+                            {% if ouvrier.inVacation(date) %}
+                                (abs)
+                            {% endif %}
+                            <span>{{ ouvrier.nom }}{% if not loop.last %}, {% endif %}</span>
+                        {% endfor %}
                     </td>
                 </tr>
             </table>

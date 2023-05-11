@@ -32,6 +32,8 @@ class Employe implements Stringable
     #[ORM\OneToMany(targetEntity: Absence::class, mappedBy: 'employe')]
     public Collection|null $absences;
 
+    public array $vacations;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -46,6 +48,10 @@ class Employe implements Stringable
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function inVacation(\DateTimeInterface $date):bool {
+        return in_array($date->format('Y-m-d'), $this->vacations);
     }
 
     public function getNomPrenom(): string

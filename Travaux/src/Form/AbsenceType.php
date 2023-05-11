@@ -25,6 +25,7 @@ class AbsenceType extends AbstractType
                 DateType::class,
                 [
                     'label' => 'Date de début',
+                    'help' => 'Date y compris',
                     'required' => true,
                     'widget' => 'single_text',
                 ]
@@ -34,6 +35,7 @@ class AbsenceType extends AbstractType
                 DateType::class,
                 [
                     'label' => 'Date de fin',
+                    'help' => 'Date y compris',
                     'required' => true,
                     'widget' => 'single_text',
                 ]

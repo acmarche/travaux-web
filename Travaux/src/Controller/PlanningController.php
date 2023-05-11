@@ -2,6 +2,7 @@
 
 namespace AcMarche\Travaux\Controller;
 
+use AcMarche\Travaux\Absence\AbsenceUtils;
 use AcMarche\Travaux\Entity\CategoryPlanning;
 use AcMarche\Travaux\Entity\InterventionPlanning;
 use AcMarche\Travaux\Form\PlanningType;
@@ -42,7 +43,8 @@ class PlanningController extends AbstractController
         private CategorieRepository $categorieRepository,
         private EmployeRepository $employeRepository,
         private DateProvider $dateProvider,
-        private XlsGenerator $xlsGenerator
+        private XlsGenerator $xlsGenerator,
+        private AbsenceUtils $absenceUtils
     ) {
     }
 
@@ -71,6 +73,10 @@ class PlanningController extends AbstractController
         $today = Carbon::today();
 
         $weeks = $this->dateProvider->weeksOfMonth($dateSelected);
+
+        foreach ($interventions as $intervention) {
+            $this->absenceUtils->setVacationToEmployes($intervention->employes);
+        }
 
         return $this->render('@AcMarcheTravaux/planning/index.html.twig', [
             'interventions' => $interventions,
@@ -194,7 +200,7 @@ class PlanningController extends AbstractController
         $query = $request->query->get('query');
         $category = null;
         if ($request->getSession()->has(self::CATEGORY_SELECTED)) {
-         //   $category = $request->getSession()->get(self::CATEGORY_SELECTED);
+            //   $category = $request->getSession()->get(self::CATEGORY_SELECTED);
         }
         $employes = $this->employeRepository->searchForAutocomplete($query, $category);
         $results = ['results' => []];

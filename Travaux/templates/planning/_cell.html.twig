@@ -17,10 +17,15 @@
             </a>
         </div>
         {% for plan in plans %}
-            <div class="shadow p-3 mb-2 bg-body-tertiary rounded border border-success m-2" style="--bs-border-opacity: .5;">
-                <a href="{{ path('planning_show', {'id': plan.id}) }}" style="font-size: 0.7rem;">
+            <div class="shadow p-3 mb-2 bg-body-tertiary rounded border border-success m-2"
+                 style="--bs-border-opacity: .5;">
+                <a href="{{ path('planning_show', {'id': plan.id}) }}" style="font-size: 0.7rem;"
+                   class="d-flex align-items-center gap-1">
                     {% for ouvrier in plan.employes %}
-                        {{ ouvrier.nom }} {% if not loop.last %}, {% endif %}
+                        {% if ouvrier.inVacation(day) %}
+                            <i class="fas fa-umbrella-beach"></i>
+                        {% endif %}
+                        <span>{{ ouvrier.nom }}{% if not loop.last %}, {% endif %}</span>
                     {% endfor %}
                 </a>
             </div>

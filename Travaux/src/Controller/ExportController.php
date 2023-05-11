@@ -2,6 +2,7 @@
 
 namespace AcMarche\Travaux\Controller;
 
+use AcMarche\Travaux\Absence\AbsenceUtils;
 use AcMarche\Travaux\Entity\CategoryPlanning;
 use AcMarche\Travaux\Entity\Employe;
 use AcMarche\Travaux\Export\PdfDownloaderTrait;
@@ -30,7 +31,8 @@ class ExportController extends AbstractController
     public function __construct(
         private InterventionRepository $interventionRepository,
         private InterventionPlanningRepository $interventionPlanningRepository,
-        private DateProvider $dateProvider
+        private DateProvider $dateProvider,
+        private AbsenceUtils $absenceUtils
     ) {
     }
 
@@ -115,10 +117,14 @@ class ExportController extends AbstractController
             $date,
             $categoryPlanning
         );
+        foreach ($interventions as $intervention) {
+            $this->absenceUtils->setVacationToEmployes($intervention->employes->toArray());
+        }
         $html = $this->renderView(
             '@AcMarcheTravaux/pdf/planning.html.twig',
             [
                 'interventions' => $interventions,
+                'date' => $date,
                 'title' => 'Interventions du jour '.$date->format('d-m-Y'),
             ]
         );
@@ -157,11 +163,11 @@ class ExportController extends AbstractController
 
             foreach ($intervention->getEmployes() as $employe) {
                 $index = PlanningUtils::findIndex($employe, $ouvriers);
-                $lettrePosition = Coordinate::stringFromColumnIndex(5+$index);
+                $lettrePosition = Coordinate::stringFromColumnIndex(5 + $index);
                 //$lettre + $index;
                 $worksheet
                     ->setCellValue($lettrePosition.$ligne, 1);
-                    //->setCellValue($lettrePosition.$ligne, $index.' : '.$lettrePosition);
+                //->setCellValue($lettrePosition.$ligne, $index.' : '.$lettrePosition);
             }
             $ligne++;
         }

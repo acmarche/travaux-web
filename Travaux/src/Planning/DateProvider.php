@@ -43,22 +43,18 @@ class DateProvider
         return $days;
     }
 
-    /**
-     * @return int[]
-     */
-    public function getHours(): array
-    {
-        return range(1, CarbonInterface::HOURS_PER_DAY);
-    }
-
     public function daysOfMonth(DateTimeInterface $date): CarbonPeriod
     {
         $carbon = $this->carbonFactory->instance($date);
 
-        //CarbonPeriod::create($dateSelected->firstOfMonth(), $dateSelected->endOfMonth());
         return Carbon::parse($carbon->firstOfMonth())->daysUntil(
             $carbon->endOfMonth()
         );
+    }
+
+    public function daysBetween2Dates(DateTimeInterface $dateBegin, DateTimeInterface $dateEnd): CarbonPeriod
+    {
+        return Carbon::parse($dateBegin)->daysUntil($dateEnd);
     }
 
     /**
@@ -95,19 +91,6 @@ class DateProvider
         $date->setISODate($year, $week);
 
         return $date->startOfWeek();
-    }
-
-    /**
-     * @param CarbonPeriod $days
-     * @return array<\DateTime>
-     */
-    public function convertCarbonPeriodToDatesTime(CarbonPeriod $days): array
-    {
-        $dates = array_map(function ($day) {
-            return $day->format('Y-m-d');
-        }, $days->toArray());
-
-        return $dates;
     }
 
     public function createDateFromYearMonth(string $yearMonth): CarbonImmutable

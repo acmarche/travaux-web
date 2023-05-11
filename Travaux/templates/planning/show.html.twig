@@ -24,7 +24,7 @@
                     <th>Ouvrier(s)</th>
                     <td>
                         {% for employe in intervention.employes %}
-                            {{ employe }},
+                            <a href="{{ path('employe_show', {'id': employe.id}) }}">{{ employe }}</a>,
                         {% endfor %}
                     </td>
                 </tr>

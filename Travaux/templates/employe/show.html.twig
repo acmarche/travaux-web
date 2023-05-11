@@ -20,6 +20,7 @@
                             <td>
                                 <a href="{{ path('absence_show', {'id': absence.id}) }}">
                                     {{ absence.date_begin|format_date('full') }}
+                                    au {{ absence.date_end|format_date('full') }}
                                 </a>
                             </td>
                             <td>{{ absence.raison }}</td>
