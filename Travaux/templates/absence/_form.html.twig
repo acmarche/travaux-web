@@ -1,0 +1,16 @@
+{{ form_start(form) }}
+{{ form_errors(form) }}
+{{ form_row(form.raison) }}
+<div class="row">
+    <div class="col">
+        {{ form_row(form.date_begin) }}
+    </div>
+    <div class="col">
+        {{ form_row(form.date_end) }}
+    </div>
+</div>
+
+<button type="submit" name="save" class="btn btn-primary mb-3" role="button">
+    <i class="fas fa-save"></i> Sauvegarder
+</button>
+{{ form_end(form) }}

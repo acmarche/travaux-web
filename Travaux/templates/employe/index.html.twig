@@ -11,6 +11,7 @@
                     <th>Nom</th>
                     <th>Prénom</th>
                     <th>Equipe</th>
+                    <th>Absences</th>
                 </tr>
                 {% for employe in employes %}
                     <tr>
@@ -22,6 +23,9 @@
                         </td>
                         <td>
                             {{ employe.categories|join(',') }}
+                        </td>
+                        <td>
+                            <a href="{{ path('absence_index', {'id':employe.id}) }}">{{ employe.absences|length }}</a>
                         </td>
                     </tr>
                 {% endfor %}

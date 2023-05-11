@@ -7,6 +7,26 @@
             {% include '@AcMarcheTravaux/employe/_actions.html.twig' %}
 
             <p class="block m-3">Equipes : {{ employe.categories|join('') }}</p>
+
+            <h4 class="text-success">Absences</h4>
+            {% for absence in absences %}
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Date</th>
+                        <th>Raison</th>
+                    </tr>
+                    {% for absence in absences %}
+                        <tr>
+                            <td>
+                                <a href="{{ path('absence_show', {'id': absence.id}) }}">
+                                    {{ absence.date_begin|format_date('full') }}
+                                </a>
+                            </td>
+                            <td>{{ absence.raison }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

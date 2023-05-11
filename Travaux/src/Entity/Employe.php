@@ -29,9 +29,13 @@ class Employe implements Stringable
     #[ORM\ManyToMany(targetEntity: CategoryPlanning::class)]
     public Collection|null $categories;
 
+    #[ORM\OneToMany(targetEntity: Absence::class, mappedBy: 'employe')]
+    public Collection|null $absences;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
+        $this->absences = new ArrayCollection();
     }
 
     public function __toString()
@@ -69,6 +73,29 @@ class Employe implements Stringable
     public function removeCategory(CategoryPlanning $categoryPlanning): self
     {
         $this->categories->removeElement($categoryPlanning);
+
+        return $this;
+    }
+    /**
+     * @return Collection<int, Absence>|array<Absence>
+     */
+    public function getAbsences(): Collection|array
+    {
+        return $this->absences;
+    }
+
+    public function addAbsence(Absence $absence): self
+    {
+        if (!$this->absences->contains($absence)) {
+            $this->absences->add($absence);
+        }
+
+        return $this;
+    }
+
+    public function removeAbsence(Absence $absence): self
+    {
+        $this->absences->removeElement($absence);
 
         return $this;
     }

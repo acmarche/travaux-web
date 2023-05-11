@@ -4,6 +4,7 @@ namespace AcMarche\Travaux\Controller;
 
 use AcMarche\Travaux\Entity\Employe;
 use AcMarche\Travaux\Form\EmployeType;
+use AcMarche\Travaux\Repository\AbsenceRepository;
 use AcMarche\Travaux\Repository\EmployeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -17,8 +18,10 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_TRAVAUX_PLANNING')]
 class EmployeController extends AbstractController
 {
-    public function __construct(private EmployeRepository $employeRepository)
-    {
+    public function __construct(
+        private EmployeRepository $employeRepository,
+        private AbsenceRepository $absenceRepository
+    ) {
     }
 
     #[Route(path: '/', name: 'employe', methods: ['GET'])]
@@ -62,10 +65,13 @@ class EmployeController extends AbstractController
     #[Route(path: '/{id}/show', name: 'employe_show', methods: ['GET'])]
     public function show(Employe $employe): Response
     {
+        $absences = $this->absenceRepository->findByEmploye($employe);
+
         return $this->render(
             '@AcMarcheTravaux/employe/show.html.twig',
             array(
                 'employe' => $employe,
+                'absences' => $absences,
             )
         );
     }

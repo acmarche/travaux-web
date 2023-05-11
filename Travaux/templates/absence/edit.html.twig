@@ -1,0 +1,11 @@
+{% extends '@AcMarcheTravaux/layout.html.twig' %}
+
+{% block body -%}
+    <div class="card">
+        <h3 class="card-header">Absence de {{ employe }} du {{ absence.date_begin|format_date('full') }}</h3>
+        <div class="card-body">
+            {% include '@AcMarcheTravaux/absence/_form.html.twig' %}
+        </div>
+    </div>
+{% endblock %}
+

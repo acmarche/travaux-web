@@ -1,6 +1,9 @@
 <a href="{{ path('employe') }}" class="btn btn-primary" role="button"><i
             class="fas fa-arrow-left"></i> Retour à la liste</a>
 
+<a href="{{ path('absence_new', { 'id': employe.id }) }}" class="btn btn-primary"
+   role="button"><i class="fas fa-plus"></i> Ajouter une absence</a>
+
 <a href="{{ path('employe_edit', { 'id': employe.id }) }}" class="btn btn-primary"
    role="button"><i class="far fa-edit"></i> Editer</a>
 

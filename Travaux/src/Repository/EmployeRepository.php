@@ -2,11 +2,10 @@
 
 namespace AcMarche\Travaux\Repository;
 
-use AcMarche\Travaux\Entity\CategoryPlanning;
 use AcMarche\Travaux\Entity\Employe;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-
 
 /**
  * @method Employe|null find($id, $lockMode = null, $lockVersion = null)
@@ -28,7 +27,7 @@ class EmployeRepository extends ServiceEntityRepository
      */
     public function findAllOrdered(): array
     {
-        return $this->findBy(array(), array('nom' => 'ASC'));
+        return $this->createQb()->addOrderBy('employe.nom')->getQuery()->getResult();
     }
 
     /**
@@ -39,7 +38,8 @@ class EmployeRepository extends ServiceEntityRepository
         ?int $categoryPlanning = null
     ): array {
 
-        $queryBuilder = $this->createQueryBuilder('employe');
+        $queryBuilder = $this->createQb();
+
         if ($categoryPlanning) {
             $queryBuilder->andWhere(':category MEMBER OF employe.categories')
                 ->setParameter('category', $categoryPlanning);
@@ -54,5 +54,13 @@ class EmployeRepository extends ServiceEntityRepository
             ->orderBy('employe.nom')
             ->getQuery()
             ->getResult();
+    }
+
+    private function createQb(): QueryBuilder
+    {
+        return $this->createQueryBuilder('employe')
+            ->leftJoin('employe.absences', 'absences', 'WITH')
+            ->leftJoin('employe.categories', 'categories', 'WITH')
+            ->addSelect('absences', 'categories');
     }
 }
