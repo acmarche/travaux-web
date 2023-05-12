@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/absence')]
-#[IsGranted('ROLE_TRAVAUX_ADMIN')]
+#[IsGranted('ROLE_TRAVAUX_PLANNING')]
 class AbsenceController extends AbstractController
 {
     public function __construct(private AbsenceRepository $absenceRepository)
