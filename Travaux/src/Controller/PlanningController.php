@@ -124,6 +124,12 @@ class PlanningController extends AbstractController
 
             TreatmentDates::setDatesFromCollection($intervention, $data);
 
+            if (count($intervention->dates) === 0) {
+                $this->addFlash('danger', 'Il doit y avoir au moins 1 date d\'encodée');
+
+                return $this->redirectToRoute('planning_new');
+            }
+
             $this->interventionPlanningRepository->persist($intervention);
             $this->interventionPlanningRepository->flush();
 
