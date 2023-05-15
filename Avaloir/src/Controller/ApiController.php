@@ -294,8 +294,10 @@ class ApiController extends AbstractController
         $longitude = $data['longitude'];
         $t = ['distance' => 55, 'latitude' => $latitude, 'longitude' => $longitude];
         $this->mailerAvaloir->sendError('search avaloir', $t);
-        $latitude = number_format($data['latitude'], 3);
-        $longitude = number_format($data['longitude'], 3);
+        $latitude = $rounded = floor($data['latitude'] * 100) / 100;
+        //number_format($data['latitude'], 3);
+        $longitude = $rounded = floor($data['longitude'] * 100) / 100;
+        //number_format($data['longitude'], 3);
         $distance = (string)$data['distance'];
         if (!$latitude || !$longitude || !$distance) {
             return new JsonResponse(
