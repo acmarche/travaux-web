@@ -290,8 +290,8 @@ class ApiController extends AbstractController
     public function search(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
-        $latitude = number_format($data['latitude'], 10);
-        $longitude = number_format($data['longitude'], 10);
+        $latitude = number_format($data['latitude'], 3);
+        $longitude = number_format($data['longitude'], 3);
         $distance = (string)$data['distance'];
         if (!$latitude || !$longitude || !$distance) {
             return new JsonResponse(
