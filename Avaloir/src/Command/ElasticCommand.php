@@ -20,6 +20,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class ElasticCommand extends Command
 {
+    private SymfonyStyle $io;
+
     public function __construct(
         private ElasticServer $elasticServer,
         private ElasticSearch $elasticSearch,
@@ -40,7 +42,7 @@ class ElasticCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
+        $this->io = new SymfonyStyle($input, $output);
         $raz = $input->getOption('raz');
         $reindex = $input->getOption('reindex');
         $latitude = $input->getArgument('latitude');
@@ -55,7 +57,7 @@ class ElasticCommand extends Command
                 $this->elasticServer->open();
                 $this->elasticServer->updateMappings();
             } catch (Exception $e) {
-                $io->error($e->getMessage());
+                $this->io->error($e->getMessage());
 
                 return Command::FAILURE;
             }
@@ -80,6 +82,7 @@ class ElasticCommand extends Command
     private function updateAvaloirs(): array
     {
         foreach ($this->avaloirRepository->findAll() as $avaloir) {
+            $this->io->writeln($avaloir->getId());
             $result = $this->elasticServer->updateData($avaloir);
             var_dump($result);
         }
