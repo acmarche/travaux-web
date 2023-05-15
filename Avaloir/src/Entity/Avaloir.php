@@ -50,7 +50,7 @@ class Avaloir implements TimestampableInterface, Stringable
     #[Vich\UploadableField(mapping: 'avaloir_image', fileNameProperty: 'imageName')]
     private ?File $imageFile = null;
     #[ORM\Column(type: 'string', length: 120, nullable: true)]
-    private ?string $imageName;
+    private ?string $imageName = null;
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 8, nullable: true)]
     public ?float $cos_latitude = 0;
