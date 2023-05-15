@@ -42,7 +42,11 @@ class InterventionPlanning implements TimestampableInterface, Stringable
 
     public function __toString(): string
     {
-        return $this->dates[0];
+        if (count($this->dates) > 0) {
+            return $this->dates[0];
+        } else {
+            return 'aucune date';
+        }
     }
 
     public function __construct()
