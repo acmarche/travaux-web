@@ -83,7 +83,11 @@ class ElasticCommand extends Command
     {
         foreach ($this->avaloirRepository->findAll() as $avaloir) {
             $this->io->writeln($avaloir->getId());
-            $result = $this->elasticServer->updateData($avaloir);
+            try {
+                $result = $this->elasticServer->updateData($avaloir);
+            } catch (Exception $e) {
+                $this->io->error($e->getMessage());
+            }
             var_dump($result);
         }
 
