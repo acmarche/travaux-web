@@ -43,7 +43,6 @@ class ElasticCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $raz = $input->getOption('raz');
         $reindex = $input->getOption('reindex');
-        $reindex = $input->getOption('reindex');
         $latitude = $input->getArgument('latitude');
         $longitude = $input->getArgument('longitude');
 
@@ -57,19 +56,25 @@ class ElasticCommand extends Command
                 $this->elasticServer->updateMappings();
             } catch (Exception $e) {
                 $io->error($e->getMessage());
+
+                return Command::FAILURE;
             }
+
+            return Command::SUCCESS;
         }
 
         if ($latitude && $longitude) {
             $result = $this->elasticSearch->search("25m", $latitude, $longitude);
             print_r($result);
+
+            return Command::SUCCESS;
         }
 
         if ($reindex) {
             $this->updateAvaloirs();
         }
 
-        return 0;
+        return Command::SUCCESS;
     }
 
     private function updateAvaloirs(): array
