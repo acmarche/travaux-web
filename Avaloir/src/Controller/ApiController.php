@@ -294,9 +294,9 @@ class ApiController extends AbstractController
         $longitude = $data['longitude'];
         $t = ['distance' => 55, 'latitude' => $latitude, 'longitude' => $longitude];
         $this->mailerAvaloir->sendError('search avaloir', $t);
-        $latitude = $rounded = floor($data['latitude'] * 1000) / 1000;
+        $latitude = $rounded = floor($data['latitude'] * 10000) / 10000;
         //number_format($data['latitude'], 3);
-        $longitude = $rounded = floor($data['longitude'] * 1000) / 1000;
+        $longitude = $rounded = floor($data['longitude'] * 10000) / 10000;
         //number_format($data['longitude'], 3);
         $distance = (string)$data['distance'];
         if (!$latitude || !$longitude || !$distance) {
