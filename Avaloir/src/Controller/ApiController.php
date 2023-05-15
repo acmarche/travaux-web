@@ -290,6 +290,10 @@ class ApiController extends AbstractController
     public function search(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $latitude = $data['latitude'];
+        $longitude = $data['longitude'];
+        $t = ['distance' => 25, 'latitude' => $latitude, 'longitude' => $longitude];
+        $this->mailerAvaloir->sendError('search avaloir', $t);
         $latitude = number_format($data['latitude'], 4);
         $longitude = number_format($data['longitude'], 4);
         $distance = (string)$data['distance'];
