@@ -293,7 +293,7 @@ class ApiController extends AbstractController
         $latitude = $data['latitude'];
         $longitude = $data['longitude'];
         $t = ['distance' => 55, 'latitude' => $latitude, 'longitude' => $longitude];
-        $this->mailerAvaloir->sendError('search avaloir', $t);
+      //  $this->mailerAvaloir->sendError('search avaloir', $t);
         $latitude = $rounded = floor($data['latitude'] * 10000) / 10000;
         //number_format($data['latitude'], 3);
         $longitude = $rounded = floor($data['longitude'] * 10000) / 10000;
@@ -313,7 +313,7 @@ class ApiController extends AbstractController
         $total = $hits['total'];
         $t = ['distance' => $distance, 'latitude' => $latitude, 'longitude' => $longitude];
         $avaloirs = [];
-        $this->mailerAvaloir->sendError('search avaloir', $t);
+     //   $this->mailerAvaloir->sendError('search avaloir', $t);
 
         foreach ($hits['hits'] as $hit) {
             $score = $hit['_score'];
