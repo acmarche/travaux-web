@@ -41,6 +41,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         'form_login' => [],
         'entry_point' => TravauxAuthenticator::class,
         'switch_user' => true,
+        'login_throttling' => [
+            'max_attempts' => 6, //per minute...
+        ],
     ];
 
     if (interface_exists(LdapInterface::class)) {
