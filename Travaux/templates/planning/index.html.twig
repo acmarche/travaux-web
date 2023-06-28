@@ -15,7 +15,7 @@
 
             {% include '@Travaux/planning/_calendar.html.twig' %}
 
-            <h3 class="text-success mt-4">Listing du mois {{ dateSelected.monthName }} {{ dateSelected.year }} {{ categorySelected }}</h3>
+            <h3 class="text-success mt-4">Interventions du mois {{ dateSelected.monthName }} {{ dateSelected.year }} {{ categorySelected }}</h3>
             <div class="d-flex gap-3 flex-row align-items-center">
             <a class="btn btn-sm btn-success m-2"
                href="{{ path('planning_export_pdf',{'yearmonth':dateSelected.year~'-'~dateSelected.month, 'categoryPlanning':categorySelected ?categorySelected.id}) }}"
@@ -59,7 +59,7 @@
                         </td>
                         <td class="hidden-xs">
                             {% for employe in intervention.employes %}
-                                {{ employe.prenom }},
+                                {{ employe.prenom }} {% if not loop.last %},{% endif %}
                             {% endfor %}
                         </td>
                     </tr>
