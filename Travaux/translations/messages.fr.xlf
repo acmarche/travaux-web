@@ -102,6 +102,34 @@
                 <source>Save</source>
                 <target>Sauvegarder</target>
             </trans-unit>
+            <trans-unit id="26">
+                <source>Mon</source>
+                <target>Lundi</target>
+            </trans-unit>
+            <trans-unit id="27">
+                <source>Tue</source>
+                <target>Mardi</target>
+            </trans-unit>
+            <trans-unit id="28">
+                <source>Wed</source>
+                <target>Mercredi</target>
+            </trans-unit>
+            <trans-unit id="29">
+                <source>Thu</source>
+                <target>Jeudi</target>
+            </trans-unit>
+            <trans-unit id="30">
+                <source>Fri</source>
+                <target>Vendredi</target>
+            </trans-unit>
+            <trans-unit id="31">
+                <source>Sat</source>
+                <target>Samedi</target>
+            </trans-unit>
+            <trans-unit id="32">
+                <source>Sun</source>
+                <target>Dimanche</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
