@@ -98,34 +98,12 @@ class ExportController extends AbstractController
             $week,
             $categoryPlanning
         );
+
         $html = $this->renderView(
             '@AcMarcheTravaux/pdf/planning.html.twig',
             [
                 'interventions' => $interventions,
                 'title' => 'Interventions de la semaine '.$week,
-            ]
-        );
-        $name = sprintf('planning-%s.pdf', date('Y-m-d'));
-
-        return $this->downloadPdf($html, $name, false);
-    }
-
-    #[Route(path: '/planning/pdf/daily/{date}/{categoryPlanning}', name: 'planning_export_pdf_daily', methods: ['GET'])]
-    public function planningDailyPdf(\DateTime $date, ?CategoryPlanning $categoryPlanning = null): Response
-    {
-        $interventions = $this->interventionPlanningRepository->findPlanningByDayAndCategory(
-            $date,
-            $categoryPlanning
-        );
-        foreach ($interventions as $intervention) {
-            $this->absenceUtils->setVacationToEmployes($intervention->employes->toArray());
-        }
-        $html = $this->renderView(
-            '@AcMarcheTravaux/pdf/planning.html.twig',
-            [
-                'interventions' => $interventions,
-                'date' => $date,
-                'title' => 'Interventions du jour '.$date->format('d-m-Y'),
             ]
         );
         $name = sprintf('planning-%s.pdf', date('Y-m-d'));
