@@ -187,7 +187,7 @@ class ExportController extends AbstractController
         foreach ($ouvriers as $key => $ouvrier) {
             $ligne = 2;
             $worksheet->mergeCells($lettre.$ligne.':'.$lettre.$ligne + 7);
-            $worksheet->setCellValue($lettre.$ligne, $key.' '.$ouvrier->nom.' '.$ouvrier->prenom);
+            $worksheet->setCellValue($lettre.$ligne, $ouvrier->nom.' '.$ouvrier->prenom);
             $worksheet->getStyle($lettre.$ligne)->getAlignment()->setTextRotation(90);
             $lettre++;
         }
