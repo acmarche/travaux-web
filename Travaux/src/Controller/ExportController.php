@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
 
 #[Route(path: '/export')]
@@ -32,7 +33,7 @@ class ExportController extends AbstractController
         private InterventionRepository $interventionRepository,
         private InterventionPlanningRepository $interventionPlanningRepository,
         private DateProvider $dateProvider,
-        private AbsenceUtils $absenceUtils
+        private AbsenceUtils $absenceUtils,
     ) {
     }
 
@@ -152,7 +153,12 @@ class ExportController extends AbstractController
             $ligne++;
         }
 
-        $name = 'intervention-'.$yearmonth.'.xlsx';
+        $nameCategory = '';
+        if ($categoryPlanning) {
+            $slugger = new AsciiSlugger();
+            $nameCategory = '-'.$slugger->slug($categoryPlanning->name);
+        }
+        $name = 'intervention-'.$yearmonth.$nameCategory.'.xlsx';
 
         return $this->downloadXls($spreadsheet, $name);
     }
