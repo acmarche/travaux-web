@@ -10,6 +10,7 @@ use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Stringable;
 use Doctrine\DBAL\Types\Types;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: InterventionPlanningRepository::class)]
 #[ORM\Table(name: 'intervention_planning')]
@@ -23,6 +24,7 @@ class InterventionPlanning implements TimestampableInterface, Stringable
     protected int $id;
 
     #[ORM\Column(type: Types::TEXT, nullable: false)]
+    #[Assert\Length(min: 5)]
     public ?string $description;
     #[ORM\Column(type: 'string', nullable: false)]
     public string $user_add;
