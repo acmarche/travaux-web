@@ -22,6 +22,7 @@ class TravauxBundle extends AbstractBundle
     {
         $container->import('../config/packages/doctrine.php');
         $container->import('../config/packages/liip_imagine.php');
+        $container->import('../config/packages/rate_limiter.php');
         $container->import('../config/packages/security.php');
         $container->import('../config/packages/vich_uploader.php');
         $container->import('../config/packages/twig.php');
