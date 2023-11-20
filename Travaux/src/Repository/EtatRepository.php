@@ -2,9 +2,9 @@
 
 namespace AcMarche\Travaux\Repository;
 
-use Doctrine\ORM\QueryBuilder;
 use AcMarche\Travaux\Entity\Etat;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,14 +19,14 @@ class EtatRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Etat::class);
     }
-    public function getForList(): QueryBuilder
+
+    public function findAllForList(): QueryBuilder
     {
-        $qb = $this->createQueryBuilder('etat');
-        $qb->orderBy('etat.intitule', 'DESC');
-        return $qb;
+        return $this->createQueryBuilder('etat')
+            ->orderBy('etat.intitule', 'DESC');
     }
 
-    public function getForListDefault(): QueryBuilder
+    public function onlyNewForList(): QueryBuilder
     {
         $qb = $this->createQueryBuilder('etat');
         $qb->andWhere('etat.intitule LIKE :titre')
