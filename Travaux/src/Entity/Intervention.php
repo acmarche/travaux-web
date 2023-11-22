@@ -56,9 +56,9 @@ class Intervention implements TimestampableInterface, Stringable
     protected ?DateTimeInterface $date_solution;
     #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 0])]
     protected bool $archive = false;
-    #[ORM\Column(type: 'decimal', precision: 9, scale: 2, nullable: true)]
+    #[ORM\Column(type: 'float', precision: 9, scale: 2, nullable: true)]
     protected ?float $cout_main = 0;
-    #[ORM\Column(type: 'decimal', precision: 9, scale: 2, nullable: true)]
+    #[ORM\Column(type: 'float', precision: 9, scale: 2, nullable: true)]
     protected ?float $cout_materiel = 0;
     #[ORM\Column(type: 'date', nullable: true)]
     protected ?DateTimeInterface $date_validation = null;

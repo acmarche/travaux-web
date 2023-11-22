@@ -32,7 +32,7 @@ class PlanningType extends AbstractType
                 'required' => true,
                 'placeholder' => 'Choisissez un horaire',
                 'class' => Horaire::class,
-                'expanded'=>true,
+                'expanded' => true,
                 'query_builder' => fn(HoraireRepository $horaireRepository) => $horaireRepository->getQblForList(),
             ])
             ->add('lieu', TextType::class, [
@@ -65,10 +65,6 @@ class PlanningType extends AbstractType
             ])
             ->add('employes', EmployeAutocompleteField::class, [
 
-            ])
-            ->add('save', SubmitType::class, [
-                'label' => 'Sauvegarder',
-                'attr' => ['class' => 'btn-success'],
             ]);
     }
 

@@ -1,0 +1,19 @@
+{% if absents|length > 0 %}
+    <h4 class="text-warning my-3">Attention, ils sont absents ce {{ dateSelected|format_date('full') }}</h4>
+    <table class="table table-bordered">
+        <tr>
+            <th>Nom</th>
+            <th>Raison</th>
+        </tr>
+        {% for employe in absents %}
+            <tr>
+                <td>
+                    <a href="{{ path('absence_show', {'id': employe.id}) }}">
+                        {{ employe }}
+                    </a>
+                </td>
+                <td>{{ employe.reason_absence }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endif %}

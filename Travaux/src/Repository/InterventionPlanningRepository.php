@@ -96,7 +96,7 @@ class InterventionPlanningRepository extends ServiceEntityRepository
     /**
      * @param string $yearMonth
      * @param CategoryPlanning|null $categoryPlanning
-     * @return array|InterventionPlanning[]
+     * @return InterventionPlanning[]
      */
     public function findByMonthAndCategory(string $yearMonth, ?CategoryPlanning $categoryPlanning): array
     {
@@ -112,7 +112,7 @@ class InterventionPlanningRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return array|InterventionPlanning[]
+     * @return InterventionPlanning[]
      */
     public function findByCategory(?CategoryPlanning $categoryPlanning): array
     {

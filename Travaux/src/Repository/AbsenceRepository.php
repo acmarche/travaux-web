@@ -3,6 +3,7 @@
 namespace AcMarche\Travaux\Repository;
 
 use AcMarche\Travaux\Entity\Absence;
+use AcMarche\Travaux\Entity\CategoryPlanning;
 use AcMarche\Travaux\Entity\Employe;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -40,6 +41,23 @@ class AbsenceRepository extends ServiceEntityRepository
             ->setParameter('employe', $employe)
             ->getQuery()
             ->getResult();
+    }
+
+    public function findByDateAndCategory(\DateTimeInterface $date, ?CategoryPlanning $categoryPlanning = null): array
+    {
+        $qb = $this->createQueryBuilder('absence')
+            ->leftJoin('absence.employe', 'employe', 'WITH')
+            ->leftJoin('employe.categories', 'categories', 'WITH')
+            ->addSelect('employe', 'categories')
+            ->andWhere(':date BETWEEN absence.date_begin AND absence.date_end')
+            ->setParameter('date', $date->format('Y-m-d'));
+
+        if ($categoryPlanning) {
+            $qb->andWhere(':category MEMBER OF employe.categories')
+                ->setParameter('category', $categoryPlanning->getId());
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
 }

@@ -28,9 +28,9 @@ class Avaloir implements TimestampableInterface, Stringable
     #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = 0;//todo pq ???
-    #[ORM\Column(type: 'decimal', precision: 10, scale: 8, nullable: false)]
+    #[ORM\Column(type: 'float', precision: 10, scale: 8, nullable: false)]
     protected float $latitude = 0;
-    #[ORM\Column(type: 'decimal', precision: 10, scale: 8, nullable: false)]
+    #[ORM\Column(type: 'float', precision: 10, scale: 8, nullable: false)]
     protected float $longitude = 0;
     #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $description = null;
@@ -52,13 +52,13 @@ class Avaloir implements TimestampableInterface, Stringable
     #[ORM\Column(type: 'string', length: 120, nullable: true)]
     private ?string $imageName = null;
 
-    #[ORM\Column(type: 'decimal', precision: 10, scale: 8, nullable: true)]
+    #[ORM\Column(type: 'float', precision: 10, scale: 8, nullable: true)]
     public ?float $cos_latitude = 0;
-    #[ORM\Column(type: 'decimal', precision: 10, scale: 8, nullable: true)]
+    #[ORM\Column(type: 'float', precision: 10, scale: 8, nullable: true)]
     public ?float $cos_longitude = 0;
-    #[ORM\Column(type: 'decimal', precision: 10, scale: 8, nullable: true)]
+    #[ORM\Column(type: 'float', precision: 10, scale: 8, nullable: true)]
     public ?float $sin_latitude = 0;
-    #[ORM\Column(type: 'decimal', precision: 10, scale: 8, nullable: true)]
+    #[ORM\Column(type: 'float', precision: 10, scale: 8, nullable: true)]
     public ?float $sin_longitude = 0;
 
     public function __construct()

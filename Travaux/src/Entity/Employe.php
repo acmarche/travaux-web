@@ -33,6 +33,7 @@ class Employe implements Stringable
     public Collection|null $absences;
 
     public array $vacations;
+    public ?string $reason_absence = null;
 
     public function __construct()
     {
@@ -40,7 +41,7 @@ class Employe implements Stringable
         $this->absences = new ArrayCollection();
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->nom.' '.$this->prenom;
     }
@@ -50,7 +51,8 @@ class Employe implements Stringable
         return $this->id;
     }
 
-    public function inVacation(\DateTimeInterface $date):bool {
+    public function inVacation(\DateTimeInterface $date): bool
+    {
         return in_array($date->format('Y-m-d'), $this->vacations);
     }
 
@@ -82,6 +84,7 @@ class Employe implements Stringable
 
         return $this;
     }
+
     /**
      * @return Collection<int, Absence>|array<Absence>
      */

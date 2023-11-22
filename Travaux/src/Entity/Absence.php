@@ -46,7 +46,7 @@ class Absence implements Stringable
         $this->employe = $employe;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return 'absence x';
     }

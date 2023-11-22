@@ -60,12 +60,13 @@ class PlanningController extends AbstractController
 
         $interventions = $this->interventionPlanningRepository->findByMonthAndCategory($yearmonth, $categoryPlanning);
         $days = $this->dateProvider->daysOfMonth($dateSelected);
-        $data = [];
+        $data = $absents = [];
         foreach ($days as $day) {
             $data[$day->day] = $this->interventionPlanningRepository->findPlanningByDayAndCategory(
                 $day,
                 $categoryPlanning
             );
+            $absents[$day->day] = $this->absenceUtils->findAbsentByDateAndCategory($day, $categoryPlanning);
         }
 
         $next = $dateSelected->addMonth();
@@ -87,6 +88,7 @@ class PlanningController extends AbstractController
             'previous' => $previous,
             'weeks' => $weeks,
             'data' => $data,
+            'absents' => $absents,
             'categorySelected' => $categoryPlanning,
             'categories' => $this->categoryPlanningRepository->findAllOrdered(),
         ]);
@@ -138,11 +140,14 @@ class PlanningController extends AbstractController
                 : $this->redirectToRoute('planning_show', array('id' => $intervention->getId()));
         }
 
+        $absents = $this->absenceUtils->findAbsentByDateAndCategory($dateSelected, $category);
+
         return $this->render(
             '@AcMarcheTravaux/planning/new.html.twig',
             array(
                 'form' => $form->createView(),
                 'dateSelected' => $dateSelected,
+                'absents' => $absents,
             )
         );
     }
