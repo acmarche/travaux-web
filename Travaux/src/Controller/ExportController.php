@@ -83,6 +83,7 @@ class ExportController extends AbstractController
             [
                 'interventions' => $interventions,
                 'title' => ' pour le mois de '.$yearmonth,
+                'dateSelected' => null,
             ]
         );
         $name = sprintf('planning-%s.pdf', date('Y-m-d'));
@@ -105,7 +106,7 @@ class ExportController extends AbstractController
             '@AcMarcheTravaux/pdf/planning.html.twig',
             [
                 'interventions' => $interventions,
-                'date' => $date,
+                'dateSelected' => $date,
                 'title' => 'Interventions du jour '.$date->format('d-m-Y'),
             ]
         );

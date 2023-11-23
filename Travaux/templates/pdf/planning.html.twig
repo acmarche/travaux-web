@@ -41,7 +41,10 @@
                     </th>
                     <td>
                         {% for ouvrier in intervention.employes %}
-                            {% if ouvrier.inVacation(date) %}
+                            {% if dateSelected == null %}
+                                {% set dateSelected =  intervention.createdAt %}
+                            {% endif %}
+                            {% if ouvrier.inVacation(dateSelected) %}
                                 (abs)
                             {% endif %}
                             <span>{{ ouvrier.nom }}{% if not loop.last %}, {% endif %}</span>
