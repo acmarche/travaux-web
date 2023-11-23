@@ -77,7 +77,9 @@ class ExportController extends AbstractController
         ?CategoryPlanning $categoryPlanning = null
     ): Response {
         $interventions = $this->interventionPlanningRepository->findByMonthAndCategory($yearmonth, $categoryPlanning);
-
+        foreach ($interventions as $intervention) {
+            $this->absenceUtils->setVacationToEmployes($intervention->employes->toArray());
+        }
         $html = $this->renderView(
             '@AcMarcheTravaux/pdf/planning.html.twig',
             [

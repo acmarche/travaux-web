@@ -32,7 +32,7 @@ class Employe implements Stringable
     #[ORM\OneToMany(targetEntity: Absence::class, mappedBy: 'employe')]
     public Collection|null $absences;
 
-    public array $vacations;
+    public array $vacations = [];
     public ?string $reason_absence = null;
 
     public function __construct()
