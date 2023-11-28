@@ -161,6 +161,7 @@ class AvaloirRepository extends ServiceEntityRepository
             ->leftJoin('avaloir.commentaires', 'commentaires', 'WITH')
             ->addSelect('dates', 'commentaires')
             ->addOrderBy('avaloir.createdAt', 'DESC')
+            ->setMaxResults(1000)
             ->getQuery()
             ->getResult();
     }
