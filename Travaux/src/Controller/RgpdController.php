@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Travaux\Entity\Security\Group;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/rgpd')]
 #[IsGranted('ROLE_TRAVAUX')]

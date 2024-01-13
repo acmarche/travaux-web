@@ -11,7 +11,7 @@ use AcMarche\Avaloir\Repository\AvaloirRepository;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/localisation')]
 class LocalisationController extends AbstractController

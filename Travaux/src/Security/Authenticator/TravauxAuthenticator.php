@@ -11,7 +11,6 @@ use Symfony\Component\Ldap\LdapInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\InteractiveAuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
@@ -21,6 +20,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
+use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 /**
@@ -57,7 +57,7 @@ class TravauxAuthenticator extends AbstractAuthenticator implements Authenticati
         $password = $request->request->get('password', '');
         $token = $request->request->get('_csrf_token', '');
 
-        $request->getSession()->set(Security::LAST_USERNAME, $email);
+        $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
 
         $badges =
             [
@@ -93,7 +93,7 @@ class TravauxAuthenticator extends AbstractAuthenticator implements Authenticati
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
         if ($request->hasSession()) {
-            $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
+            $request->getSession()->set(SecurityRequestAttributes::AUTHENTICATION_ERROR, $exception);
         }
 
         if (interface_exists(LdapInterface::class)) {
