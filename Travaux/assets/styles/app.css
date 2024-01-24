@@ -1,8 +1,3 @@
-@import '~bootstrap';
-@import "~leaflet";
-@import "tokenfield.css";
-@import '~lightgallery/css/lightgallery-bundle.min.css';
-
 label.required:after {
     content: " *";
     color: red;
@@ -28,12 +23,83 @@ legend.required:after {
     width: 50px;
 }
 
-#topmenu li {
-    border-color: transparent !important;
-    border-bottom: 2px solid transparent !important;
+#planning_datesCollection div.mb-3 {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
 }
 
-#topmenu li:hover {
-    border-color: #0dcaf0 !important;
-    border-bottom: 2px solid #dee2e6 !important;
+#planning_datesCollection div.mb-3 button.btn-danger {
+    margin-left: 1rem;
+    width: 220px;
+}
+
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+}
+
+.first-day {
+    grid-column-start: 3;
+}
+
+.calendar-wrapper {
+    width: 90%;
+}
+
+ul.calendar {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+/*https://getbootstrap.com/docs/5.1/examples/dropdowns/dropdowns.css*/
+
+/* change name */
+.dropdown-menu-cal {
+    position: static;
+    display: block;
+    width: auto;
+    /*   margin: 4rem auto;*/
+}
+
+.cal-month,
+.cal-days,
+.cal-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.cal-month {
+    gap: 0.25em;
+}
+
+.cal-month-name {
+    grid-column-start: 1;
+    grid-column-end: 5;
+    text-align: center;
+}
+
+.cal-weekday,
+.cal-btn {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    margin: 1em 1em 0 0;
+    padding: 0;
+}
+
+.cal-btn:not([disabled]) {
+    font-weight: 500;
+}
+
+.cal-btn:hover,
+.cal-btn:focus {
+    background-color: rgba(0, 0, 0, .05);
+}
+
+.cal-btn[disabled] {
+    opacity: .5;
 }
