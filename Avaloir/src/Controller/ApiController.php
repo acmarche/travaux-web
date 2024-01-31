@@ -12,8 +12,8 @@ use AcMarche\Avaloir\Repository\AvaloirRepository;
 use AcMarche\Avaloir\Repository\CommentaireRepository;
 use AcMarche\Avaloir\Repository\DateNettoyageRepository;
 use AcMarche\Stock\Service\SerializeApi;
-use AcMarche\Travaux\Elastic\ElasticSearch;
-use AcMarche\Travaux\Elastic\ElasticServer;
+use AcMarche\Travaux\Search\MeiliServer;
+use AcMarche\Travaux\Search\SearchMeili;
 use DateTime;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,8 +33,8 @@ class ApiController extends AbstractController
         private DateNettoyageRepository $dateNettoyageRepository,
         private CommentaireRepository $commentaireRepository,
         private SerializeApi $serializeApi,
-        private ElasticSearch $elasticSearch,
-        private ElasticServer $elasticServer,
+        private SearchMeili $meilisearch,
+        private MeiliServer $meiliServer,
         private MailerAvaloir $mailerAvaloir,
         private LocationUpdater $locationUpdater,
         private CacheInterface $cache,
@@ -127,8 +127,7 @@ class ApiController extends AbstractController
             return new JsonResponse($result);
         }
         try {
-            $result = $this->elasticServer->updateData($avaloir);
-            //$this->elasticServer->getClient()->indices()->refresh();
+            $result = $this->meiliServer->addData($avaloir);
             $data = [
                 'error' => 0,
                 'elastic' => $result,
@@ -292,12 +291,6 @@ class ApiController extends AbstractController
         $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
         $latitude = $data['latitude'];
         $longitude = $data['longitude'];
-        $t = ['distance' => 55, 'latitude' => $latitude, 'longitude' => $longitude];
-      //  $this->mailerAvaloir->sendError('search avaloir', $t);
-        $latitude = $rounded = floor($data['latitude'] * 10000) / 10000;
-        //number_format($data['latitude'], 3);
-        $longitude = $rounded = floor($data['longitude'] * 10000) / 10000;
-        //number_format($data['longitude'], 3);
         $distance = (string)$data['distance'];
         if (!$latitude || !$longitude || !$distance) {
             return new JsonResponse(
@@ -308,16 +301,14 @@ class ApiController extends AbstractController
                 ]
             );
         }
-        $result = $this->elasticSearch->search($distance, $latitude, $longitude);
-        $hits = $result['hits'];
-        $total = $hits['total'];
-        $t = ['distance' => $distance, 'latitude' => $latitude, 'longitude' => $longitude];
+        $result = $this->meilisearch->searchGeo( $latitude, $longitude,$distance);
+        $hits = $result->getHits();
+        $total = $result->count();
         $avaloirs = [];
-     //   $this->mailerAvaloir->sendError('search avaloir', $t);
+        $t = ['distance' => $distance, 'latitude' => $latitude, 'longitude' => $longitude];
+        //   $this->mailerAvaloir->sendError('search avaloir', $t);
 
-        foreach ($hits['hits'] as $hit) {
-            $score = $hit['_score'];
-            $post = $hit['_source'];
+        foreach ($hits as $post) {
             $id = $post['id'];
             if (($avaloir = $this->avaloirRepository->find($id)) !== null) {
                 $avaloirs[] = $this->serializeApi->serializeAvaloir($avaloir);

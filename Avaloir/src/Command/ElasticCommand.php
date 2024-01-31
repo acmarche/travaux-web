@@ -2,12 +2,11 @@
 
 namespace AcMarche\Avaloir\Command;
 
-use Exception;
-use AcMarche\Avaloir\Repository\AvaloirRepository;
-use AcMarche\Travaux\Elastic\ElasticSearch;
-use AcMarche\Travaux\Elastic\ElasticServer;
+use AcMarche\Travaux\Search\MeiliServer;
+use AcMarche\Travaux\Search\SearchMeili;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -23,75 +22,90 @@ class ElasticCommand extends Command
     private SymfonyStyle $io;
 
     public function __construct(
-        private ElasticServer $elasticServer,
-        private ElasticSearch $elasticSearch,
-        private AvaloirRepository $avaloirRepository,
-        string $name = null
+        private MeiliServer $meiliServer,
+        private SearchMeili $meilisearch,
     ) {
-        parent::__construct($name);
+        parent::__construct();
     }
 
     protected function configure(): void
     {
-        $this
-            ->addOption('raz', null, InputOption::VALUE_NONE, 'Remise à zéro du moteur')
-            ->addOption('reindex', null, InputOption::VALUE_NONE, 'Réindex tous les avaloirs')
-            ->addArgument('latitude', InputArgument::OPTIONAL)
-            ->addArgument('longitude', InputArgument::OPTIONAL);
+        $this->addOption('key', "key", InputOption::VALUE_NONE, 'Create a key');
+        $this->addOption('tasks', "tasks", InputOption::VALUE_NONE, 'Display tasks');
+        $this->addOption('reset', "reset", InputOption::VALUE_NONE, 'Search engine reset');
+        $this->addOption('update', "update", InputOption::VALUE_NONE, 'Update data')->addArgument(
+            'latitude',
+            InputArgument::OPTIONAL
+        )
+            ->addArgument('longitude', InputArgument::OPTIONAL);;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->io = new SymfonyStyle($input, $output);
-        $raz = $input->getOption('raz');
-        $reindex = $input->getOption('reindex');
         $latitude = $input->getArgument('latitude');
         $longitude = $input->getArgument('longitude');
 
-        if ($raz) {
-            try {
-                $this->elasticServer->deleteIndex();
-                $this->elasticServer->createIndex();
-                $this->elasticServer->close();
-                $this->elasticServer->updateSettings();
-                $this->elasticServer->open();
-                $this->elasticServer->updateMappings();
-            } catch (Exception $e) {
-                $this->io->error($e->getMessage());
+        $key = (bool)$input->getOption('key');
+        $tasks = (bool)$input->getOption('tasks');
+        $reset = (bool)$input->getOption('reset');
+        $update = (bool)$input->getOption('update');
 
-                return Command::FAILURE;
-            }
+        if ($key) {
+            dump($this->meiliServer->createKey());
 
             return Command::SUCCESS;
+        }
+
+        if ($tasks) {
+            $this->tasks($output);
+
+            return Command::SUCCESS;
+        }
+
+        if ($reset) {
+            $result = $this->meiliServer->createIndex();
+            dump($result);
+            $result = $this->meiliServer->settings();
+            dump($result);
+        }
+
+        if ($update) {
+            $this->meiliServer->addAvaloirs();
         }
 
         if ($latitude && $longitude) {
-            $result = $this->elasticSearch->search("25m", $latitude, $longitude);
-            print_r($result);
+            $result = $this->meilisearch->searchGeo($latitude, $longitude, 25);
+            dump($result);
 
             return Command::SUCCESS;
-        }
-
-        if ($reindex) {
-            $this->updateAvaloirs();
         }
 
         return Command::SUCCESS;
     }
 
-    private function updateAvaloirs(): array
+    private function tasks(OutputInterface $output): void
     {
-        foreach ($this->avaloirRepository->findAll() as $avaloir) {
-            $this->io->writeln($avaloir->getId());
-            try {
-                $result = $this->elasticServer->updateData($avaloir);
-            } catch (Exception $e) {
-                $this->io->error($e->getMessage());
+        $this->meilSearch->init();
+        $tasks = $this->meilSearch->client->getTasks();
+        $data = [];
+        foreach ($tasks->getResults() as $result) {
+            $t = [$result['uid'], $result['status'], $result['type'], $result['startedAt']];
+            $t['error'] = null;
+            $t['url'] = null;
+            if ($result['status'] == 'failed') {
+                if (isset($result['error'])) {
+                    $t['error'] = $result['error']['message'];
+                    $t['link'] = $result['error']['link'];
+                }
             }
-            var_dump($result);
+            $data[] = $t;
         }
-
-        //$this->elasticServer->getClient()->indices()->refresh();
-        return [];
+        $table = new Table($output);
+        $table
+            ->setHeaders(['Uid', 'status', 'Type', 'Date', 'Error', 'Url'])
+            ->setRows($data);
+        $table->render();
     }
+
 }

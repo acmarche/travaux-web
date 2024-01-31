@@ -154,14 +154,14 @@ class AvaloirRepository extends ServiceEntityRepository
     /**
      * @return Avaloir[]
      */
-    public function getAll(): array
+    public function getAll(int $max = 5000): array
     {
         return $this->createQueryBuilder('avaloir')
             ->leftJoin('avaloir.dates', 'dates', 'WITH')
             ->leftJoin('avaloir.commentaires', 'commentaires', 'WITH')
             ->addSelect('dates', 'commentaires')
             ->addOrderBy('avaloir.createdAt', 'DESC')
-            ->setMaxResults(1000)
+            ->setMaxResults($max)
             ->getQuery()
             ->getResult();
     }
