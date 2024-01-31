@@ -24,8 +24,9 @@ class SearchMeili
      * @param int $distance in meters
      * @return void
      */
-    public function searchGeo(float $latitude, float $longitude, int $distance = 200): SearchResult
+    public function searchGeo(string $latitude, string $longitude, int $distance = 2000): SearchResult
     {
+        $this->init();
         return $this->client
             ->index($this->indexName)
             ->search('', [

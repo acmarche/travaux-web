@@ -33,11 +33,9 @@ class ElasticCommand extends Command
         $this->addOption('key', "key", InputOption::VALUE_NONE, 'Create a key');
         $this->addOption('tasks', "tasks", InputOption::VALUE_NONE, 'Display tasks');
         $this->addOption('reset', "reset", InputOption::VALUE_NONE, 'Search engine reset');
-        $this->addOption('update', "update", InputOption::VALUE_NONE, 'Update data')->addArgument(
-            'latitude',
-            InputArgument::OPTIONAL
-        )
-            ->addArgument('longitude', InputArgument::OPTIONAL);;
+        $this->addOption('update', "update", InputOption::VALUE_NONE, 'Update data');
+        $this->addArgument('latitude', InputArgument::OPTIONAL);
+        $this->addArgument('longitude', InputArgument::OPTIONAL);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -75,6 +73,7 @@ class ElasticCommand extends Command
         }
 
         if ($latitude && $longitude) {
+            $this->io->writeln('search... lat: '.$latitude.' lng: '.$longitude);
             $result = $this->meilisearch->searchGeo($latitude, $longitude, 25);
             dump($result);
 
@@ -86,8 +85,8 @@ class ElasticCommand extends Command
 
     private function tasks(OutputInterface $output): void
     {
-        $this->meilSearch->init();
-        $tasks = $this->meilSearch->client->getTasks();
+        $this->meiliServer->init();
+        $tasks = $this->meiliServer->client->getTasks();
         $data = [];
         foreach ($tasks->getResults() as $result) {
             $t = [$result['uid'], $result['status'], $result['type'], $result['startedAt']];
