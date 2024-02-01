@@ -21,6 +21,8 @@ class Batiment implements Stringable
     #[ORM\OrderBy(['intitule' => 'ASC'])]
     #[Assert\NotBlank]
     protected string $intitule;
+    #[ORM\Column(nullable: true)]
+    public ?string $color = null;
     #[ORM\OneToMany(targetEntity: Intervention::class, mappedBy: 'batiment')]
     private Collection $intervention;
 

@@ -2,6 +2,7 @@
 
 namespace AcMarche\Travaux\Controller;
 
+use AcMarche\Travaux\Repository\BatimentRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,24 +14,19 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * Batiment controller.
- */
+
 #[Route(path: '/batiment')]
 #[IsGranted('ROLE_TRAVAUX_ADMIN')]
 class BatimentController extends AbstractController
 {
-    public function __construct(private ManagerRegistry $managerRegistry)
+    public function __construct(private BatimentRepository $batimentRepository)
     {
     }
-    /**
-     * Lists all Batiment entities.
-     */
+
     #[Route(path: '/', name: 'batiment', methods: ['GET'])]
     public function index() : Response
     {
-        $em = $this->managerRegistry->getManager();
-        $entities = $em->getRepository(Batiment::class)->findAll();
+        $entities = $this->batimentRepository->findAll();
         return $this->render(
             '@AcMarcheTravaux/batiment/index.html.twig',
             array(
@@ -38,11 +34,7 @@ class BatimentController extends AbstractController
             )
         );
     }
-    /**
-     * Displays a form to create a new Batiment entity.
-     *
-     *
-     */
+
     #[Route(path: '/new', name: 'batiment_new', methods: ['GET', 'POST'])]
     public function new(Request $request) : Response
     {
@@ -51,14 +43,13 @@ class BatimentController extends AbstractController
             ->add('Create', SubmitType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->managerRegistry->getManager();
 
-            $em->persist($batiment);
-            $em->flush();
+            $this->batimentRepository->persist($batiment);
+            $this->batimentRepository->flush();
 
             $this->addFlash('success', 'Le bâtiment a bien été créé.');
 
-            return $this->redirectToRoute('batiment_show', array('id' => $batiment->getId()));
+            return $this->redirectToRoute('batiment');
         }
         return $this->render(
             '@AcMarcheTravaux/batiment/new.html.twig',
@@ -68,11 +59,7 @@ class BatimentController extends AbstractController
             )
         );
     }
-    /**
-     * Finds and displays a Batiment entity.
-     *
-     *
-     */
+
     #[Route(path: '/{id}', name: 'batiment_show', methods: ['GET'])]
     public function show(Batiment $batiment) : Response
     {
@@ -83,24 +70,20 @@ class BatimentController extends AbstractController
             )
         );
     }
-    /**
-     * Displays a form to edit an existing Batiment entity.
-     *
-     *
-     */
+
     #[Route(path: '/{id}/edit', name: 'batiment_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Batiment $batiment) : Response
     {
-        $em = $this->managerRegistry->getManager();
         $editForm = $this->createForm(BatimentType::class, $batiment)
             ->add('Update', SubmitType::class);
         $editForm->handleRequest($request);
+
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em->flush();
+            $this->batimentRepository->flush();
 
             $this->addFlash('success', 'Le bâtiment a bien été modifié.');
 
-            return $this->redirectToRoute('batiment_show', array('id' => $batiment->getId()));
+            return $this->redirectToRoute('batiment');
         }
         return $this->render(
             '@AcMarcheTravaux/batiment/edit.html.twig',
@@ -110,18 +93,14 @@ class BatimentController extends AbstractController
             )
         );
     }
-    /**
-     * Deletes a Batiment entity.
-     */
+
     #[Route(path: '/{id}', name: 'batiment_delete', methods: ['POST'])]
     public function delete(Request $request, Batiment $batiment) : RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$batiment->getId(), $request->request->get('_token'))) {
 
-            $em = $this->managerRegistry->getManager();
-
-            $em->remove($batiment);
-            $em->flush();
+            $this->batimentRepository->remove($batiment);
+            $this->batimentRepository->flush();
 
             $this->addFlash('success', 'Le bâtiment a bien été supprimé.');
         }

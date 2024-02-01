@@ -22,6 +22,7 @@
                         <th scope="col" class="hidden-xs" style="width: 10%;">Validé le</th>
                         <th scope="col">Encodé par</th>
                         <th scope="col" class="hidden-xs">Affection</th>
+                        <th scope="col" class="hidden-xs">Bâtiment</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -74,6 +75,14 @@
                             </td>
                             <td>{{ intervention.useradd }}</td>
                             <td class="hidden-xs">{{ intervention.affectation }}</td>
+                            <td class="hidden-xs align-middle">
+                                {% if intervention.batiment %}
+                                    <span class="d-block"
+                                          style="{% if intervention.batiment.color %}background-color: {{ intervention.batiment.color }}; {% endif %}width: 120px;height: 50px">
+                                            {{ intervention.batiment }}
+                                        </span>
+                                {% endif %}
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>

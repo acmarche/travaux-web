@@ -17,6 +17,7 @@
                     <tr>
                         <th>Intitule</th>
                         <th>Nbre intervention</th>
+                        <th>Couleur</th>
                         {% if is_granted('ROLE_TRAVAUX_ADMIN') %}
                             <th>Actions</th>
                         {% endif %}
@@ -28,6 +29,11 @@
                             <td><a href="{{ path('batiment_show', { 'id': entity.id }) }}">{{ entity.intitule }}</a>
                             </td>
                             <td>{{ entity.intervention | length }}</td>
+                            <td>
+                                {% if entity.color %}
+                                <span class="d-block" style="background-color: {{ entity.color }};width: 120px;height: 50px">{{ entity.color }}</span>
+                                {% endif %}
+                            </td>
                             {% if is_granted('ROLE_TRAVAUX_ADMIN') %}
                                 <td>
                                     <a href="{{ path('batiment_edit', { 'id': entity.id }) }}" title="Editer"
