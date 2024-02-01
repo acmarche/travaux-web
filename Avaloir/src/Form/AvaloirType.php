@@ -55,7 +55,7 @@ class AvaloirType extends AbstractType
                 'date_rappel',
                 DateType::class,
                 array(
-                    'widget' => 'single_text',
+                    
                     'required' => false,
                     'label' => 'Date de rappel',
                     'attr' => array('autocomplete' => 'off'),

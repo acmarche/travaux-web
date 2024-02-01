@@ -52,7 +52,7 @@ class SearchAvaloirType extends AbstractType
                 'date_debut',
                 DateType::class,
                 array(
-                    'widget' => 'single_text',
+                    
                     'label' => 'Date de début',
                     'required' => false,
                     'attr' => array(
@@ -64,7 +64,7 @@ class SearchAvaloirType extends AbstractType
                 'date_fin',
                 DateType::class,
                 array(
-                    'widget' => 'single_text',
+                    
                     'label' => 'Date de fin',
                     'required' => false,
                     'attr' => array(

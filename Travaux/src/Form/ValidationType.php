@@ -67,7 +67,7 @@ class ValidationType extends AbstractType
                     'date_execution',
                     DateType::class,
                     array(
-                        'widget' => 'single_text',
+                        
                         'label' => 'A réaliser à partir du',
                         'required' => false,
                         'help' => 'Si reporter, choisissez une date d\'exécution',

@@ -85,7 +85,7 @@ class InterventionType extends AbstractType
                 'date_rappel',
                 DateType::class,
                 array(
-                    'widget' => 'single_text',
+                    
                     'label' => 'Date de rappel',
                     'required' => false,
                     'attr' => array('autocomplete' => 'off'),
@@ -104,7 +104,7 @@ class InterventionType extends AbstractType
                 'soumis_le',
                 DateType::class,
                 array(
-                    'widget' => 'single_text',
+                    
                     'label' => 'Soumis le',
                     'required' => false,
                     'attr' => array('autocomplete' => 'off'),
@@ -122,7 +122,7 @@ class InterventionType extends AbstractType
                 'date_solution',
                 DateType::class,
                 array(
-                    'widget' => 'single_text',
+                    
                     'label' => 'Date de solution',
                     'required' => false,
                     'attr' => array('autocomplete' => 'off'),
@@ -150,7 +150,7 @@ class InterventionType extends AbstractType
                 'date_execution',
                 DateType::class,
                 array(
-                    'widget' => 'single_text',
+                    
                     'label' => 'A réaliser à partir du',
                     'required' => false,
                     'attr' => array('autocomplete' => 'off'),

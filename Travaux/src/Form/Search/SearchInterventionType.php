@@ -73,7 +73,7 @@ class SearchInterventionType extends AbstractType
                 'date_debut',
                 DateType::class,
                 array(
-                    'widget' => 'single_text',
+                    
                     'label' => 'Date d\'introduction',
                     'required' => false,
                     'attr' => array(
@@ -85,7 +85,7 @@ class SearchInterventionType extends AbstractType
                 'date_fin',
                 DateType::class,
                 array(
-                    'widget' => 'single_text',
+                    
                     'label' => 'Date d\'introduction',
                     'required' => false,
                     'attr' => array(
