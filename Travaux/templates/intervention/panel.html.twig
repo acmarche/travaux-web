@@ -19,7 +19,7 @@
             </tr>
             <tr>
                 <th>
-                    <i class="far fa-calendar-alt"></i> Demandé le:
+                    <i class="ti ti-calendar"></i> Demandé le:
                 </th>
                 <td>
                     {{ intervention.createdAt | date('d-m-Y') }}
@@ -27,7 +27,7 @@
             </tr>
             <tr>
                 <th>
-                    <i class="far fa-calendar-alt"></i> Reporté au:
+                    <i class="ti ti-calendar"></i> Reporté au:
                 </th>
                 <td>
                     {% if intervention.dateExecution %}
@@ -37,7 +37,7 @@
             </tr>
             <tr>
                 <th>
-                    <i class="far fa-calendar-alt"></i> Validé le:
+                    <i class="ti ti-calendar"></i> Validé le:
                 </th>
                 <td>
                     {% if intervention.datevalidation %}
@@ -92,7 +92,7 @@
             </tr>
             <tr>
                 <th>
-                    <i class="far fa-calendar-alt"></i> Date rappel:
+                    <i class="ti ti-calendar"></i> Date rappel:
                 </th>
                 <td>
                     {% if intervention.daterappel %}
@@ -102,7 +102,7 @@
             </tr>
             <tr>
                 <th>
-                    <i class="fas fa-user"></i>
+                    <i class="ti ti-user"></i>
                     <strong>Affectation:</strong>
                 </th>
                 <td>
@@ -125,13 +125,13 @@
                 </th>
                 <td>
                     {% if intervention.transmis %}
-                        <i class="fas fa-check"></i>
+                        <i class="ti ti-check"></i>
                     {% endif %}
                 </td>
             </tr>
             <tr>
                 <th>
-                    <i class="far fa-calendar-alt"></i> Soumis le
+                    <i class="ti ti-calendar"></i> Soumis le
                 </th>
                 <td>
                     {% if intervention.soumisle %}
@@ -141,7 +141,7 @@
             </tr>
             <tr>
                 <th>
-                    <i class="fas fa-euro-sign"></i> Coût en main
+                    <i class="ti ti-currency-euro"></i> Coût en main
                     d'oeuvre:
                 </th>
                 <td>
@@ -152,7 +152,7 @@
             </tr>
             <tr>
                 <th>
-                    <i class="fas fa-euro-sign"></i><strong> Coût en
+                    <i class="ti ti-currency-euro"></i><strong> Coût en
                         matériel:</strong>
                 </th>
                 <td>
@@ -174,7 +174,7 @@
             {% endif %}
             <tr>
                 <th>
-                    <i class="far fa-calendar-alt"></i> Date de solution:
+                    <i class="ti ti-calendar"></i> Date de solution:
                 </th>
                 <td>
                     {% if intervention.datesolution %}

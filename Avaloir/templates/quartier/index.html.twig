@@ -6,7 +6,7 @@
         <div class="card-body">
             {% if is_granted('ROLE_TRAVAUX_AVALOIR') %}
                 <a href="{{ path('quartier_new') }}" class="btn btn-primary" role="button"><i
-                            class="fas fa-plus"></i> Ajouter</a>
+                            class="ti ti-plus"></i> Ajouter</a>
                 <br/><br/>
             {% endif %}
 
@@ -33,7 +33,7 @@
                             {% if is_granted('ROLE_TRAVAUX_AVALOIR') %}
                                 <td>
                                     <a href="{{ path('quartier_edit', { 'id': entity.id }) }}" title="Editer"
-                                       role="button" class="btn btn-primary btn-xs"><i class="far fa-edit"></i>
+                                       role="button" class="btn btn-primary btn-xs"><i class="ti ti-pencil"></i>
                                         Editer
                                     </a>
                                 </td>

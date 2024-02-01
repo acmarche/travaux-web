@@ -1,7 +1,7 @@
 {% if is_granted('ROLE_TRAVAUX_ADMIN') %}
 
     <a href="{{ path('intervention_show', { 'id': entity.intervention.id }) }}" class="btn btn-primary" role="button">
-        <i class="fas fa-list"></i> Retour à l'intervention</a>
+        <i class="ti ti-list"></i> Retour à l'intervention</a>
     <br/>
 
 {% endif %}

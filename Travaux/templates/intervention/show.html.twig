@@ -6,7 +6,7 @@
         <div class="card-header">
             <h3>{{ intervention }}</h3>
             {% if intervention.etat == 'En attente' %}
-                <i class="float-right far fa-hourglass" title="{{ intervention.etat }}"></i>
+                <i class="float-right ti ti-hourglass" title="{{ intervention.etat }}"></i>
             {% endif %}
         </div>
         <div class="card-body">
@@ -27,7 +27,7 @@
                 . {{ 'Updated' | trans }} {{ intervention.updatedAt|date('d-m-Y H:i:s') }}
             </span>
                 {% if intervention.archive %}
-                    <i class="float-right fas fa-archive" title="Archive"></i>
+                    <i class="float-right ti ti-archive" title="Archive"></i>
                 {% endif %}
             </div>
         {% endif %}

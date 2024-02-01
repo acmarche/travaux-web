@@ -45,13 +45,13 @@
                         <tr class="{{ class }}" id="{{ intervention.id }}" title="{{ title }}">
                             <td>
                                 {% if anchor == intervention.id %}
-                                    <i class="fas fa-arrow-right"></i>
+                                    <i class="ti ti-arrow-right"></i>
                                 {% endif %}
 
                                 {{ intervention.id }}
 
                                 {% if intervention.etat == 'En attente' %}
-                                    <br/>  <i class="far fa-hourglass" title="{{ intervention.etat }}"></i>
+                                    <br/>  <i class="ti ti-hourglass" title="{{ intervention.etat }}"></i>
                                 {% endif %}
                             </td>
                             <td>
@@ -63,7 +63,7 @@
                             <td class="hidden-xs">{{ intervention.etat }}</td>
                             <td class="hidden-xs">
                                 {% if intervention.transmis %}
-                                    <i class="fas fa-check"></i>
+                                    <i class="ti ti-check"></i>
                                 {% endif %}
                             </td>
                             <td>{{ intervention.priorite }}</td>

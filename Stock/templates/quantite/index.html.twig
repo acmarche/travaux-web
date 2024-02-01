@@ -8,11 +8,11 @@
             {{ form_start(form) }}
             {{ form_widget(form) }}
             <button class="btn btn-primary"><i
-                        class="far fa-save"></i> {{ button_label|default('Save')|trans }}</button>
+                        class="ti ti-device-floppy"></i> {{ button_label|default('Save')|trans }}</button>
             {{ form_end(form) }}
 
             <br/>
-            <a href="{{ path('stock_produit_show',{'id': produit.id}) }}"><i class="fas fa-arrow-left"></i>
+            <a href="{{ path('stock_produit_show',{'id': produit.id}) }}"><i class="ti ti-arrow-left"></i>
                 Annuler</a>
         </div>
     </div>

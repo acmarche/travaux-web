@@ -8,13 +8,13 @@
                 {{ day.day }}
             </span>
             <a href="{{ path('planning_new', {'date': day|date('Y-m-d'),'category':categorySelected ? categorySelected.id}) }}">
-                <i class="fa fa-plus-square" style="height: 2rem;"></i>
+                <i class="ti ti-plus-square" style="height: 2rem;"></i>
             </a>
             <a class="btn btn-sm btn-success"
                href="{{ path('planning_export_pdf_daily',{'date':day|date('Y-m-d'), 'categoryPlanning':categorySelected ?categorySelected.id}) }}"
                title="Exporter la journée en pdf "
                role="button">
-                <i class="fas fa-file-pdf"></i>
+                <i class="ti ti-file-type-pdf"></i>
             </a>
         </div>
         {% for plan in plans %}

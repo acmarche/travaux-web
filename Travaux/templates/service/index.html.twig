@@ -8,7 +8,7 @@
             {% if is_granted('ROLE_TRAVAUX_ADMIN') %}
                 <div class="btn-group">
                     <a href="{{ path('service_new') }}" class="btn btn-primary" role="button">
-                        <i class="fa fa-plus"></i> Ajouter</a>
+                        <i class="ti ti-plus"></i> Ajouter</a>
                 </div>
                 <br/><br/>
             {% endif %}
@@ -38,7 +38,7 @@
                             {% if is_granted('ROLE_TRAVAUX_ADMIN') %}
                                 <td>
                                     <a href="{{ path('service_edit', { 'id': entity.id }) }}" title="Editer"
-                                       role="button" class="btn btn-primary btn-xs"><i class="far fa-edit"></i>
+                                       role="button" class="btn btn-primary btn-xs"><i class="ti ti-pencil"></i>
                                         Editer
                                     </a>
                                 </td>

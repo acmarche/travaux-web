@@ -1,13 +1,13 @@
 <div class="mt-2 calendar-wrapper">
     <div class="d-flex justify-content-between">
         <a href="{{ path('planning_index', {'monthyear':previous.format('Y-m')}) }}">
-            <i class="fas fa-arrow-left"></i> Précédent
+            <i class="ti ti-arrow-left"></i> Précédent
         </a>
         <h3 class="text-success text-center">
             {{ dateSelected.monthName|trans }}  {{ dateSelected.year }} {{ categorySelected }}
         </h3>
         <a href="{{ path('planning_index', {'monthyear':next.format('Y-m')}) }}">
-            Suivant <i class="fas fa-arrow-right"></i>
+            Suivant <i class="ti ti-arrow-right"></i>
         </a>
     </div>
 

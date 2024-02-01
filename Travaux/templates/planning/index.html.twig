@@ -7,7 +7,7 @@
         <div class="card-body">
             {% if is_granted('ROLE_TRAVAUX') %}
                 <a href="{{ path('planning_new') }}" class="btn btn-primary mb-3" role="button"><i
-                            class="fa fa-plus"></i> Ajouter</a>
+                            class="ti ti-plus"></i> Ajouter</a>
             {% endif %}
 
 
@@ -20,13 +20,13 @@
             <a class="btn btn-sm btn-success m-2"
                href="{{ path('planning_export_pdf',{'yearmonth':dateSelected.year~'-'~dateSelected.month, 'categoryPlanning':categorySelected ?categorySelected.id}) }}"
                role="button">
-                <i class="fas fa-file-pdf"></i>
+                <i class="ti ti-file-type-pdf"></i>
                 Exporter en Pdf
             </a>
             <a class="btn btn-sm btn-warning m-2"
                href="{{ path('planning_export_xls',{'yearmonth':dateSelected.year~'-'~dateSelected.month, 'categoryPlanning':categorySelected ?categorySelected.id}) }}"
                role="button">
-                <i class="fas fa-file-csv"></i>
+                <i class="ti ti-file-type-csv"></i>
                 Exporter en Xls
             </a>
             </div>

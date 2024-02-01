@@ -1,13 +1,13 @@
 {% if is_granted('ROLE_TRAVAUX_ADMIN') %}
 
     <a href="{{ path('group') }}" class="btn btn-primary" role="button"><i
-                class="fas fa-arrow-left"></i> Retour à la liste</a>
+                class="ti ti-arrow-left"></i> Retour à la liste</a>
 
     <a href="{{ path('group_edit', { 'id': group.id }) }}" class="btn btn-primary"
-       role="button"><i class="far fa-edit"></i> Editer</a>
+       role="button"><i class="ti ti-pencil"></i> Editer</a>
 
     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
-        <i class="fas fa-trash"></i> Supprimer le groupe
+        <i class="ti ti-trash"></i> Supprimer le groupe
     </button>
 
     <br/>

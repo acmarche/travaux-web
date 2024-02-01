@@ -2,20 +2,20 @@
 {% if is_granted('ROLE_TRAVAUX') %}
     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li>
-            <a href="{{ path('intervention') }}" class="nav-link px-2 link-dark"><i class="fa fa-search"></i>
+            <a href="{{ path('intervention') }}" class="nav-link px-2 link-dark"><i class="ti ti-search"></i>
                 Rechercher</a>
         </li>
         {% if is_granted('ROLE_TRAVAUX_ADD') %}
             <li>
                 <a href="{{ path('intervention_new') }}" class="nav-link px-2 link-dark">
-                    <i class="fa fa-plus"></i>
+                    <i class="ti ti-plus"></i>
                     Ajouter une intervention</a>
             </li>
         {% endif %}
         {% if is_granted('ROLE_TRAVAUX_PLANNING') %}
             <li>
                 <a href="{{ path('planning_index') }}" class="nav-link px-2 link-dark">
-                    <i class="fa fa-calendar-alt"></i>
+                    <i class="ti ti-calendar"></i>
                     Planning</a>
             </li>
         {% endif %}
@@ -33,15 +33,18 @@
             <a href="{{ path('intervention_archive') }}" class="nav-link px-2 link-dark">
                 Archive</a>
         </li>
+
         <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                Paramètres... <b class="caret"></b>
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+               data-bs-toggle="dropdown" aria-expanded="false">
+                Paramètres...
             </a>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                 {% if is_granted('ROLE_TRAVAUX_PLANNING') %}
                     <li><a class="dropdown-item" href="{{ path('employe') }}">Les ouvriers</a></li>
                     <li><a class="dropdown-item" href="{{ path('horaire') }}">Les horaires</a></li>
-                    <li><a class="dropdown-item" href="{{ path('category_planning') }}">Les catégories du planning</a></li>
+                    <li><a class="dropdown-item" href="{{ path('category_planning') }}">Les catégories du planning</a>
+                    </li>
                 {% endif %}
                 {% if is_granted('ROLE_TRAVAUX_ADMIN') %}
                     <li><a class="dropdown-item" href="{{ path('batiment') }}">Les bâtiments</a></li>
@@ -69,11 +72,11 @@
 <ul class="navbar-nav mb-2 mb-lg-0">
     {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
         <li class="nav-item">
-            <a href="{{ path('app_login') }}" class="nav-link"><i class="fas fa-sign-in-alt"></i>
+            <a href="{{ path('app_login') }}" class="nav-link"><i class="ti ti-login-2"></i>
                 Se connecter</a>
         </li>
     {% else %}
-        <li class="nav-item"><a href="{{ path('app_logout') }}" class="nav-link"><i class="fas fa-sign-out-alt"></i>
+        <li class="nav-item"><a href="{{ path('app_logout') }}" class="nav-link"><i class="ti ti-logout-2"></i>
                 Déconnexion</a>
         </li>
     {% endif %}

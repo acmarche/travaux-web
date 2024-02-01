@@ -22,7 +22,7 @@
         </tr>
         <tr>
             <th>
-                <i class="far fa-calendar-alt"></i> Demandé le:
+                <i class="ti ti-calendar"></i> Demandé le:
             </th>
             <td>
                 {{ intervention.createdAt | date('d-m-Y') }}
@@ -31,7 +31,7 @@
         {% if intervention.datevalidation %}
             <tr>
                 <th>
-                    <i class="far fa-calendar-alt"></i> Validé le:
+                    <i class="ti ti-calendar"></i> Validé le:
                 </th>
                 <td>
 
@@ -98,7 +98,7 @@
         {% if intervention.dateRappel %}
             <tr>
                 <th>
-                    <i class="far fa-calendar-alt"></i> Date rappel:
+                    <i class="ti ti-calendar"></i> Date rappel:
                 </th>
                 <td>
                     {% if intervention.daterappel %}
@@ -110,7 +110,7 @@
         {% if intervention.affectation %}
             <tr>
                 <th>
-                    <i class="far fa-user"></i>
+                    <i class="ti ti-user"></i>
                     <strong>Affectation:</strong>
                 </th>
                 <td>
@@ -137,7 +137,7 @@
                 </th>
                 <td>
                     {% if intervention.transmis %}
-                        <span class="fas fa-check"></span>
+                        <span class="ti ti-check"></span>
 
                     {% endif %}
                 </td>
@@ -146,7 +146,7 @@
         {% if intervention.soumisLe %}
             <tr>
                 <th>
-                    <i class="far fa-calendar-alt"></i> Soumis le
+                    <i class="ti ti-calendar"></i> Soumis le
                 </th>
                 <td>
                     {{ intervention.soumisle | date('d-m-Y') }}
@@ -156,7 +156,7 @@
         {% if intervention.coutMain %}
             <tr>
                 <th>
-                    <i class="fas fa-euro-sign"></i> Coût en main
+                    <i class="ti ti-currency-euro"></i> Coût en main
                     d'oeuvre:
                 </th>
                 <td>
@@ -169,7 +169,7 @@
         {% if intervention.coutMateriel %}
             <tr>
                 <th>
-                    <i class="fas fa-euro-sign"></i><strong> Coût en
+                    <i class="ti ti-currency-euro"></i><strong> Coût en
                         matériel:</strong>
                 </th>
                 <td>
@@ -193,7 +193,7 @@
         {% if intervention.dateSolution %}
             <tr>
                 <th>
-                    <i class="far fa-calendar-alt"></i> Date de solution:
+                    <i class="ti ti-calendar"></i> Date de solution:
                 </th>
                 <td>
                     {% if intervention.datesolution %}
@@ -221,7 +221,7 @@
                 . {{ 'Updated' | trans }} {{ intervention.updatedAt|date('d-m-Y H:i:s') }}
             </span>
     {% if intervention.archive %}
-        <span class="float-right"><i class="fas fa-archive" title="Archive"></i> Archive</span>
+        <span class="float-right"><i class="ti ti-archive" title="Archive"></i> Archive</span>
     {% endif %}
 </div>
 

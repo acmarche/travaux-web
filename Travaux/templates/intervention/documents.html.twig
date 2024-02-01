@@ -12,7 +12,7 @@
                                 <img src="{{ document | apptravaux_download | imagine_filter('actravaux_thumb') }}"
                                      alt="img"/>
                             {% else %}
-                                <i class="fas fa-download"></i>
+                                <i class="ti ti-download"></i>
                                 <a href="{{ absolute_url(document | apptravaux_download ) }}">Télécharger</a>
                             {% endif %}
                         </a>
