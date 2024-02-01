@@ -60,13 +60,12 @@ class PlanningController extends AbstractController
 
         $interventions = $this->interventionPlanningRepository->findByMonthAndCategory($yearmonth, $categoryPlanning);
         $days = $this->dateProvider->daysOfMonth($dateSelected);
-        $data = $absents = [];
+        $data = [];
         foreach ($days as $day) {
             $data[$day->day] = $this->interventionPlanningRepository->findPlanningByDayAndCategory(
                 $day,
                 $categoryPlanning
             );
-            $absents[$day->day] = $this->absenceUtils->findAbsentByDateAndCategory($day, $categoryPlanning);
         }
 
         $next = $dateSelected->addMonth();
@@ -88,7 +87,6 @@ class PlanningController extends AbstractController
             'previous' => $previous,
             'weeks' => $weeks,
             'data' => $data,
-            'absents' => $absents,
             'categorySelected' => $categoryPlanning,
             'categories' => $this->categoryPlanningRepository->findAllOrdered(),
         ]);
