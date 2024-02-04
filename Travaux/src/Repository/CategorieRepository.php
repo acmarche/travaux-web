@@ -2,7 +2,6 @@
 
 namespace AcMarche\Travaux\Repository;
 
-use Doctrine\ORM\QueryBuilder;
 use AcMarche\Travaux\Entity\Categorie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -28,21 +27,20 @@ class CategorieRepository extends ServiceEntityRepository
         return $this->findBy(array(), array('intitule' => 'ASC'));
     }
 
-    public function getForList(): QueryBuilder
+    public function getForList(): array
     {
-        $qb = $this->createQueryBuilder('categorie');
-        $qb->orderBy('categorie.intitule', 'ASC');
+        return $this->createQueryBuilder('categorie')
+            ->orderBy('categorie.intitule', 'ASC')
+            ->getQuery()->getResult();
 
-        return $qb;
     }
 
-    public function getInterventionForList(): QueryBuilder
+    public function getInterventionForList(): array
     {
-        $qb = $this->createQueryBuilder('categorie');
-        $qb->andWhere('categorie.intitule LIKE :titre')
-            ->setParameter('titre', "Intervention");
-
-        return $qb;
+        return $this->createQueryBuilder('categorie')
+            ->andWhere('categorie.intitule LIKE :titre')
+            ->setParameter('titre', "Intervention")
+            ->getQuery()->getResult();
     }
 
     /**

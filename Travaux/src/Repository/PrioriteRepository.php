@@ -4,7 +4,6 @@ namespace AcMarche\Travaux\Repository;
 
 use AcMarche\Travaux\Entity\Priorite;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -20,21 +19,27 @@ class PrioriteRepository extends ServiceEntityRepository
         parent::__construct($registry, Priorite::class);
     }
 
-    public function getForList(): QueryBuilder
+    /**
+     * @return Priorite[]
+     */
+    public function getForList(): array
     {
-        $qb = $this->createQueryBuilder('priorite');
-        $qb->orderBy('priorite.intitule', 'DESC');//desc : normal at first
+        return $this->createQueryBuilder('priorite')
+            ->orderBy('priorite.intitule', 'DESC')
+            ->getQuery()->getResult();//desc : normal at first
 
-        return $qb;
     }
 
-    public function getNormalForList(): QueryBuilder
+    /**
+     * @return Priorite[]
+     */
+    public function getNormalForList(): array
     {
         return $this->createQueryBuilder('priorite')
             ->andWhere('priorite.intitule LIKE :titre')
-            ->setParameter('titre', "Normal");
+            ->setParameter('titre', "Normal")
+            ->getQuery()->getResult();
     }
-
 
     /**
      * Pour formulaire avec liste deroulante
