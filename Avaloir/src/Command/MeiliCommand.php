@@ -14,10 +14,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'avaloir:elastic',
+    name: 'avaloir:meili',
     description: 'Mise à jour du moteur de recherche'
 )]
-class ElasticCommand extends Command
+class MeiliCommand extends Command
 {
     private SymfonyStyle $io;
 
