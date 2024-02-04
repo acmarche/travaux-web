@@ -36,7 +36,7 @@ class CategorieRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function getForListDefault(): QueryBuilder
+    public function getInterventionForList(): QueryBuilder
     {
         $qb = $this->createQueryBuilder('categorie');
         $qb->andWhere('categorie.intitule LIKE :titre')

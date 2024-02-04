@@ -73,8 +73,8 @@ class ElasticCommand extends Command
         }
 
         if ($latitude && $longitude) {
-            $this->io->writeln('search... lat: '.$latitude.' lng: '.$longitude);
-            $result = $this->meilisearch->searchGeo($latitude, $longitude, 25);
+            $this->io->writeln('search... lat: '.(float)$latitude.' lng: '.(float)$longitude);
+            $result = $this->meilisearch->searchGeo((float)$latitude, (float)$longitude, 250);
             dump($result);
 
             return Command::SUCCESS;

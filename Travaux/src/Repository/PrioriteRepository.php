@@ -2,9 +2,9 @@
 
 namespace AcMarche\Travaux\Repository;
 
-use Doctrine\ORM\QueryBuilder;
 use AcMarche\Travaux\Entity\Priorite;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,6 +19,7 @@ class PrioriteRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Priorite::class);
     }
+
     public function getForList(): QueryBuilder
     {
         $qb = $this->createQueryBuilder('priorite');
@@ -27,13 +28,11 @@ class PrioriteRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function getForListDefault(): QueryBuilder
+    public function getNormalForList(): QueryBuilder
     {
-        $qb = $this->createQueryBuilder('priorite');
-        $qb->andWhere('priorite.intitule LIKE :titre')
+        return $this->createQueryBuilder('priorite')
+            ->andWhere('priorite.intitule LIKE :titre')
             ->setParameter('titre', "Normal");
-
-        return $qb;
     }
 
 

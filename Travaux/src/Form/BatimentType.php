@@ -16,6 +16,7 @@ class BatimentType extends AbstractType
             ->add('intitule')
             ->add('color', ColorType::class, [
                 'label' => 'Couleur',
+                'required'=> false
             ]);
     }
 

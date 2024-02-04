@@ -22,17 +22,16 @@ class SearchMeili
      * @param float $latitude
      * @param float $longitude
      * @param int $distance in meters
-     * @return void
+     * @return SearchResult
      */
-    public function searchGeo(string $latitude, string $longitude, int $distance = 2000): SearchResult
+    public function searchGeo(float $latitude, float $longitude, int $distance = 20000): SearchResult
     {
         $this->init();
         return $this->client
             ->index($this->indexName)
             ->search('', [
                 //'filter' => '_geoBoundingBox([45.494181, 9.214024], [45.449484, 9.179175])',
-                //'filter' => "_geoRadius($latitude,$longitude, $distance) AND type = pizza",
-                'filter' => "_geoRadius($latitude,$longitude, $distance)",
+                'filter' => "_geoRadius($latitude, $longitude, $distance)",
             ]);
     }
 

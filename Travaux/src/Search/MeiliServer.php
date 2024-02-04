@@ -13,7 +13,6 @@ class MeiliServer
     use MeiliTrait;
 
     private string $primaryKey = 'id';
-    private array $skips = [705];
 
     public function __construct(
         #[Autowire(env: 'MEILI_INDEX_NAME')]

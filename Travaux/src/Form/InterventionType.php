@@ -20,19 +20,37 @@ use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class InterventionType extends AbstractType
 {
-    public function __construct(private AuthorizationCheckerInterface $authorizationChecker)
-    {
+    public function __construct(
+        private readonly EtatRepository $etatRepository,
+        private readonly PrioriteRepository $prioriteRepository,
+        private readonly CategorieRepository $categorieRepository,
+        private readonly AuthorizationCheckerInterface $authorizationChecker
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $admin = $this->authorizationChecker->isGranted('ROLE_TRAVAUX_ADMIN');
+        $redacteur = $this->authorizationChecker->isGranted('ROLE_TRAVAUX_REDACTEUR');
         $editeur = $this->authorizationChecker->isGranted('ROLE_TRAVAUX_EDITEUR');
+
+        if ($admin || $redacteur || $editeur) {
+            $etats = $this->etatRepository->findAllForList();
+        } else {
+            $etats = $this->etatRepository->onlyNewForList();
+        }
+
+        $priorities = $this->prioriteRepository->getForList();
+        $categories = $this->categorieRepository->getForList();
+
+        if (!$admin) {
+            $priorities = $this->prioriteRepository->getNormalForList();
+            $categories = $this->categorieRepository->getInterventionForList();
+        }
 
         $builder
             ->add('intitule')
@@ -85,7 +103,7 @@ class InterventionType extends AbstractType
                 'date_rappel',
                 DateType::class,
                 array(
-                    
+
                     'label' => 'Date de rappel',
                     'required' => false,
                     'attr' => array('autocomplete' => 'off'),
@@ -104,7 +122,7 @@ class InterventionType extends AbstractType
                 'soumis_le',
                 DateType::class,
                 array(
-                    
+
                     'label' => 'Soumis le',
                     'required' => false,
                     'attr' => array('autocomplete' => 'off'),
@@ -122,7 +140,7 @@ class InterventionType extends AbstractType
                 'date_solution',
                 DateType::class,
                 array(
-                    
+
                     'label' => 'Date de solution',
                     'required' => false,
                     'attr' => array('autocomplete' => 'off'),
@@ -150,106 +168,54 @@ class InterventionType extends AbstractType
                 'date_execution',
                 DateType::class,
                 array(
-                    
+
                     'label' => 'A réaliser à partir du',
                     'required' => false,
                     'attr' => array('autocomplete' => 'off'),
                 )
-            );
-
-        if ($admin) {
-            $builder
-                ->add(
-                    'etat',
-                    EntityType::class,
-                    array(
-                        'class' => Etat::class,
-                        'required' => true,
-                        'query_builder' => fn(EtatRepository $er) => $er->findAllForList(),
-                        'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
-                    )
+            )
+            ->add(
+                'etat',
+                EntityType::class,
+                array(
+                    'class' => Etat::class,
+                    'required' => true,
+                    'choices' => $etats,
+                    'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
                 )
-                ->add(
-                    'categorie',
-                    EntityType::class,
-                    array(
-                        'class' => Categorie::class,
-                        'required' => true,
-                        'multiple' => false,
-                        'query_builder' => fn(CategorieRepository $er) => $er->getForList(),
-                        'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
-                    )
-                )
-                ->add(
-                    'priorite',
-                    EntityType::class,
-                    array(
-                        'class' => Priorite::class,
-                        'required' => true,
-                        'query_builder' => fn(PrioriteRepository $er) => $er->getForList(),
-                        'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
-                    )
-                );
-        } else {
-
-
-            $builder->add(
+            )->add(
                 'priorite',
                 EntityType::class,
                 array(
                     'class' => Priorite::class,
                     'required' => true,
-                    'multiple' => false,
-                    'query_builder' => fn(PrioriteRepository $er) => $er->getForListDefault(),
+                    'choices' => $priorities,
                     'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
                 )
             )
-                ->add(
-                    'categorie',
-                    EntityType::class,
-                    array(
-                        'class' => Categorie::class,
-                        'required' => true,
-                        'multiple' => false,
-                        'query_builder' => fn(CategorieRepository $er) => $er->getForListDefault(),
-                        'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
-                    )
-                );
-        }
-        $this->addEtat($builder, $admin, $editeur);
-    }
+            ->add(
+                'categorie',
+                EntityType::class,
+                array(
+                    'class' => Categorie::class,
+                    'required' => true,
+                    'multiple' => false,
+                    'choices' => $categories,
+                    'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
+                )
+            )
+            ->add(
+                'etat',
+                EntityType::class,
+                array(
+                    'class' => Etat::class,
+                    'required' => true,
+                    'multiple' => false,
+                    'choices' => $etats,
+                    'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
 
-    private function addEtat(FormBuilderInterface $builder, bool $admin, bool $editeur): void
-    {
-        if ($admin || $editeur) {
-            $builder
-                ->add(
-                    'etat',
-                    EntityType::class,
-                    array(
-                        'class' => Etat::class,
-                        'required' => true,
-                        'multiple' => false,
-                        'query_builder' => fn(EtatRepository $er) => $er->findAllForList(),
-                        'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
-
-                    )
-                );
-        } else {
-            $builder
-                ->add(
-                    'etat',
-                    EntityType::class,
-                    array(
-                        'class' => Etat::class,
-                        'required' => true,
-                        'multiple' => false,
-                        'query_builder' => fn(EtatRepository $er) => $er->onlyNewForList(),
-                        'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
-
-                    )
-                );
-        }
+                )
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver): void
