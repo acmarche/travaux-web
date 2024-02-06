@@ -2,6 +2,7 @@
 
 namespace AcMarche\Travaux\Repository;
 
+use AcMarche\Travaux\Doctrine\OrmCrudTrait;
 use AcMarche\Travaux\Entity\Document;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -14,6 +15,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class DocumentRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Document::class);

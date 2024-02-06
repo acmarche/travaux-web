@@ -3,6 +3,7 @@
 namespace AcMarche\Stock\Repository;
 
 use AcMarche\Stock\Entity\Produit;
+use AcMarche\Travaux\Doctrine\OrmCrudTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,6 +15,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ProduitRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Produit::class);
@@ -27,11 +30,6 @@ class ProduitRepository extends ServiceEntityRepository
             ->orderBy('produit.nom', 'ASC')
             ->getQuery()
             ->getResult();
-    }
-
-    public function flush(): void
-    {
-        $this->_em->flush();
     }
 
     /**

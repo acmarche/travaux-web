@@ -44,7 +44,7 @@ class LoginApiController extends AbstractController
             if ($this->userPasswordEncoder->isPasswordValid($user, $password)) {
 
                 $user = $this->serializer->serializeUser($user);
-                $this->userRepository->save();
+                $this->userRepository->flush();
 
                 return new JsonResponse($user);
             }

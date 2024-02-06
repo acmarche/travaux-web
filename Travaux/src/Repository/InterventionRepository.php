@@ -2,6 +2,7 @@
 
 namespace AcMarche\Travaux\Repository;
 
+use AcMarche\Travaux\Doctrine\OrmCrudTrait;
 use AcMarche\Travaux\Entity\Intervention;
 use AcMarche\Travaux\Entity\Security\Group;
 use AcMarche\Travaux\Entity\Security\User;

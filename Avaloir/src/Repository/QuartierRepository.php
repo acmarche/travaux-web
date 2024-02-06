@@ -3,7 +3,7 @@
 namespace AcMarche\Avaloir\Repository;
 
 use AcMarche\Avaloir\Entity\Quartier;
-use AcMarche\Travaux\Repository\OrmCrudTrait;
+use AcMarche\Travaux\Doctrine\OrmCrudTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;

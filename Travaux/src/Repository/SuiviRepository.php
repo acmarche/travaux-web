@@ -2,6 +2,7 @@
 
 namespace AcMarche\Travaux\Repository;
 
+use AcMarche\Travaux\Doctrine\OrmCrudTrait;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\NonUniqueResultException;
 use AcMarche\Travaux\Entity\Intervention;
@@ -16,6 +17,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class SuiviRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Suivi::class);

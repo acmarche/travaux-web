@@ -2,6 +2,7 @@
 
 namespace AcMarche\Travaux\Repository;
 
+use AcMarche\Travaux\Doctrine\OrmCrudTrait;
 use AcMarche\Travaux\Entity\CategoryPlanning;
 use AcMarche\Travaux\Entity\InterventionPlanning;
 use AcMarche\Travaux\Planning\DateProvider;

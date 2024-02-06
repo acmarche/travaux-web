@@ -2,7 +2,7 @@
 
 namespace AcMarche\Avaloir\Repository;
 
-use AcMarche\Travaux\Repository\OrmCrudTrait;
+use AcMarche\Travaux\Doctrine\OrmCrudTrait;
 use Doctrine\ORM\QueryBuilder;
 use AcMarche\Avaloir\Entity\Quartier;
 use AcMarche\Avaloir\Entity\Rue;

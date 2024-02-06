@@ -87,7 +87,7 @@ class UtilisateurController extends AbstractController
 
         $editForm->handleRequest($request);
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->userRepository->save();
+            $this->userRepository->flush();
             $this->addFlash("success", "L'utilisateur a bien été modifié");
 
             return $this->redirectToRoute('actravaux_utilisateur');
