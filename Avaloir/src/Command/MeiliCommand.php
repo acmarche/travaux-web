@@ -36,6 +36,7 @@ class MeiliCommand extends Command
         $this->addOption('update', "update", InputOption::VALUE_NONE, 'Update data');
         $this->addArgument('latitude', InputArgument::OPTIONAL);
         $this->addArgument('longitude', InputArgument::OPTIONAL);
+        $this->addArgument('distance', InputArgument::OPTIONAL);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -43,6 +44,7 @@ class MeiliCommand extends Command
         $this->io = new SymfonyStyle($input, $output);
         $latitude = $input->getArgument('latitude');
         $longitude = $input->getArgument('longitude');
+        $disance = (int)$input->getArgument('longitude');
 
         $key = (bool)$input->getOption('key');
         $tasks = (bool)$input->getOption('tasks');
@@ -74,7 +76,7 @@ class MeiliCommand extends Command
 
         if ($latitude && $longitude) {
             $this->io->writeln('search... lat: '.(float)$latitude.' lng: '.(float)$longitude);
-            $result = $this->meilisearch->searchGeo((float)$latitude, (float)$longitude, 250);
+            $result = $this->meilisearch->searchGeo((float)$latitude, (float)$longitude, $disance);
             dump($result);
 
             return Command::SUCCESS;
