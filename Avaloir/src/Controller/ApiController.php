@@ -288,10 +288,25 @@ class ApiController extends AbstractController
     #[Route(path: '/search', format: 'json')]
     public function search(Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $this->mailerAvaloir->sendError('search avaloir', ['ok']);
+        try {
+            $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            return new JsonResponse(
+                [
+                    'error' => 1,
+                    'message' => 'idi '.$e->getMessage().$request->getContent(),
+                    'avaloirs' => [],
+                ]
+            );
+        }
+
         $latitude = $data['latitude'];
         $longitude = $data['longitude'];
         $distance = (string)$data['distance'];
+        $t = ['distance' => $distance, 'latitude' => $latitude, 'longitude' => $longitude];
+        $this->mailerAvaloir->sendError('search avaloir', $t);
+
         if (!$latitude || !$longitude || !$distance) {
             return new JsonResponse(
                 [
@@ -301,7 +316,7 @@ class ApiController extends AbstractController
                 ]
             );
         }
-        $result = $this->meilisearch->searchGeo( $latitude, $longitude,$distance);
+        $result = $this->meilisearch->searchGeo($latitude, $longitude, $distance);
         $hits = $result->getHits();
         $total = $result->count();
         $avaloirs = [];
@@ -318,7 +333,7 @@ class ApiController extends AbstractController
         return new JsonResponse(
             [
                 'error' => 0,
-                'message' => 'distance: '.$distance.' latitude: '.$latitude.' longitude: '.$longitude.'ok count '.$total['value'],
+                'message' => 'distance: '.$distance.' latitude: '.$latitude.' longitude: '.$longitude.'ok count '.$total,
                 'avaloirs' => $avaloirs,
             ]
         );
