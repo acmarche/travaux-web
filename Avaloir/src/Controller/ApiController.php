@@ -303,7 +303,7 @@ class ApiController extends AbstractController
 
         $latitude = $data['latitude'];
         $longitude = $data['longitude'];
-        $distance = (string)$data['distance'];
+        $distance = (int)$data['distance'];
         $t = ['distance' => $distance, 'latitude' => $latitude, 'longitude' => $longitude];
         $this->mailerAvaloir->sendError('search avaloir', $t);
 
@@ -321,7 +321,7 @@ class ApiController extends AbstractController
         $total = $result->count();
         $avaloirs = [];
         $t = ['distance' => $distance, 'latitude' => $latitude, 'longitude' => $longitude];
-        //   $this->mailerAvaloir->sendError('search avaloir', $t);
+        $this->mailerAvaloir->sendError('search avaloir', $t);
 
         foreach ($hits as $post) {
             $id = $post['id'];
