@@ -65,10 +65,6 @@ class SerializeApi
         $std->idReferent = $avaloir->getId();
         $std->latitude = $avaloir->getLatitude();
         $std->longitude = $avaloir->getLongitude();
-        $std->cosLatitude = $avaloir->cos_latitude;
-        $std->cosLongitude = $avaloir->cos_longitude;
-        $std->sinLatitude = $avaloir->sin_latitude;
-        $std->sinLongitude = $avaloir->sin_longitude;
         $std->rue = $avaloir->getRue();
         $std->localite = $avaloir->getLocalite();
         $std->description = $avaloir->getDescription();
@@ -193,8 +189,8 @@ class SerializeApi
     {
         $imageUrl = null;
         if ($avaloir->getImageName()) {
-            $url = $this->root.'/media/cache/avaloir_smartphone/avaloirs/'.$avaloir->getId(
-                ).'/aval-'.$avaloir->getId().'.jpg';
+            $url = $this->root.'/media/cache/avaloir_smartphone/avaloirs/'.$avaloir->getId().'/aval-'.$avaloir->getId(
+                ).'.jpg';
             if (is_readable($url)) {
                 return $this->urlBase.'/media/cache/avaloir_smartphone/avaloirs/'.$avaloir->getId(
                     ).'/aval-'.$avaloir->getId().'.jpg';

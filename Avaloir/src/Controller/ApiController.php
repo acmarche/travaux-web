@@ -5,7 +5,6 @@ namespace AcMarche\Avaloir\Controller;
 use AcMarche\Avaloir\Entity\Avaloir;
 use AcMarche\Avaloir\Entity\Commentaire;
 use AcMarche\Avaloir\Entity\DateNettoyage;
-use AcMarche\Avaloir\Location\LocationMath;
 use AcMarche\Avaloir\Location\LocationUpdater;
 use AcMarche\Avaloir\MailerAvaloir;
 use AcMarche\Avaloir\Repository\AvaloirRepository;
@@ -38,7 +37,6 @@ class ApiController extends AbstractController
         private MailerAvaloir $mailerAvaloir,
         private LocationUpdater $locationUpdater,
         private CacheInterface $cache,
-        private LocationMath $locationMath,
     ) {
     }
 
@@ -98,7 +96,6 @@ class ApiController extends AbstractController
                 $avaloir->setCreatedAt($dateTime);
                 $avaloir->setUpdatedAt($dateTime);
             }
-            $this->locationMath->calculate($avaloir);
             $this->avaloirRepository->persist($avaloir);
             $this->avaloirRepository->flush();
         } catch (Exception $exception) {
@@ -127,10 +124,10 @@ class ApiController extends AbstractController
             return new JsonResponse($result);
         }
         try {
-            $result = $this->meiliServer->addData($avaloir);
+            $this->meiliServer->addData($avaloir);
             $data = [
                 'error' => 0,
-                'elastic' => $result,
+                'elastic' => '',
                 'message' => 'ok',
                 'avaloir' => $this->serializeApi->serializeAvaloir($avaloir),
             ];
