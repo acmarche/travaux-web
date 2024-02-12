@@ -316,9 +316,24 @@ class ApiController extends AbstractController
                 ]
             );
         }
-        $result = $this->meilisearch->searchGeo($latitude, $longitude, $distance);
-        $hits = $result->getHits();
-        $total = $result->count();
+
+        try {
+            $result = $this->meilisearch->searchGeo($latitude, $longitude, $distance);
+            $hits = $result->getHits();
+            $total = $result->count();
+        } catch (Exception $exception) {
+
+            $this->mailerAvaloir->sendError('search avaloir', [$exception->getMessage()]);
+
+            return new JsonResponse(
+                [
+                    'error' => 1,
+                    'message' => $exception->getMessage(),
+                    'avaloirs' => [],
+                ]
+            );
+
+        }
         $avaloirs = [];
         $t = ['distance' => $distance, 'latitude' => $latitude, 'longitude' => $longitude];
         $this->mailerAvaloir->sendError('search avaloir', $t);
