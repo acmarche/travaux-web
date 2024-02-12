@@ -75,7 +75,7 @@ class MeiliCommand extends Command
         }
 
         if ($latitude && $longitude) {
-            $this->io->writeln('search... lat: '.(float)$latitude.' lng: '.(float)$longitude);
+            $this->io->writeln('search... lat: '.(float)$latitude.' lng: '.(float)$longitude.' distance '.$disance);
             $result = $this->meilisearch->searchGeo((float)$latitude, (float)$longitude, $disance);
             dump($result);
 
