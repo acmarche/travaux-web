@@ -44,7 +44,7 @@ class MeiliCommand extends Command
         $this->io = new SymfonyStyle($input, $output);
         $latitude = $input->getArgument('latitude');
         $longitude = $input->getArgument('longitude');
-        $disance = (int)$input->getArgument('longitude');
+        $disance = (int)$input->getArgument('distance');
 
         $key = (bool)$input->getOption('key');
         $tasks = (bool)$input->getOption('tasks');
