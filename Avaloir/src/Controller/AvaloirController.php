@@ -11,6 +11,7 @@ use AcMarche\Avaloir\Form\LocalisationType;
 use AcMarche\Avaloir\Form\Search\SearchAvaloirType;
 use AcMarche\Avaloir\Repository\AvaloirRepository;
 use AcMarche\Avaloir\Repository\RueRepository;
+use AcMarche\Travaux\Search\MeiliServer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -23,8 +24,11 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route(path: '/avaloir')]
 class AvaloirController extends AbstractController
 {
-    public function __construct(private AvaloirRepository $avaloirRepository, private RueRepository $rueRepository)
-    {
+    public function __construct(
+        private readonly  AvaloirRepository $avaloirRepository,
+        private readonly  RueRepository $rueRepository,
+        private readonly MeiliServer $meiliServer
+    ) {
     }
 
     #[Route(path: '/', name: 'avaloir', methods: ['GET'])]
@@ -173,11 +177,18 @@ class AvaloirController extends AbstractController
     public function delete(Request $request, Avaloir $avaloir): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$avaloir->getId(), $request->request->get('_token'))) {
+            $id = $avaloir->getId();
             $this->avaloirRepository->remove($avaloir);
             $last = $this->avaloirRepository->getLastUpdatedAvaloir();
             $last->setUpdatedAt(new \DateTime());//for api cache
             $this->avaloirRepository->flush();
             $this->addFlash("success", "L'avaloir a bien été supprimé");
+
+            try {
+                $this->meiliServer->removeAvaloir($id);
+            } catch (\Exception $e) {
+
+            }
         }
 
         return $this->redirectToRoute('avaloir');

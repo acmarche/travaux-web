@@ -94,6 +94,13 @@ class MeiliServer
         $index->addDocuments($documents, $this->primaryKey);
     }
 
+    public function removeAvaloir(int $id): void
+    {
+        $this->init();
+        $index = $this->client->index($this->indexName);
+        $index->deleteDocument($id);
+    }
+
     private function prepareAvaloir(Avaloir $avaloir): array
     {
         return [
