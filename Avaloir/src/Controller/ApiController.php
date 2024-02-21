@@ -80,7 +80,7 @@ class ApiController extends AbstractController
     public function insert(Request $request): JsonResponse
     {
         $coordinatesJson = $request->request->get('coordinates');
-        $this->logger->log(LogLevel::INFO, 'coord '.$coordinatesJson);
+        $this->logger->log(LogLevel::ERROR, 'coord '.$coordinatesJson);
         try {
             $data = json_decode($coordinatesJson, true, 512, JSON_THROW_ON_ERROR);
             $avaloir = new Avaloir();
@@ -92,7 +92,7 @@ class ApiController extends AbstractController
                 try {
                     $dateTime = DateTime::createFromFormat("Y-m-d H:m", $date);
                 } catch (Exception $exception) {
-                    $this->logger->log(LogLevel::INFO, 'error '.$exception->getMessage());
+                    $this->logger->log(LogLevel::ERROR, 'error '.$exception->getMessage());
                 }
                 if (!$dateTime) {
                     $dateTime = new DateTime();
@@ -109,7 +109,7 @@ class ApiController extends AbstractController
                 'avaloir' => $exception->getMessage(),
             ];
 
-            $this->logger->log(LogLevel::INFO, 'error '.$exception->getMessage());
+            $this->logger->log(LogLevel::ERROR, 'error '.$exception->getMessage());
             $this->mailerAvaloir->sendError('Avaloir non insérer dans la base de données', $data);
 
             return new JsonResponse($data);
@@ -126,7 +126,7 @@ class ApiController extends AbstractController
                 'message' => 'Error add date nettoyage',
                 'avaloir' => $exception->getMessage(),
             ];
-            $this->logger->log(LogLevel::INFO, 'error '.$exception->getMessage());
+            $this->logger->log(LogLevel::ERROR, 'error '.$exception->getMessage());
             $this->mailerAvaloir->sendError('Error add date nettoyage', $data);
         }
 
@@ -155,7 +155,7 @@ class ApiController extends AbstractController
                 'avaloir' => $this->serializeApi->serializeAvaloir($avaloir),
             ];
 
-            $this->logger->log(LogLevel::INFO, 'error '.$exception->getMessage());
+            $this->logger->log(LogLevel::ERROR, 'error '.$exception->getMessage());
 
             return new JsonResponse($data);
         }
