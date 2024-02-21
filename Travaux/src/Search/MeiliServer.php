@@ -99,6 +99,7 @@ class MeiliServer
         return [
             'id' => $avaloir->getId(),
             'localite' => $avaloir->getLocalite(),
+            'rue' => $avaloir->getRue(),
             '_geo' => ['lat' => $avaloir->latitude, 'lng' => $avaloir->longitude],
             'location' => ['lat' => $avaloir->getLatitude(), 'lon' => $avaloir->getLongitude()],
             'description' => $avaloir->getDescription(),
