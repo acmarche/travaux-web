@@ -22,7 +22,7 @@
                                     <h5 class="card-title">
                                         <a title="Consulter l'avaloir"
                                            href="{{ path('avaloir_show', { 'id': avaloir.id }) }}">
-                                            {{ avaloir.rue }} {{ avaloir.numero }} <br/> {{ avaloir.localite }}
+                                            {{ avaloir.rue ? 'Rue non déterminée' }} {{ avaloir.numero }} <br/> {{ avaloir.localite }}
                                         </a>
                                     </h5>
 
