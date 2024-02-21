@@ -4,7 +4,6 @@
 namespace AcMarche\Avaloir\Location;
 
 use AcMarche\Avaloir\Entity\Avaloir;
-use AcMarche\Avaloir\MailerAvaloir;
 use AcMarche\Avaloir\Repository\AvaloirRepository;
 use AcMarche\Avaloir\Repository\RueRepository;
 use Exception;
@@ -15,40 +14,36 @@ class LocationUpdater
         private AvaloirRepository $avaloirRepository,
         private RueRepository $rueRepository,
         private LocationReverseInterface $locationReverse,
-        private MailerAvaloir $mailerAvaloir
     ) {
     }
 
+    /**
+     * @param Avaloir $avaloir
+     * @return void
+     * @throws Exception
+     */
     public function updateRueAndLocalite(Avaloir $avaloir): void
     {
-        try {
-            $result = $this->locationReverse->reverse($avaloir->getLatitude(), $avaloir->getLongitude());
-            if ($this->isResultOk($result)) {
-                $road = $this->locationReverse->getRoad();
-                if ($road) {
-                    if ($number = $this->locationReverse->getHouseNumber()) {
-                        $road = $road.' '.$number;
-                    }
-                    $avaloir->setRue($road);
-                    $rue = $this->rueRepository->findOneByRue($road);
-                    if ($rue !== null) {
-                        $avaloir->setLocalite($rue->getVillage());
-                    } else {
-                        $this->mailerAvaloir->sendError(
-                            'rue non trouvee dans db sql',
-                            ['message' => 'dans db sql', 'rueName' => $road]
-                        );
-                        $avaloir->setLocalite($this->locationReverse->getLocality());
-                    }
-                    $this->avaloirRepository->flush();
-                } else {
-                    $this->mailerAvaloir->sendError('road non trouve dans api. Avaloir id '.$avaloir->getId(), $result);
+        $result = $this->locationReverse->reverse($avaloir->getLatitude(), $avaloir->getLongitude());
+        if ($this->isResultOk($result)) {
+            $road = $this->locationReverse->getRoad();
+            if ($road) {
+                if ($number = $this->locationReverse->getHouseNumber()) {
+                    $road = $road.' '.$number;
                 }
+                $avaloir->setRue($road);
+                $rue = $this->rueRepository->findOneByRue($road);
+                if ($rue !== null) {
+                    $avaloir->setLocalite($rue->getVillage());
+                } else {
+                    $avaloir->setLocalite($this->locationReverse->getLocality());
+                }
+                $this->avaloirRepository->flush();
             } else {
-                $this->mailerAvaloir->sendError('result pas OK', $result);
+                throw new Exception('road non trouve dans api. Avaloir id '.$avaloir->getId());
             }
-        } catch (Exception $e) {
-            $this->mailerAvaloir->sendError($e->getMessage(), [$result]);
+        } else {
+            throw new Exception('result pas OK');
         }
     }
 
