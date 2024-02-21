@@ -46,9 +46,9 @@ class ApiController extends AbstractController
         $last = $this->avaloirRepository->getLastUpdatedAvaloir();
 
         if ($last) {
-            $date = $last->getUpdatedAt()->format('Y-m-d H');
+            $date = $last->getUpdatedAt()->format('Y-m-d-H');
         }
-dd($date);
+
         return $this->cache->get('allAvaloirs-'.$date, function () {
             $avaloirs = $this->serializeApi->serializeAvaloirs($this->avaloirRepository->getAll());
 
