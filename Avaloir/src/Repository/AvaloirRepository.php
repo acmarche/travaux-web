@@ -38,7 +38,7 @@ class AvaloirRepository extends ServiceEntityRepository
     public function findAllNotFinished(): array
     {
         return $this->createQueryBuilder('avaloir')
-            ->andWhere('avaloir.avaloir.finished = :finish')
+            ->andWhere('avaloir.finished = :finish')
             ->setParameter('finish', false)
             ->addOrderBy('avaloir.createdAt', 'DESC')
             ->getQuery()->getResult();
