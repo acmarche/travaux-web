@@ -61,6 +61,10 @@ class FinishCommand extends Command
             } catch (Exception $e) {
                 $io->error($e->getMessage());
             }
+
+            $last = $this->avaloirRepository->getLastUpdatedAvaloir();
+            $last->setUpdatedAt(new \DateTime());//for api cache
+            $this->avaloirRepository->flush();
         }
 
         return Command::SUCCESS;
