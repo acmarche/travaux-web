@@ -22,7 +22,7 @@
                                     <h5 class="card-title">
                                         <a title="Consulter l'avaloir"
                                            href="{{ path('avaloir_show', { 'id': avaloir.id }) }}">
-                                            {% if avaloir.rue %}
+                                            {% if avaloir.rue != null %}
                                                 {{ avaloir.rue }}
                                             {% else %}
                                                 Rue non déterminée
