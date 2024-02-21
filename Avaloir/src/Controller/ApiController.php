@@ -15,6 +15,8 @@ use AcMarche\Travaux\Search\MeiliServer;
 use AcMarche\Travaux\Search\SearchMeili;
 use DateTime;
 use Exception;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -37,6 +39,7 @@ class ApiController extends AbstractController
         private readonly MailerAvaloir $mailerAvaloir,
         private readonly LocationUpdater $locationUpdater,
         private readonly CacheInterface $cache,
+        private readonly LoggerInterface $logger
     ) {
     }
 
@@ -77,6 +80,7 @@ class ApiController extends AbstractController
     public function insert(Request $request): JsonResponse
     {
         $coordinatesJson = $request->request->get('coordinates');
+        $this->logger->log(LogLevel::INFO, 'coord '.$coordinatesJson);
         try {
             $data = json_decode($coordinatesJson, true, 512, JSON_THROW_ON_ERROR);
             $avaloir = new Avaloir();
@@ -88,7 +92,7 @@ class ApiController extends AbstractController
                 try {
                     $dateTime = DateTime::createFromFormat("Y-m-d H:m", $date);
                 } catch (Exception $exception) {
-
+                    $this->logger->log(LogLevel::INFO, 'error '.$exception->getMessage());
                 }
                 if (!$dateTime) {
                     $dateTime = new DateTime();
@@ -105,6 +109,7 @@ class ApiController extends AbstractController
                 'avaloir' => $exception->getMessage(),
             ];
 
+            $this->logger->log(LogLevel::INFO, 'error '.$exception->getMessage());
             $this->mailerAvaloir->sendError('Avaloir non insérer dans la base de données', $data);
 
             return new JsonResponse($data);
@@ -121,6 +126,7 @@ class ApiController extends AbstractController
                 'message' => 'Error add date nettoyage',
                 'avaloir' => $exception->getMessage(),
             ];
+            $this->logger->log(LogLevel::INFO, 'error '.$exception->getMessage());
             $this->mailerAvaloir->sendError('Error add date nettoyage', $data);
         }
 
@@ -148,6 +154,8 @@ class ApiController extends AbstractController
                 'message' => $e->getMessage(),
                 'avaloir' => $this->serializeApi->serializeAvaloir($avaloir),
             ];
+
+            $this->logger->log(LogLevel::INFO, 'error '.$exception->getMessage());
 
             return new JsonResponse($data);
         }
