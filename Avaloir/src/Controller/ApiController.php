@@ -268,6 +268,7 @@ class ApiController extends AbstractController
     #[Route(path: '/search', format: 'json')]
     public function search(Request $request): JsonResponse
     {
+        sleep(2000);
         try {
             $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
