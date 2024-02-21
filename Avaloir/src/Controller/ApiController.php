@@ -5,13 +5,11 @@ namespace AcMarche\Avaloir\Controller;
 use AcMarche\Avaloir\Entity\Avaloir;
 use AcMarche\Avaloir\Entity\Commentaire;
 use AcMarche\Avaloir\Entity\DateNettoyage;
-use AcMarche\Avaloir\Location\LocationUpdater;
 use AcMarche\Avaloir\MailerAvaloir;
 use AcMarche\Avaloir\Repository\AvaloirRepository;
 use AcMarche\Avaloir\Repository\CommentaireRepository;
 use AcMarche\Avaloir\Repository\DateNettoyageRepository;
 use AcMarche\Stock\Service\SerializeApi;
-use AcMarche\Travaux\Search\MeiliServer;
 use AcMarche\Travaux\Search\SearchMeili;
 use DateTime;
 use Exception;
@@ -35,9 +33,7 @@ class ApiController extends AbstractController
         private readonly CommentaireRepository $commentaireRepository,
         private readonly SerializeApi $serializeApi,
         private readonly SearchMeili $meilisearch,
-        private readonly MeiliServer $meiliServer,
         private readonly MailerAvaloir $mailerAvaloir,
-        private readonly LocationUpdater $locationUpdater,
         private readonly CacheInterface $cache,
         private readonly LoggerInterface $logger
     ) {
@@ -101,6 +97,7 @@ class ApiController extends AbstractController
             }
             $this->avaloirRepository->persist($avaloir);
             $this->avaloirRepository->flush();
+
         } catch (Exception $exception) {
             $data = [
                 'error' => 1,
@@ -113,51 +110,21 @@ class ApiController extends AbstractController
 
             return new JsonResponse($data);
         }
-        try {
-            $dateNettoyage = new DateNettoyage();
-            $dateNettoyage->setAvaloir($avaloir);
-            $dateNettoyage->setJour(new \DateTime());
-            $this->dateNettoyageRepository->persist($dateNettoyage);
-            $this->dateNettoyageRepository->flush();
-        } catch (Exception $exception) {
-            $data = [
-                'error' => 1,
-                'message' => 'Error add date nettoyage',
-                'avaloir' => $exception->getMessage(),
-            ];
-            $this->logger->log(LogLevel::ERROR, 'error '.$exception->getMessage());
-            $this->mailerAvaloir->sendError('Error add date nettoyage', $data);
-        }
-
-        $this->locationUpdater->updateRueAndLocalite($avaloir);
-
         $result = $this->uploadImage($avaloir, $request);
         if (isset($result['error']) && $result['error'] > 0) {
+            $this->logger->log(LogLevel::ERROR, 'error upload image '.$result['error']);
             $this->mailerAvaloir->sendError('image upload error', $result);
 
             return new JsonResponse($result);
         }
-        try {
-            $this->meiliServer->addData($avaloir);
-            $data = [
-                'error' => 0,
-                'elastic' => '',
-                'message' => 'ok',
-                'avaloir' => $this->serializeApi->serializeAvaloir($avaloir),
-            ];
+        $data = [
+            'error' => 0,
+            'elastic' => '',
+            'message' => 'ok',
+            'avaloir' => $this->serializeApi->serializeAvaloir($avaloir),
+        ];
 
-            return new JsonResponse($data);
-        } catch (Exception $e) {
-            $data = [
-                'error' => 1,
-                'message' => $e->getMessage(),
-                'avaloir' => $this->serializeApi->serializeAvaloir($avaloir),
-            ];
-
-            $this->logger->log(LogLevel::ERROR, 'error '.$exception->getMessage());
-
-            return new JsonResponse($data);
-        }
+        return new JsonResponse($data);
     }
 
     #[Route(path: '/update/{id}', format: 'json')]
