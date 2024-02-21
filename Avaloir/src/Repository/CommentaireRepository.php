@@ -4,6 +4,7 @@ namespace AcMarche\Avaloir\Repository;
 
 use AcMarche\Avaloir\Entity\Avaloir;
 use AcMarche\Avaloir\Entity\Commentaire;
+use AcMarche\Travaux\Doctrine\OrmCrudTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -15,19 +16,11 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CommentaireRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Commentaire::class);
-    }
-
-    public function flush(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function persist(Commentaire $avaloir): void
-    {
-        $this->_em->persist($avaloir);
     }
 
     /**

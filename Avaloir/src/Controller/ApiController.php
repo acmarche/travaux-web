@@ -28,15 +28,15 @@ use Symfony\Contracts\Cache\CacheInterface;
 class ApiController extends AbstractController
 {
     public function __construct(
-        private AvaloirRepository $avaloirRepository,
-        private DateNettoyageRepository $dateNettoyageRepository,
-        private CommentaireRepository $commentaireRepository,
-        private SerializeApi $serializeApi,
-        private SearchMeili $meilisearch,
-        private MeiliServer $meiliServer,
-        private MailerAvaloir $mailerAvaloir,
-        private LocationUpdater $locationUpdater,
-        private CacheInterface $cache,
+        private readonly AvaloirRepository $avaloirRepository,
+        private readonly DateNettoyageRepository $dateNettoyageRepository,
+        private readonly CommentaireRepository $commentaireRepository,
+        private readonly SerializeApi $serializeApi,
+        private readonly SearchMeili $meilisearch,
+        private readonly MeiliServer $meiliServer,
+        private readonly MailerAvaloir $mailerAvaloir,
+        private readonly LocationUpdater $locationUpdater,
+        private readonly CacheInterface $cache,
     ) {
     }
 

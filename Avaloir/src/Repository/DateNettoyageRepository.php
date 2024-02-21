@@ -3,6 +3,7 @@
 namespace AcMarche\Avaloir\Repository;
 
 use AcMarche\Avaloir\Entity\DateNettoyage;
+use AcMarche\Travaux\Doctrine\OrmCrudTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,19 +15,11 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class DateNettoyageRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, DateNettoyage::class);
-    }
-
-    public function flush(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function persist(DateNettoyage $avaloir): void
-    {
-        $this->_em->persist($avaloir);
     }
 
     public function findForNew()
