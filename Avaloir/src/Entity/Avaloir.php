@@ -51,6 +51,8 @@ class Avaloir implements TimestampableInterface, Stringable
     private ?File $imageFile = null;
     #[ORM\Column(type: 'string', length: 120, nullable: true)]
     private ?string $imageName = null;
+    #[ORM\Column(nullable: false)]
+    public bool $finished = false;
 
     public function __construct()
     {
