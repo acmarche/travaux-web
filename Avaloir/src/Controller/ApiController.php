@@ -109,14 +109,23 @@ class ApiController extends AbstractController
 
             return new JsonResponse($data);
         }
-
-        $dateNettoyage = new DateNettoyage();
-        $dateNettoyage->setAvaloir($avaloir);
-        $dateNettoyage->setJour(new \DateTime());
-        $this->dateNettoyageRepository->persist($dateNettoyage);
-        $this->dateNettoyageRepository->flush();
+        try {
+            $dateNettoyage = new DateNettoyage();
+            $dateNettoyage->setAvaloir($avaloir);
+            $dateNettoyage->setJour(new \DateTime());
+            $this->dateNettoyageRepository->persist($dateNettoyage);
+            $this->dateNettoyageRepository->flush();
+        } catch (Exception $exception) {
+            $data = [
+                'error' => 1,
+                'message' => 'Error add date nettoyage',
+                'avaloir' => $exception->getMessage(),
+            ];
+            $this->mailerAvaloir->sendError('Error add date nettoyage', $data);
+        }
 
         $this->locationUpdater->updateRueAndLocalite($avaloir);
+
         $result = $this->uploadImage($avaloir, $request);
         if ($result['error'] > 0) {
             $this->mailerAvaloir->sendError('image upload error', $result);
