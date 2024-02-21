@@ -174,6 +174,8 @@ class AvaloirController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$avaloir->getId(), $request->request->get('_token'))) {
             $this->avaloirRepository->remove($avaloir);
+            $last = $this->avaloirRepository->getLastUpdatedAvaloir();
+            $last->setUpdatedAt(new \DateTime());//for api cache
             $this->avaloirRepository->flush();
             $this->addFlash("success", "L'avaloir a bien été supprimé");
         }
