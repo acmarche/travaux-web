@@ -48,7 +48,7 @@ class ApiController extends AbstractController
         if ($last) {
             $date = $last->getUpdatedAt()->format('Y-m-d H');
         }
-
+dd($date);
         return $this->cache->get('allAvaloirs-'.$date, function () {
             $avaloirs = $this->serializeApi->serializeAvaloirs($this->avaloirRepository->getAll());
 
@@ -268,7 +268,6 @@ class ApiController extends AbstractController
     #[Route(path: '/search', format: 'json')]
     public function search(Request $request): JsonResponse
     {
-        $this->mailerAvaloir->sendError('search avaloir', ['ok']);
         try {
             $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
