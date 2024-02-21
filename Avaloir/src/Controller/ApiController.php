@@ -80,7 +80,6 @@ class ApiController extends AbstractController
     public function insert(Request $request): JsonResponse
     {
         $coordinatesJson = $request->request->get('coordinates');
-        $this->logger->log(LogLevel::ERROR, 'coord '.$coordinatesJson);
         try {
             $data = json_decode($coordinatesJson, true, 512, JSON_THROW_ON_ERROR);
             $avaloir = new Avaloir();
@@ -133,7 +132,7 @@ class ApiController extends AbstractController
         $this->locationUpdater->updateRueAndLocalite($avaloir);
 
         $result = $this->uploadImage($avaloir, $request);
-        if ($result['error'] > 0) {
+        if (isset($result['error']) && $result['error'] > 0) {
             $this->mailerAvaloir->sendError('image upload error', $result);
 
             return new JsonResponse($result);
