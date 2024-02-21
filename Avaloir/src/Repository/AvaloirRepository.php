@@ -35,6 +35,19 @@ class AvaloirRepository extends ServiceEntityRepository
     /**
      * @return Avaloir[]
      */
+    public function findAllNotFinished(): array
+    {
+        return $this->createQueryBuilder('avaloir')
+            ->andWhere('avaloir.avaloir.finish = :finish')
+            ->setParameter('finish', false)
+            ->addOrderBy('avaloir.createdAt', 'DESC')
+            ->getQuery()->getResult();
+
+    }
+
+    /**
+     * @return Avaloir[]
+     */
     public function findLast(int $max = 300): array
     {
         return $this->createQueryBuilder('avaloir')
