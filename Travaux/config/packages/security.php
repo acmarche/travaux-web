@@ -8,14 +8,15 @@ use Symfony\Component\Ldap\LdapInterface;
 use Symfony\Config\SecurityConfig;
 
 return static function (SecurityConfig $security) {
-    $security->provider('travaux_user_provider', [
-        'entity' => [
-            'class' => User::class,
-            'property' => 'username',
-        ],
-    ]);
+
+    $security
+        ->provider('travaux_user_provider')
+        ->entity()
+        ->class(User::class)
+        ->property('username');
 
     $authenticators = [TravauxAuthenticator::class];
+
     if (interface_exists(LdapInterface::class)) {
         $authenticators[] = TravauxLdapAuthenticator::class;
         $main['form_login_ldap'] = [
@@ -44,6 +45,6 @@ return static function (SecurityConfig $security) {
         ],
     ];
 
-    $security->firewall('main', $main)
-        ->switchUser();
+    $security
+        ->firewall('main', $main);
 };
