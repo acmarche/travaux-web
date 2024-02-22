@@ -169,9 +169,13 @@ class PlanningController extends AbstractController
         );
     }
 
-    #[Route(path: '/edit/{id}', name: 'planning_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, InterventionPlanning $intervention): Response
-    {
+    #[Route(path: '/edit/{id}/{yearmonth}/{categoryId}', name: 'planning_edit', methods: ['GET', 'POST'])]
+    public function edit(
+        Request $request,
+        InterventionPlanning $intervention,
+        string $yearmonth = null,
+        ?int $categoryId = null
+    ): Response {
         $request->getSession()->set(self::CATEGORY_SELECTED, $intervention->category?->getId());
         TreatmentDates::setDatesCollectionFromDates($intervention);
 
@@ -187,7 +191,10 @@ class PlanningController extends AbstractController
 
             $this->addFlash('success', 'L\'employé a bien été modifié.');
 
-            return $this->redirectToRoute('planning_show', array('id' => $intervention->getId()));
+            return $this->redirectToRoute(
+                'planning_show',
+                array('id' => $intervention->getId(), 'yearmonth' => $yearmonth, 'categoryId' => $categoryId)
+            );
         }
 
         $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);

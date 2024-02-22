@@ -3,7 +3,8 @@
        class="btn btn-primary" role="button"><i
                 class="ti ti-arrow-left"></i> Retour à la liste</a>
 
-    <a href="{{ path('planning_edit', { 'id': intervention.id }) }}" class="btn btn-primary"
+    <a href="{{ path('planning_edit', { 'id': intervention.id,'yearmonth': yearMonth, 'categoryId': categorySelected }) }}"
+       class="btn btn-primary"
        role="button"><i class="ti ti-pencil"></i> Editer</a>
 
     <button type="button" class="btn btn-primary" onclick="print()"
