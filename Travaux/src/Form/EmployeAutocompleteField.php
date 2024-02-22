@@ -8,7 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Validator\Constraints\Count;
 use Symfony\UX\Autocomplete\Form\AsEntityAutocompleteField;
-use Symfony\UX\Autocomplete\Form\ParentEntityAutocompleteType;
+use Symfony\UX\Autocomplete\Form\BaseEntityAutocompleteType;
 
 #[AsEntityAutocompleteField]
 class EmployeAutocompleteField extends AbstractType
@@ -40,6 +40,6 @@ class EmployeAutocompleteField extends AbstractType
 
     public function getParent(): string
     {
-        return ParentEntityAutocompleteType::class;
+        return BaseEntityAutocompleteType::class;
     }
 }
