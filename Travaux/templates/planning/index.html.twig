@@ -46,7 +46,7 @@
                 {% for intervention in interventions %}
                     <tr id="{{ intervention.id }}">
                         <td>
-                            <a href="{{ path('planning_show', { 'id': intervention.id }) }}"
+                            <a href="{{ path('planning_show', {'id': intervention.id, 'yearmonth':yearMonth,'categoryId':categorySelected ?categorySelected.id}) }}"
                                title="Détail de l'intervention">Num {{ intervention.id }}
                             </a>
                         </td>

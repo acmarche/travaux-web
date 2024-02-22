@@ -1,5 +1,6 @@
 <div class="d-print-none">
-    <a href="{{ path('planning_index') }}" class="btn btn-primary" role="button"><i
+    <a href="{{ path('planning_index', {'yearmonth': yearMonth, 'categoryPlanning': categorySelected}) }}"
+       class="btn btn-primary" role="button"><i
                 class="ti ti-arrow-left"></i> Retour à la liste</a>
 
     <a href="{{ path('planning_edit', { 'id': intervention.id }) }}" class="btn btn-primary"

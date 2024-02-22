@@ -90,6 +90,7 @@ class PlanningController extends AbstractController
             'data' => $data,
             'absents' => $absents,
             'categorySelected' => $categoryPlanning,
+            'yearMonth' => $yearmonth,
             'categories' => $this->categoryPlanningRepository->findAllOrdered(),
         ]);
     }
@@ -152,13 +153,18 @@ class PlanningController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}', name: 'planning_show', methods: ['GET'])]
-    public function show(InterventionPlanning $intervention): Response
-    {
+    #[Route(path: '/{id}/{yearmonth}/{categoryId}', name: 'planning_show', methods: ['GET'], requirements: ['id' => '\d+'])]
+    public function show(
+        InterventionPlanning $intervention,
+        string $yearmonth = null,
+        ?int $categoryId = null
+    ): Response {
         return $this->render(
             '@AcMarcheTravaux/planning/show.html.twig',
             [
                 'intervention' => $intervention,
+                'categorySelected' => $categoryId,
+                'yearMonth' => $yearmonth,
             ]
         );
     }
