@@ -15,20 +15,21 @@
 
             {% include '@Travaux/planning/_calendar.html.twig' %}
 
-            <h3 class="text-success mt-4">Interventions du mois {{ dateSelected.monthName }} {{ dateSelected.year }} {{ categorySelected }}</h3>
+            <h3 class="text-success mt-4">Interventions du
+                mois {{ dateSelected.monthName }} {{ dateSelected.year }} {{ categorySelected }}</h3>
             <div class="d-flex gap-3 flex-row align-items-center">
-            <a class="btn btn-sm btn-success m-2"
-               href="{{ path('planning_export_pdf',{'yearmonth':dateSelected.year~'-'~dateSelected.month, 'categoryPlanning':categorySelected ?categorySelected.id}) }}"
-               role="button">
-                <i class="ti ti-file-type-pdf"></i>
-                Exporter en Pdf
-            </a>
-            <a class="btn btn-sm btn-warning m-2"
-               href="{{ path('planning_export_xls',{'yearmonth':dateSelected.year~'-'~dateSelected.month, 'categoryPlanning':categorySelected ?categorySelected.id}) }}"
-               role="button">
-                <i class="ti ti-file-type-csv"></i>
-                Exporter en Xls
-            </a>
+                <a class="btn btn-sm btn-success m-2"
+                   href="{{ path('planning_export_pdf',{'yearmonth':dateSelected.year~'-'~dateSelected.month, 'categoryPlanning':categorySelected ?categorySelected.id}) }}"
+                   role="button">
+                    <i class="ti ti-file-type-pdf"></i>
+                    Exporter en Pdf
+                </a>
+                <a class="btn btn-sm btn-warning m-2"
+                   href="{{ path('planning_export_xls',{'yearmonth':dateSelected.year~'-'~dateSelected.month, 'categoryPlanning':categorySelected ?categorySelected.id}) }}"
+                   role="button">
+                    <i class="ti ti-file-type-csv"></i>
+                    Exporter en Xls
+                </a>
             </div>
             <table class='table table-bordered table-hover'>
                 <thead>
@@ -69,4 +70,13 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block scripts %}
+    <script type="module">
+        import bootstrap from '@popperjs/core'
+
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    </script>
 {% endblock %}

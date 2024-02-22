@@ -1,12 +1,18 @@
-<a href="{{ path('planning_index') }}" class="btn btn-primary" role="button"><i
-            class="ti ti-arrow-left"></i> Retour à la liste</a>
+<div class="d-print-none">
+    <a href="{{ path('planning_index') }}" class="btn btn-primary" role="button"><i
+                class="ti ti-arrow-left"></i> Retour à la liste</a>
 
-<a href="{{ path('planning_edit', { 'id': intervention.id }) }}" class="btn btn-primary"
-   role="button"><i class="ti ti-pencil"></i> Editer</a>
+    <a href="{{ path('planning_edit', { 'id': intervention.id }) }}" class="btn btn-primary"
+       role="button"><i class="ti ti-pencil"></i> Editer</a>
 
-<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
-    <i class="ti ti-trash"></i> Supprimer l'intervention
-</button>
+    <button type="button" class="btn btn-primary" onclick="print()"
+            role="button"><i class="ti ti-printer"></i> Imprimer
+    </button>
 
-<br/>
-<br/>
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+        <i class="ti ti-trash"></i> Supprimer l'intervention
+    </button>
+
+    <br/>
+    <br/>
+</div>

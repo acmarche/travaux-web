@@ -16,8 +16,8 @@
     <a href="{{ path('suivi_new', { 'id': intervention.id }) }}" class="btn btn-primary" role="button"><i
                 class="ti ti-plus"></i> Ajouter un suivi</a>
 
-    <a href="javascript:window.print();" class="btn btn-primary" role="button">
-        <i class="ti ti-printer"></i> Imprimer</a>
+    <button type="button" onclick="print()" class="btn btn-primary">
+        <i class="ti ti-printer"></i> Imprimer</button>
 
     {% if is_granted('ROLE_TRAVAUX_ADMIN') or is_granted('ROLE_TRAVAUX_REDACTEUR') %}
 
@@ -34,9 +34,9 @@
         {% endif %}
     {% endif %}
 
-        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
-            <i class="ti ti-trash"></i> Supprimer l'intervention
-        </button>
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+        <i class="ti ti-trash"></i> Supprimer l'intervention
+    </button>
 
 </div>
 <br/>

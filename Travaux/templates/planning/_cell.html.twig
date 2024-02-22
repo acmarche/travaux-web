@@ -1,15 +1,16 @@
 {% set plans = data[day|date('j')] ?? [] %}
+{% set missing = absents[day|date('j')] ?? [] %}
 {% set classDay = "border border-success" %}
 <div class="border" style="min-height: 300px;">
     {% if day.isSameMonth(dateSelected) %}
         <div class="d-flex flex-row justify-content-end align-items-center gap-2">
-            <span class="badge rounded-pill text-bg-secondary {{ classDay }}" role="button">
+            <span class="badge text-bg-secondary rounded-pill text-bg-secondary {{ classDay }}" role="button">
                 {{ day.day }}
             </span>
             <a href="{{ path('planning_new', {'date': day|date('Y-m-d'),'category':categorySelected ? categorySelected.id}) }}">
-                <i class="ti ti-plus-square" style="height: 2rem;"></i>
+                <i class="ti ti-plus" style="font-size: 1.2rem;"></i>
             </a>
-            <a class="btn btn-sm btn-success"
+            <a class="btn btn-sm"
                href="{{ path('planning_export_pdf_daily',{'date':day|date('Y-m-d'), 'categoryPlanning':categorySelected ?categorySelected.id}) }}"
                title="Exporter la journée en pdf "
                role="button">
@@ -20,6 +21,7 @@
             <div class="shadow p-3 mb-2 bg-body-tertiary rounded border border-success m-2"
                  style="--bs-border-opacity: .5;">
                 <a href="{{ path('planning_show', {'id': plan.id}) }}" style="font-size: 0.7rem;"
+                   data-bs-toggle="tooltip" data-bs-title="Default tooltip"
                    class="d-flex align-items-center gap-1">
                     {% for ouvrier in plan.employes %}
                         {{ ouvrier.nom }}
@@ -31,6 +33,17 @@
                 </a>
             </div>
         {% endfor %}
+        {% if missing|length > 0 %}
+            <hr style="margin: 5px 0 0 0;">
+            <div class="rounded border border-success m-2"
+                 style="--bs-border-opacity: .5;">
+                <h6 style="font-size: 0.9rem;"><strong>Absent(s)</strong></h6>
+                {% for absent in missing %}
+                    <span class="text-warning" title="absent"
+                          style="font-size: 0.8rem;">{{ absent.nom }}</span>
+                {% endfor %}
+            </div>
+        {% endif %}
     {% else %}
         <button type="button" disabled="disabled" class="btn cal-btn {{ classDay }}">{{ day.day }}
             /{{ day.month }}</button>
