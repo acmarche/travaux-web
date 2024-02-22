@@ -19,10 +19,11 @@
         </div>
         {% for plan in plans %}
             <div class="shadow p-3 mb-2 bg-body-tertiary rounded border border-success m-2"
+                 data-controller="popover"
+                 data-action="mouseenter->popover#show mouseleave->popover#hide"
                  style="--bs-border-opacity: .5;">
                 <a href="{{ path('planning_show', {'id': plan.id,'yearmonth': yearMonth, 'categoryId':categorySelected ?categorySelected.id}) }}"
                    style="font-size: 0.7rem;"
-                   data-bs-toggle="tooltip" data-bs-title="Default tooltip"
                    class="d-flex align-items-center gap-1">
                     {% for ouvrier in plan.employes %}
                         {{ ouvrier.nom }}
@@ -32,6 +33,13 @@
                         <br/>
                     {% endfor %}
                 </a>
+                <template data-popover-target="content">
+                    <div data-popover-target="card" style="position:relative;">
+                        <turbo-frame id="planet-card-{{ plan.id }}" src="{{ path('planning_preview', {
+                            'id': plan.id,
+                        }) }}"></turbo-frame>
+                    </div>
+                </template>
             </div>
         {% endfor %}
         {% if missing|length > 0 %}

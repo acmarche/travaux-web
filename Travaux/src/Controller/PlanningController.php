@@ -169,6 +169,19 @@ class PlanningController extends AbstractController
         );
     }
 
+
+    #[Route(path: '/preview/{id}', name: 'planning_preview', methods: ['GET'], requirements: ['id' => '\d+'])]
+    public function preview(
+        InterventionPlanning $intervention,
+    ): Response {
+        return $this->render(
+            '@AcMarcheTravaux/planning/_preview.html.twig',
+            [
+                'intervention' => $intervention,
+            ]
+        );
+    }
+
     #[Route(path: '/edit/{id}/{yearmonth}/{categoryId}', name: 'planning_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
