@@ -169,7 +169,7 @@ class PlanningController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}/edit', name: 'planning_edit', methods: ['GET', 'POST'])]
+    #[Route(path: '/edit/{id}', name: 'planning_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, InterventionPlanning $intervention): Response
     {
         $request->getSession()->set(self::CATEGORY_SELECTED, $intervention->category?->getId());
@@ -190,12 +190,15 @@ class PlanningController extends AbstractController
             return $this->redirectToRoute('planning_show', array('id' => $intervention->getId()));
         }
 
+        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
+
         return $this->render(
             '@AcMarcheTravaux/planning/edit.html.twig',
             array(
                 'intervention' => $intervention,
                 'form' => $form->createView(),
             )
+            , $response
         );
     }
 
