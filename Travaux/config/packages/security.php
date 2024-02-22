@@ -15,16 +15,6 @@ return static function (SecurityConfig $security) {
         ->class(User::class)
         ->property('username');
 
-    $authenticators = [TravauxAuthenticator::class];
-
-    if (interface_exists(LdapInterface::class)) {
-        $authenticators[] = TravauxLdapAuthenticator::class;
-        $main['form_login_ldap'] = [
-            'service' => Ldap::class,
-            'check_path' => 'app_login',
-        ];
-    }
-
     // @see Symfony\Config\Security\FirewallConfig
     $main = [
         'provider' => 'travaux_user_provider',
@@ -33,7 +23,6 @@ return static function (SecurityConfig $security) {
         ],
         'form_login' => [],
         'entry_point' => TravauxAuthenticator::class,
-        'custom_authenticators' => $authenticators,
         'login_throttling' => [
             'max_attempts' => 6, // per minute...
         ],
@@ -45,6 +34,17 @@ return static function (SecurityConfig $security) {
         ],
     ];
 
+    $authenticators = [TravauxAuthenticator::class];
+
+    if (interface_exists(LdapInterface::class)) {
+        $authenticators[] = TravauxLdapAuthenticator::class;
+        $main['form_login_ldap'] = [
+            'service' => Ldap::class,
+            'check_path' => 'app_login',
+        ];
+    }
+
+    $main['custom_authenticators'] = $authenticators;
     $security
         ->firewall('main', $main);
 };
