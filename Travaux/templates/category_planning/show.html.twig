@@ -5,6 +5,18 @@
         <h3 class="card-header">{{ category }}</h3>
         <div class="card-body">
             {% include '@AcMarcheTravaux/category_planning/_actions.html.twig' %}
+
+            <h4 class="text-success">Ouvriers</h4>
+            <table class="table table-bordered">
+                <tr>
+                    <th>Nom</th>
+                </tr>
+                {% for ouvrier in category.ouriers %}
+                    <tr>
+                        <td>{{ ouvrier }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
         </div>
     </div>
     {% include '@AcMarcheTravaux/category_planning/_delete.html.twig' %}

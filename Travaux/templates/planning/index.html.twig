@@ -6,7 +6,8 @@
 
         <div class="card-body">
             {% if is_granted('ROLE_TRAVAUX') %}
-                <a href="{{ path('planning_new') }}" class="btn btn-primary mb-3" role="button"><i
+                <a href="{{ path('planning_new',{'date':date('today')|date('Y-m-d'),'category':categorySelected ? categorySelected.id}) }}"
+                   class="btn btn-primary mb-3" role="button"><i
                             class="ti ti-plus"></i> Ajouter</a>
             {% endif %}
 

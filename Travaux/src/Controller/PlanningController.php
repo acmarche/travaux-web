@@ -97,7 +97,7 @@ class PlanningController extends AbstractController
 
     #[Route(path: '/new/{date}/{category}', name: 'planning_new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_TRAVAUX_ADD')]
-    public function new(Request $request, string $date = null, ?CategoryPlanning $category = null): Response
+    public function new(Request $request, ?string $date = null, ?CategoryPlanning $category = null): Response
     {
         if (!$date) {
             $dateSelected = new \DateTime();
@@ -105,13 +105,14 @@ class PlanningController extends AbstractController
             $dateSelected = \DateTime::createFromFormat('Y-m-d', $date);
         }
 
-        $request->getSession()->set(self::CATEGORY_SELECTED, $category?->getId());
         $intervention = new InterventionPlanning();
         $intervention->category = $category;
         $intervention->datesCollection = new ArrayCollection();
         $intervention->datesCollection->add($dateSelected);
 
-        $form = $this->createForm(PlanningType::class, $intervention)
+        $options = ['dateSelected' => $dateSelected];
+
+        $form = $this->createForm(PlanningType::class, $intervention, $options)
             ->add('saveAndAdd', SubmitType::class, [
                 'label' => 'Sauvegarder puis ajouter une autre',
                 'attr' => ['class' => 'btn-success'],
@@ -238,11 +239,21 @@ class PlanningController extends AbstractController
     public function autoCompleteRequest(Request $request): JsonResponse
     {
         $query = $request->query->get('query');
-        $category = null;
-        if ($request->getSession()->has(self::CATEGORY_SELECTED)) {
-            //   $category = $request->getSession()->get(self::CATEGORY_SELECTED);
+        $options64 = $request->query->get('extra_options');
+        $categoryIdSelected = null;
+        $dateSelected = null;
+
+        if($options64){
+            try {
+                $options = json_decode(base64_decode($options64));
+                $dateSelected = \DateTime::createFromFormat('Y-m-d', $options->dateIntervention);
+                $categoryIdSelected = $options->categoryId;
+            } catch (\Exception $exception) {
+
+            }
         }
-        $employes = $this->employeRepository->searchForAutocomplete($query, $category);
+
+        $employes = $this->employeRepository->searchForAutocomplete($query, $dateSelected, $categoryIdSelected);
         $results = ['results' => []];
         foreach ($employes as $employe) {
             $results['results'][] = ['value' => $employe->getId(), 'text' => $employe->nom.' '.$employe->prenom];

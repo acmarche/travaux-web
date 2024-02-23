@@ -24,6 +24,8 @@ class CategoryPlanning implements Stringable
     #[ORM\OneToMany(targetEntity: InterventionPlanning::class, mappedBy: 'category')]
     public Collection $interventions;
 
+    public array $ouriers = [];
+
     public function __construct()
     {
         $this->interventions = new ArrayCollection();

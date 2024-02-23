@@ -64,7 +64,10 @@ class PlanningType extends AbstractType
                 ],
             ])
             ->add('employes', EmployeAutocompleteField::class, [
-
+                'extra_options' => [
+                    'dateIntervention' => $options['dateSelected']?->format('Y-m-d'),
+                    'categoryId' => $builder->getData()->category?->getId() ?? 0,
+                ],
             ]);
     }
 
@@ -72,6 +75,8 @@ class PlanningType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => InterventionPlanning::class,
+            'dateSelected' => null,
         ));
+        $resolver->setAllowedTypes('dateSelected', 'DateTimeInterface');
     }
 }

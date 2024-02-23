@@ -9,12 +9,14 @@
             <table class="table table-bordered">
                 <tr>
                     <th>Nom</th>
+                    <th>Ouvriers</th>
                 </tr>
                 {% for category in categories %}
                     <tr>
                         <td>
                             <a href="{{ path('category_planning_show', {'id': category.id}) }}">{{ category }}</a>
                         </td>
+                        <td>{{ category.ouriers|length }}</td>
                     </tr>
                 {% endfor %}
             </table>

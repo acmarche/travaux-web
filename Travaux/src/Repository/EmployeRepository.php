@@ -3,6 +3,7 @@
 namespace AcMarche\Travaux\Repository;
 
 use AcMarche\Travaux\Doctrine\OrmCrudTrait;
+use AcMarche\Travaux\Entity\CategoryPlanning;
 use AcMarche\Travaux\Entity\Employe;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -36,6 +37,7 @@ class EmployeRepository extends ServiceEntityRepository
      */
     public function searchForAutocomplete(
         ?string $query,
+        ?\DateTimeInterface $dateSelected = null,
         ?int $categoryPlanning = null
     ): array {
 
@@ -44,6 +46,9 @@ class EmployeRepository extends ServiceEntityRepository
         if ($categoryPlanning) {
             $queryBuilder->andWhere(':category MEMBER OF employe.categories')
                 ->setParameter('category', $categoryPlanning);
+        }
+        if ($dateSelected) {
+            //todo remove absent
         }
         if ($query) {
             $queryBuilder
@@ -57,6 +62,19 @@ class EmployeRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @param CategoryPlanning $categoryPlanning
+     * @return Employe[]
+     */
+    public function findByCategory(CategoryPlanning $categoryPlanning): array
+    {
+        return $this->createQb()
+            ->andWhere(':category MEMBER OF employe.categories')
+            ->setParameter('category', $categoryPlanning)->orderBy('employe.nom')
+            ->getQuery()
+            ->getResult();
+    }
+
     private function createQb(): QueryBuilder
     {
         return $this->createQueryBuilder('employe')
@@ -64,4 +82,5 @@ class EmployeRepository extends ServiceEntityRepository
             ->leftJoin('employe.categories', 'categories', 'WITH')
             ->addSelect('absences', 'categories');
     }
+
 }

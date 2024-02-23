@@ -5,6 +5,7 @@ namespace AcMarche\Travaux\Controller;
 use AcMarche\Travaux\Entity\CategoryPlanning;
 use AcMarche\Travaux\Form\CategoryPlanningType;
 use AcMarche\Travaux\Repository\CategoryPlanningRepository;
+use AcMarche\Travaux\Repository\EmployeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,14 +18,19 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_TRAVAUX_PLANNING')]
 class CategoryPlanningController extends AbstractController
 {
-    public function __construct(private CategoryPlanningRepository $categoryPlanningRepository)
-    {
+    public function __construct(
+        private CategoryPlanningRepository $categoryPlanningRepository,
+        private readonly EmployeRepository $employeRepository
+    ) {
     }
 
     #[Route(path: '/', name: 'category_planning', methods: ['GET'])]
     public function index(): Response
     {
         $category_plannings = $this->categoryPlanningRepository->findAllOrdered();
+        array_map(function (CategoryPlanning $categoryPlanning) {
+            $categoryPlanning->ouriers = $this->employeRepository->findByCategory($categoryPlanning);
+        }, $category_plannings);
 
         return $this->render(
             '@AcMarcheTravaux/category_planning/index.html.twig',
@@ -60,12 +66,14 @@ class CategoryPlanningController extends AbstractController
     }
 
     #[Route(path: '/{id}', name: 'category_planning_show', methods: ['GET'])]
-    public function show(CategoryPlanning $category_planning): Response
+    public function show(CategoryPlanning $categoryPlanning): Response
     {
+        $categoryPlanning->ouriers = $this->employeRepository->findByCategory($categoryPlanning);
+
         return $this->render(
             '@AcMarcheTravaux/category_planning/show.html.twig',
             array(
-                'category' => $category_planning,
+                'category' => $categoryPlanning,
             )
         );
     }
