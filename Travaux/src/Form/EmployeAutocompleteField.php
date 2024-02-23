@@ -19,7 +19,6 @@ class EmployeAutocompleteField extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        //$resolver->addAllowedTypes('category', CategoryPlanning::class);
         $resolver->setDefaults([
             'class' => Employe::class,
             'label' => 'Ouvriers affectés',
