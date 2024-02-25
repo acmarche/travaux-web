@@ -21,7 +21,7 @@
             <div class="shadow p-3 mb-2 bg-body-tertiary rounded border border-success m-2"
                  data-controller="popover"
                  data-action="mouseenter->popover#show mouseleave->popover#hide"
-                 style="--bs-border-opacity: .5;">
+                 style="--bs-border-opacity: .5;position:relative;">
                 <a href="{{ path('planning_show', {'id': plan.id,'yearmonth': yearMonth, 'categoryId':categorySelected ?categorySelected.id}) }}"
                    style="font-size: 0.7rem;"
                    class="d-flex align-items-center gap-1">
@@ -34,7 +34,7 @@
                     {% endfor %}
                 </a>
                 <template data-popover-target="content">
-                    <div data-popover-target="card" style="position:relative;">
+                    <div data-popover-target="card" style="to45p:2rem; z-index:100;background-color: white; position:absolute; left:0;" class="p-3 rounded-2">
                         <turbo-frame id="planet-card-{{ plan.id }}" src="{{ path('planning_preview', {
                             'id': plan.id,
                         }) }}"></turbo-frame>
