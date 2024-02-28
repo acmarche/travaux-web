@@ -10,6 +10,7 @@ use AcMarche\Avaloir\Repository\AvaloirRepository;
 use AcMarche\Avaloir\Repository\CommentaireRepository;
 use AcMarche\Avaloir\Repository\DateNettoyageRepository;
 use AcMarche\Stock\Service\SerializeApi;
+use AcMarche\Travaux\Search\MeiliServer;
 use AcMarche\Travaux\Search\SearchMeili;
 use DateTime;
 use Exception;
@@ -33,6 +34,7 @@ class ApiController extends AbstractController
         private readonly CommentaireRepository $commentaireRepository,
         private readonly SerializeApi $serializeApi,
         private readonly SearchMeili $meilisearch,
+        private readonly MeiliServer $meiliServer,
         private readonly MailerAvaloir $mailerAvaloir,
         private readonly CacheInterface $cache,
         private readonly LoggerInterface $logger
@@ -117,6 +119,14 @@ class ApiController extends AbstractController
 
             return new JsonResponse($result);
         }
+
+        try {
+            $this->meiliServer->addData($avaloir);
+        } catch (Exception $exception) {
+            $this->mailerAvaloir->sendError('update search avaloir', [$exception->getMessage()]);
+        }
+
+
         $data = [
             'error' => 0,
             'elastic' => '',
