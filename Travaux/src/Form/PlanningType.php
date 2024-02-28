@@ -77,6 +77,6 @@ class PlanningType extends AbstractType
             'data_class' => InterventionPlanning::class,
             'dateSelected' => null,
         ));
-        $resolver->setAllowedTypes('dateSelected', 'DateTimeInterface');
+        $resolver->setAllowedTypes('dateSelected', ['null','DateTimeInterface']);
     }
 }
