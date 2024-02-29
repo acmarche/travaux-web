@@ -243,7 +243,7 @@ class PlanningController extends AbstractController
         $categoryIdSelected = null;
         $dateSelected = null;
 
-        if($options64){
+        if ($options64) {
             try {
                 $options = json_decode(base64_decode($options64));
                 $dateSelected = \DateTime::createFromFormat('Y-m-d', $options->dateIntervention);
@@ -251,6 +251,9 @@ class PlanningController extends AbstractController
             } catch (\Exception $exception) {
 
             }
+        }
+        if (!$dateSelected instanceof \DateTimeInterface) {
+            $dateSelected = null;
         }
 
         $employes = $this->employeRepository->searchForAutocomplete($query, $dateSelected, $categoryIdSelected);
