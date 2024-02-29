@@ -294,7 +294,6 @@ class ApiController extends AbstractController
         $longitude = $data['longitude'];
         $distance = (int)$data['distance'];
         $t = ['distance' => $distance, 'latitude' => $latitude, 'longitude' => $longitude];
-        $this->mailerAvaloir->sendError('search avaloir', $t);
 
         if (!$latitude || !$longitude || !$distance) {
             return new JsonResponse(
@@ -324,8 +323,6 @@ class ApiController extends AbstractController
 
         }
         $avaloirs = [];
-        $t = ['distance' => $distance, 'latitude' => $latitude, 'longitude' => $longitude];
-        $this->mailerAvaloir->sendError('search avaloir', $t);
 
         foreach ($hits as $post) {
             $id = $post['id'];
