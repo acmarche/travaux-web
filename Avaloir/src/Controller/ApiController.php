@@ -335,7 +335,7 @@ class ApiController extends AbstractController
 
         }
         $avaloirs = [];
-
+        $this->logger->info('count '.$count.'lat '.$latitude.' lng'.$longitude.' dist '.$distance);
         foreach ($hits as $post) {
             $source = $post->_source;
             $id = $source->id;
@@ -348,7 +348,7 @@ class ApiController extends AbstractController
         return new JsonResponse(
             [
                 'error' => 0,
-                'message' => 'distance: '.$distance.' latitude: '.$latitude.' longitude: '.$longitude.'ok count '.$total,
+                'message' => 'distance: '.$distance.' latitude: '.$latitude.' longitude: '.$longitude.'ok count '.$count,
                 'avaloirs' => $avaloirs,
             ]
         );
