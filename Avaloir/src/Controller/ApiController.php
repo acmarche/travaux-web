@@ -80,9 +80,15 @@ class ApiController extends AbstractController
         $coordinatesJson = $request->request->get('coordinates');
         try {
             $data = json_decode($coordinatesJson, true, 512, JSON_THROW_ON_ERROR);
-            $avaloir = new Avaloir();
-            $avaloir->setLatitude($data['latitude']);
-            $avaloir->setLongitude($data['longitude']);
+            if (!$avaloir = $this->avaloirRepository->findByLatitudeAndLongitude(
+                $data['latitude'],
+                $data['longitude']
+            )) {
+                $avaloir = new Avaloir();
+                $avaloir->setLatitude($data['latitude']);
+                $avaloir->setLongitude($data['longitude']);
+                $this->avaloirRepository->persist($avaloir);
+            }
             if (isset($data['createdAt'])) {
                 $date = $data['createdAt'];
                 $dateTime = false;
@@ -97,7 +103,6 @@ class ApiController extends AbstractController
                 $avaloir->setCreatedAt($dateTime);
                 $avaloir->setUpdatedAt($dateTime);
             }
-            $this->avaloirRepository->persist($avaloir);
             $this->avaloirRepository->flush();
 
         } catch (Exception $exception) {

@@ -203,4 +203,15 @@ class AvaloirRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findByLatitudeAndLongitude(mixed $latitude, mixed $longitude): ?Avaloir
+    {
+        return $this->createQueryBuilder('avaloir')
+            ->andWhere('avaloir.latitude = :latitude')
+            ->setParameter('latitude', $latitude)
+            ->andWhere('avaloir.longitude = :longitude')
+            ->setParameter('longitude', $longitude)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }
