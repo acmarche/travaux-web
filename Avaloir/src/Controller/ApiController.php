@@ -335,7 +335,7 @@ class ApiController extends AbstractController
 
         }
         $avaloirs = [];
-        $this->logger->info('count '.$count.'lat '.$latitude.' lng'.$longitude.' dist '.$distance);
+        $this->logger->error('count '.$count.'lat '.$latitude.' lng'.$longitude.' dist '.$distance);
         foreach ($hits as $post) {
             $source = $post->_source;
             $id = $source->id;
