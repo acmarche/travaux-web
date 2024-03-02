@@ -77,7 +77,7 @@ class MeiliCommand extends Command
         if ($latitude && $longitude) {
             $this->io->writeln('search... lat: '.(float)$latitude.' lng: '.(float)$longitude.' distance '.$disance);
             $result = $this->meilisearch->searchGeo((float)$latitude, (float)$longitude, $disance);
-            dump($result);
+            $this->displayResult($output, $result->getHits());
 
             return Command::SUCCESS;
         }
@@ -108,5 +108,19 @@ class MeiliCommand extends Command
             ->setRows($data);
         $table->render();
     }
+
+    private function displayResult(OutputInterface $output, array $result): void
+    {
+        $data = [];
+        foreach ($result as $hit) {
+            $data[] = ['id' => $hit['id'], 'localite' => $hit['localite'], 'rue' => $hit['rue']];
+        }
+        $table = new Table($output);
+        $table
+            ->setHeaders(['Id', 'Localité', 'Rue'])
+            ->setRows($data);
+        $table->render();
+    }
+
 
 }

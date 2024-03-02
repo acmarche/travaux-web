@@ -53,7 +53,6 @@ class SearchElastic
                 ],
             ],
         ];
-        dump($params);
 
         return $this->client->search($params);
     }
