@@ -92,6 +92,7 @@ class ElasticServer
      */
     public function addDoc(Avaloir $avaloir): Elasticsearch|Promise
     {
+        $this->connect();
         $data = $this->prepareAvaloir($avaloir);
         $params = [
             'index' => $this->indexName,
