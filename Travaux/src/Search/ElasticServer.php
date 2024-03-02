@@ -26,6 +26,14 @@ class ElasticServer
         return $this->client->info();
     }
 
+    public function getMapping(): Elasticsearch|Promise
+    {
+        $this->connect();
+        $params = ['index' => $this->indexName];
+
+        return $this->client->indices()->getMapping($params);
+    }
+
     /**
      * @return Elasticsearch|Promise
      * @throws ServerResponseException|AuthenticationException|ClientResponseException|MissingParameterException
@@ -180,7 +188,7 @@ class ElasticServer
             'rue' => $avaloir->getRue(),
             'location' => [
                 "type" => "Point",
-                "coordinates" => [$avaloir->getLatitude(), $avaloir->getLongitude()],
+                "coordinates" => [$avaloir->getLongitude(), $avaloir->getLatitude()],
             ],
             'description' => $avaloir->getDescription(),
         ];

@@ -57,7 +57,9 @@ class ElasticCommand extends Command
 
         if ($info) {
             try {
-                dump($this->elasticServer->info());
+                //  dump($this->elasticServer->info());
+                $mapping = $this->elasticServer->getMapping();
+                dump($mapping->asObject());
             } catch (ClientResponseException|ServerResponseException $e) {
                 $this->io->error($e->getMessage());
             }
