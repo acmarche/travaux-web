@@ -18,7 +18,7 @@ class AbsenceType extends AbstractType
                 'label' => 'Raison',
                 'placeholder' => '',
                 'required' => true,
-                'choices' => ['Congé' => 'congé', 'Maladie' => 'maladie'],
+                'choices' => ['Congé' => 'congé', 'Maladie' => 'maladie', '4/5' => '4/5'],
             ])
             ->add(
                 'date_begin',
