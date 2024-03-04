@@ -44,8 +44,8 @@ class EmployeRepository extends ServiceEntityRepository
         $queryBuilder = $this->createQb();
 
         if ($categoryPlanning) {
-            $queryBuilder->andWhere(':category MEMBER OF employe.categories')
-                ->setParameter('category', $categoryPlanning);
+         /*   $queryBuilder->andWhere(':category MEMBER OF employe.categories')
+                ->setParameter('category', $categoryPlanning);*/
         }
         if ($dateSelected) {
             //todo remove absent
