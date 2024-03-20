@@ -12,6 +12,7 @@ use AcMarche\Travaux\Repository\InterventionPlanningRepository;
 use AcMarche\Travaux\Repository\InterventionRepository;
 use AcMarche\Travaux\Spreadsheet\SpreadsheetDownloaderTrait;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -166,17 +167,67 @@ class ExportController extends AbstractController
         return $this->downloadXls($spreadsheet, $name);
     }
 
+    #[Route(path: '/planning/byyear/xls/{year}/{categoryPlanning}', name: 'planning_export_year_xls', methods: ['GET'])]
+    public function planningYearXls(
+        int $year,
+        ?CategoryPlanning $categoryPlanning = null
+    ): Response {
+        if (!$categoryPlanning) {
+            $this->addFlash('danger', 'Vous dever d\'abord choisir une équipe pour exporter.');
+
+            return $this->redirectToRoute('planning_index');
+        }
+
+        $spreadsheet = new Spreadsheet();
+        $worksheet = $spreadsheet->getActiveSheet();
+
+        $interventions = $this->interventionPlanningRepository->findByYearAndCategory($year, $categoryPlanning);
+        $ouvriers = PlanningUtils::extractOuvriers($interventions);
+
+        $this->setTitles($worksheet, $year, $ouvriers, $categoryPlanning);
+
+        $ligne = 10;
+        foreach ($interventions as $intervention) {
+            $lettre = 'A';
+            $worksheet
+                ->setCellValue($lettre++.$ligne, (new UnicodeString($intervention->description))->truncate(120, '...'))
+                ->setCellValue($lettre++.$ligne, $intervention->lieu)
+                ->setCellValue($lettre++.$ligne, $intervention->horaire)
+                ->setCellValue($lettre++.$ligne, '');//under title presences
+
+            foreach ($intervention->getEmployes() as $employe) {
+                $index = PlanningUtils::findIndex($employe, $ouvriers);
+                $lettrePosition = Coordinate::stringFromColumnIndex(5 + $index);
+                //$lettre + $index;
+                $worksheet
+                    ->setCellValue($lettrePosition.$ligne, 1);
+                //->setCellValue($lettrePosition.$ligne, $index.' : '.$lettrePosition);
+            }
+            $ligne++;
+        }
+
+        $nameCategory = '';
+        if ($categoryPlanning) {
+            $slugger = new AsciiSlugger();
+            $nameCategory = '-'.$slugger->slug($categoryPlanning->name);
+        }
+        $name = 'intervention-'.$year.'-'.$nameCategory.'.xlsx';
+
+        return $this->downloadXls($spreadsheet, $name);
+    }
+
+
     /**
      * @param Worksheet $worksheet
-     * @param string $yearmonth
+     * @param string|int $yearmonth
      * @param array|Employe[] $ouvriers
      * @param CategoryPlanning $categoryPlanning
      * @return void
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws Exception
      */
     private function setTitles(
         Worksheet $worksheet,
-        string $yearmonth,
+        string|int $yearmonth,
         array $ouvriers,
         CategoryPlanning $categoryPlanning
     ): void {

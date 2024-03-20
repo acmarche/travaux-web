@@ -53,55 +53,13 @@ class InterventionPlanningRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param array<\DateTime> $days
-     * @return array|InterventionPlanning[]
-     */
-    public function findPlanningByDaysAndCategory(array $days, ?CategoryPlanning $categoryPlanning = null): array
-    {
-        $qbl = $this->createQbl();
-        if (count($days) == 0) {
-            return [];
-        }
-
-        if ($categoryPlanning) {
-            $qbl->andWhere('intervention_planning.category = :category')
-                ->setParameter('category', $categoryPlanning);
-        }
-
-        return $qbl
-            ->andWhere('intervention_planning.dates IN (:dates)')
-            ->setParameter('dates', $days)
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
-     * @param int $year
-     * @param int $week
-     * @param CategoryPlanning|null $categoryPlanning
-     * @return array|InterventionPlanning
-     */
-    public function findByWeekAndCategory(int $year, int $week, ?CategoryPlanning $categoryPlanning): array
-    {
-        $date = $this->dateProvider->createDateFromWeek($year, $week);
-        $days = $this->dateProvider->daysOfWeek($date);
-
-        $interventions = [[]];
-        foreach ($days as $date) {
-            $interventions[] = $this->findPlanningByDayAndCategory($date->toDateTime(), $categoryPlanning);
-        }
-
-        return array_merge(...$interventions);
-    }
-
-    /**
      * @param string $yearMonth
      * @param CategoryPlanning|null $categoryPlanning
      * @return InterventionPlanning[]
      */
     public function findByMonthAndCategory(string $yearMonth, ?CategoryPlanning $categoryPlanning): array
     {
-        $date =   $this->dateProvider->createDateFromYearMonth($yearMonth);
+        $date = $this->dateProvider->createDateFromYearMonth($yearMonth);
         $days = $this->dateProvider->daysOfMonth($date);
 
         $interventions = [[]];
@@ -113,19 +71,19 @@ class InterventionPlanningRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param int $year
+     * @param CategoryPlanning|null $categoryPlanning
      * @return InterventionPlanning[]
      */
-    public function findByCategory(?CategoryPlanning $categoryPlanning): array
+    public function findByYearAndCategory(int $year, ?CategoryPlanning $categoryPlanning): array
     {
-        $qbl = $this->createQbl();
-        if ($categoryPlanning) {
-            $qbl->andWhere('intervention_planning.category = :category')
-                ->setParameter('category', $categoryPlanning);
+        $days = $this->dateProvider->allDaysOfYear($year);
+        $interventions = [[]];
+        foreach ($days as $date) {
+            $interventions[] = $this->findPlanningByDayAndCategory($date->toDateTime(), $categoryPlanning);
         }
 
-        return $qbl
-            ->getQuery()
-            ->getResult();
+        return array_merge(...$interventions);
     }
 
     private function createQbl(): QueryBuilder
@@ -135,6 +93,5 @@ class InterventionPlanningRepository extends ServiceEntityRepository
             ->leftJoin('intervention_planning.category', 'category', 'WITH')
             ->addSelect('employes', 'category');
     }
-
 
 }

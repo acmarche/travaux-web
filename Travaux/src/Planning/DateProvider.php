@@ -97,4 +97,13 @@ class DateProvider
     {
         return Carbon::createFromFormat('Y-m-d', $yearMonth.'-01')->toImmutable();
     }
+
+    public function allDaysOfYear(int $year): CarbonPeriod
+    {
+        $date = Carbon::create($year, 1, 1);
+        $endOfYear = Carbon::create($year, 12, 31);
+        $daysOfYear = [];
+
+        return Carbon::parse($year.'-01-01')->daysUntil($year.'-12-31');
+    }
 }

@@ -29,7 +29,13 @@
                    href="{{ path('planning_export_xls',{'yearmonth':dateSelected.year~'-'~dateSelected.month, 'categoryPlanning':categorySelected ?categorySelected.id}) }}"
                    role="button">
                     <i class="ti ti-file-type-csv"></i>
-                    Exporter en Xls
+                    Exporter le mois en Xls
+                </a>
+                <a class="btn btn-sm btn-warning m-2"
+                   href="{{ path('planning_export_year_xls',{'year':dateSelected.year, 'categoryPlanning':categorySelected ?categorySelected.id}) }}"
+                   role="button">
+                    <i class="ti ti-file-type-csv"></i>
+                    Exporter l'année en Xls
                 </a>
             </div>
             <table class='table table-bordered table-hover'>
