@@ -148,7 +148,7 @@ class ExportController extends AbstractController
 
             foreach ($intervention->getEmployes() as $employe) {
                 $index = PlanningUtils::findIndex($employe, $ouvriers);
-                $lettrePosition = Coordinate::stringFromColumnIndex(5 + $index);
+                $lettrePosition = Coordinate::stringFromColumnIndex(6 + $index);
                 //$lettre + $index;
                 $worksheet
                     ->setCellValue($lettrePosition.$ligne, 1);
@@ -189,7 +189,13 @@ class ExportController extends AbstractController
         $ligne = 10;
         foreach ($interventions as $intervention) {
             $lettre = 'A';
+            $dates = '';
+            foreach ($intervention->dates as $date) {
+                $dates .= ','.$date;
+            }
+
             $worksheet
+                ->setCellValue($lettre++.$ligne, $dates)
                 ->setCellValue($lettre++.$ligne, (new UnicodeString($intervention->description))->truncate(120, '...'))
                 ->setCellValue($lettre++.$ligne, $intervention->lieu)
                 ->setCellValue($lettre++.$ligne, $intervention->horaire)
@@ -197,8 +203,7 @@ class ExportController extends AbstractController
 
             foreach ($intervention->getEmployes() as $employe) {
                 $index = PlanningUtils::findIndex($employe, $ouvriers);
-                $lettrePosition = Coordinate::stringFromColumnIndex(5 + $index);
-                //$lettre + $index;
+                $lettrePosition = Coordinate::stringFromColumnIndex(6 + $index);
                 $worksheet
                     ->setCellValue($lettrePosition.$ligne, 1);
                 //->setCellValue($lettrePosition.$ligne, $index.' : '.$lettrePosition);
@@ -232,15 +237,15 @@ class ExportController extends AbstractController
         CategoryPlanning $categoryPlanning
     ): void {
 
-        $worksheet->mergeCells('A2:D2');
-        $worksheet->mergeCells('A3:D3');
-        $worksheet->mergeCells('A4:D4');
-        $worksheet->mergeCells('A5:D5');
-        $lettre = 'E';
+        $worksheet->mergeCells('A2:E2');
+        $worksheet->mergeCells('A3:E3');
+        $worksheet->mergeCells('A4:E4');
+        $worksheet->mergeCells('A5:E5');
+        $lettre = 'F';
 
         foreach ($ouvriers as $key => $ouvrier) {
             $ligne = 2;
-            $worksheet->mergeCells($lettre.$ligne.':'.$lettre.$ligne + 7);
+            $worksheet->mergeCells($lettre.$ligne.':'.$lettre.$ligne + 6);
             $worksheet->setCellValue($lettre.$ligne, $ouvrier->nom.' '.$ouvrier->prenom);
             $worksheet->getStyle($lettre.$ligne)->getAlignment()->setTextRotation(90);
             $lettre++;
@@ -257,6 +262,7 @@ class ExportController extends AbstractController
         $ligne = 6;
 
         $worksheet
+            ->setCellValue($lettre++.$ligne, 'Dates')
             ->setCellValue($lettre++.$ligne, 'Description tâche')
             ->setCellValue($lettre++.$ligne, 'Localisation')
             ->setCellValue($lettre++.$ligne, 'Plage horaire')
