@@ -144,13 +144,15 @@ class PlanningController extends AbstractController
 
         $absents = $this->absenceUtils->findAbsentByDateAndCategory($dateSelected, $category);
 
+        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
+
         return $this->render(
             '@AcMarcheTravaux/planning/new.html.twig',
             array(
                 'form' => $form->createView(),
                 'dateSelected' => $dateSelected,
                 'absents' => $absents,
-            )
+            ),$response
         );
     }
 
