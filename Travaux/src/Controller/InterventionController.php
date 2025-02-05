@@ -3,7 +3,6 @@
 namespace AcMarche\Travaux\Controller;
 
 use AcMarche\Travaux\Entity\Intervention;
-use AcMarche\Travaux\Entity\Suivi;
 use AcMarche\Travaux\Event\InterventionEvent;
 use AcMarche\Travaux\Form\InterventionType;
 use AcMarche\Travaux\Form\Search\SearchInterventionType;
@@ -13,8 +12,6 @@ use AcMarche\Travaux\Repository\SuiviRepository;
 use AcMarche\Travaux\Service\FileHelper;
 use AcMarche\Travaux\Service\InterventionWorkflow;
 use AcMarche\Travaux\Service\TravauxUtils;
-use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Exception\IOException;
@@ -24,6 +21,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/intervention')]
 #[IsGranted('ROLE_TRAVAUX')]
@@ -36,9 +34,8 @@ class InterventionController extends AbstractController
         private EtatRepository $etatRepository,
         private EventDispatcherInterface $eventDispatcher,
         private InterventionRepository $interventionRepository,
-        private SuiviRepository $suiviRepository
-    ) {
-    }
+        private SuiviRepository $suiviRepository,
+    ) {}
 
     #[Route(path: '/', name: 'intervention')]
     #[Route(path: '/ancre/{anchor}/', name: 'intervention_anchor', methods: ['GET'])]
@@ -62,9 +59,9 @@ class InterventionController extends AbstractController
         $search_form = $this->createForm(
             SearchInterventionType::class,
             $data,
-            array(
+            [
                 'method' => 'GET',
-            )
+            ],
         );
         $search_form->handleRequest($request);
         if ($search_form->isSubmitted() && $search_form->isValid()) {
@@ -83,11 +80,11 @@ class InterventionController extends AbstractController
 
         return $this->render(
             '@AcMarcheTravaux/intervention/index.html.twig',
-            array(
+            [
                 'search_form' => $search_form->createView(),
                 'interventions' => $interventions,
                 'anchor' => $anchor,
-            )
+            ],
         );
     }
 
@@ -96,18 +93,21 @@ class InterventionController extends AbstractController
     public function new(Request $request): Response
     {
         $intervention = new Intervention();
-        $form = $this->createForm(
-            InterventionType::class,
-            $intervention
-        )
+        $form = $this
+            ->createForm(
+                InterventionType::class,
+                $intervention,
+            )
             ->add('Create', SubmitType::class);
+
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $this->getUser();
             $intervention->setUserAdd($user->getUserIdentifier());
 
             $this->interventionRepository->persist($intervention);
-            $this->interventionRepository>flush();
+            $this->interventionRepository > flush();
 
             $this->workflow->newIntervention($intervention);
 
@@ -117,15 +117,18 @@ class InterventionController extends AbstractController
             $event = new InterventionEvent($intervention, null);
             $this->eventDispatcher->dispatch($event, InterventionEvent::INTERVENTION_NEW);
 
-            return $this->redirectToRoute('intervention_show', array('id' => $intervention->getId()));
+            return $this->redirectToRoute('intervention_show', ['id' => $intervention->getId()]);
         }
+
+        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
 
         return $this->render(
             '@AcMarcheTravaux/intervention/new.html.twig',
-            array(
+            [
                 'entity' => $intervention,
                 'form' => $form->createView(),
-            )
+            ],
+            $response,
         );
     }
 
@@ -134,17 +137,17 @@ class InterventionController extends AbstractController
     {
         $deleteFormSuivis = $this->createSuivisDeleteForm($intervention->getId());
         $suivis = $this->suiviRepository->search(
-            array('intervention' => $intervention)
+            ['intervention' => $intervention],
         );
 
         return $this->render(
             '@AcMarcheTravaux/intervention/show.html.twig',
-            array(
+            [
                 'intervention' => $intervention,
                 'suivis' => $suivis,
                 'delete_form_suivis' => $deleteFormSuivis->createView(),
                 'pdf' => false,
-            )
+            ],
         );
     }
 
@@ -152,26 +155,32 @@ class InterventionController extends AbstractController
     #[IsGranted('edit', subject: 'intervention')]
     public function edit(Request $request, Intervention $intervention): Response
     {
-        $editForm = $this->createForm(
-            InterventionType::class,
-            $intervention
-        )
+        $form = $this
+            ->createForm(
+                InterventionType::class,
+                $intervention,
+            )
             ->add('Update', SubmitType::class);
-        $editForm->handleRequest($request);
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->interventionRepository->flush();
 
             $this->addFlash('success', 'L\'intervention a bien été modifiée.');
 
-            return $this->redirectToRoute('intervention_show', array('id' => $intervention->getId()));
+            return $this->redirectToRoute('intervention_show', ['id' => $intervention->getId()]);
         }
+
+        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
 
         return $this->render(
             '@AcMarcheTravaux/intervention/edit.html.twig',
-            array(
+            [
                 'entity' => $intervention,
-                'form' => $editForm->createView(),
-            )
+                'form' => $form->createView(),
+            ],
+            $response,
         );
     }
 
@@ -200,12 +209,12 @@ class InterventionController extends AbstractController
         $form = $this->createSuivisDeleteForm($intervention->getId());
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $suivis = $request->get('suivis', array());
+            $suivis = $request->get('suivis', []);
 
             if ((is_countable($suivis) ? count($suivis) : 0) < 1) {
                 $this->addFlash('warning', "Aucun suivis sélectionné");
 
-                return $this->redirectToRoute('intervention_show', array('id' => $intervention->getid()));
+                return $this->redirectToRoute('intervention_show', ['id' => $intervention->getid()]);
             }
 
             $user = $this->getUser();
@@ -226,7 +235,7 @@ class InterventionController extends AbstractController
             $this->interventionRepository->flush();
             $this->addFlash('success', 'Le(s) suivi(s) ont bien été supprimé(s)');
 
-            return $this->redirectToRoute('intervention_show', array('id' => $intervention->getId()));
+            return $this->redirectToRoute('intervention_show', ['id' => $intervention->getId()]);
         }
 
         return $this->redirectToRoute('intervention');
@@ -241,8 +250,9 @@ class InterventionController extends AbstractController
      */
     private function createSuivisDeleteForm($intervention_id): FormInterface
     {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('suivis_delete', array('id' => $intervention_id)))
+        return $this
+            ->createFormBuilder()
+            ->setAction($this->generateUrl('suivis_delete', ['id' => $intervention_id]))
             ->setMethod(Request::METHOD_DELETE)
             ->getForm();
     }

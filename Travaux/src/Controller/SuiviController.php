@@ -2,20 +2,20 @@
 
 namespace AcMarche\Travaux\Controller;
 
-use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\Response;
-use DateTime;
 use AcMarche\Travaux\Entity\Intervention;
 use AcMarche\Travaux\Entity\Suivi;
 use AcMarche\Travaux\Event\InterventionEvent;
 use AcMarche\Travaux\Form\SuiviType;
 use AcMarche\Travaux\Service\SuiviService;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
+use DateTime;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Suivi controller.
@@ -27,15 +27,15 @@ class SuiviController extends AbstractController
     public function __construct(
         private SuiviService $suiviService,
         private EventDispatcherInterface $dispatcher,
-        private ManagerRegistry $managerRegistry
-    ) {
-    }
+        private ManagerRegistry $managerRegistry,
+    ) {}
 
     #[Route(path: '/new/{id}', name: 'suivi_new', methods: ['GET', 'POST'])]
     public function new(Request $request, Intervention $intervention): Response
     {
         $suivi = $this->suiviService->initSuivi($intervention);
-        $form = $this->createForm(SuiviType::class)
+        $form = $this
+            ->createForm(SuiviType::class)
             ->add('Create', SubmitType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -48,16 +48,19 @@ class SuiviController extends AbstractController
 
             $this->addFlash('success', 'Le suivi a bien été créé.');
 
-            return $this->redirectToRoute('intervention_show', array('id' => $intervention->getId()));
+            return $this->redirectToRoute('intervention_show', ['id' => $intervention->getId()]);
         }
+
+        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
 
         return $this->render(
             '@AcMarcheTravaux/suivi/new.html.twig',
-            array(
+            [
                 'entity' => $suivi,
                 'intervention' => $intervention,
                 'form' => $form->createView(),
-            )
+            ],
+            $response,
         );
     }
 
@@ -70,7 +73,8 @@ class SuiviController extends AbstractController
     public function edit(Request $request, Suivi $suivi): Response
     {
         $em = $this->managerRegistry->getManager();
-        $editForm = $this->createForm(SuiviType::class, $suivi)
+        $editForm = $this
+            ->createForm(SuiviType::class, $suivi)
             ->add('Update', SubmitType::class);
         $editForm->handleRequest($request);
         if ($editForm->isSubmitted() && $editForm->isValid()) {
@@ -87,15 +91,15 @@ class SuiviController extends AbstractController
                 $this->addFlash('warning', "Seul celui qui a ajouté le suivi peut le modifier");
             }
 
-            return $this->redirectToRoute('intervention_show', array('id' => $intervention->getId()));
+            return $this->redirectToRoute('intervention_show', ['id' => $intervention->getId()]);
         }
 
         return $this->render(
             '@AcMarcheTravaux/suivi/edit.html.twig',
-            array(
+            [
                 'entity' => $suivi,
                 'edit_form' => $editForm->createView(),
-            )
+            ],
         );
     }
 }
