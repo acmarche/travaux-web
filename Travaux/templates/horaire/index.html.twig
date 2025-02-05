@@ -7,14 +7,10 @@
             <a href="{{ path('horaire_new') }}" class="btn btn-primary mb-3" role="button"><i
                         class="ti ti-plus"></i> Ajouter</a>
 
-            <ul data-controller="sortable" data-sortable-animation-value="150" class="list-group">
+            <ul class="list-group">
                 {% for horaire in horaires %}
-                    <li data-sortable-update-url="{{ path('horaire_position',{'id':horaire.id}) }}"
-                        data-sortable-response-kind-value="json"
-                        class="list-group-item d-flex justify-content-between"
-                    >
+                    <li class="list-group-item d-flex justify-content-between">
                         <a href="{{ path('horaire_show', {'id': horaire.id}) }}">{{ horaire }}</a>
-                     <span class="align-self-end">Position: {{ horaire.position }}</span>
                     </li>
                 {% endfor %}
             </ul>

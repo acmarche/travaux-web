@@ -28,9 +28,9 @@ class Avaloir implements TimestampableInterface, Stringable
     #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = 0;//todo pq ???
-    #[ORM\Column(type: 'decimal', precision: 10, scale: 8, nullable: false)]
+    #[ORM\Column(precision: 10, scale: 8, nullable: false)]
     public float $latitude = 0;
-    #[ORM\Column(type: 'decimal', precision: 10, scale: 8, nullable: false)]
+    #[ORM\Column(precision: 10, scale: 8, nullable: false)]
     public float $longitude = 0;
     #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $description = null;

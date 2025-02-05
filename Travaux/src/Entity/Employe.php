@@ -29,9 +29,12 @@ class Employe implements Stringable
     #[ORM\ManyToMany(targetEntity: CategoryPlanning::class)]
     public Collection|null $categories;
 
-    #[ORM\OneToMany(targetEntity: Absence::class, mappedBy: 'employe')]
+    #[ORM\OneToMany(targetEntity: Absence::class, mappedBy: 'employe', cascade: ['remove'])]
     public Collection|null $absences;
 
+    /**
+     * @var array<int, string> $vacations
+     */
     public array $vacations = [];
     public ?string $reason_absence = null;
 

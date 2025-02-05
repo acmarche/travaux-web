@@ -5,6 +5,7 @@ namespace AcMarche\Travaux\Controller;
 use AcMarche\Travaux\Entity\Horaire;
 use AcMarche\Travaux\Form\HoraireType;
 use AcMarche\Travaux\Repository\HoraireRepository;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +18,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_TRAVAUX_PLANNING')]
 class HoraireController extends AbstractController
 {
-    public function __construct(private HoraireRepository $horaireRepository)
+    public function __construct(private HoraireRepository $horaireRepository, private readonly LoggerInterface $logger)
     {
     }
 
@@ -73,7 +74,6 @@ class HoraireController extends AbstractController
     #[Route(path: '/{id}/edit', name: 'horaire_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Horaire $horaire): Response
     {
-
         $editForm = $this->createForm(HoraireType::class, $horaire);
 
         $editForm->handleRequest($request);
@@ -116,6 +116,9 @@ class HoraireController extends AbstractController
 
         $regex = '#"position"\s*(\d)#';
         preg_match($regex, $data, $matches);
+
+        $this->logger->debug('ZEZE'.$matches[1]);
+
         $position = (int)$matches[1];
         if ($position) {
             $horaire->position = $position;

@@ -4,10 +4,12 @@
 <div class="border" style="min-height: 300px;">
     {% if day.isSameMonth(dateSelected) %}
         <div class="d-flex flex-row justify-content-end align-items-center gap-2">
-            <span class="badge text-bg-secondary rounded-pill text-bg-secondary {{ classDay }}" role="button">
+            <span class="badge text-bg-secondary rounded-pill text-bg-secondary {{ classDay }}" role="button"
+            title="{{ day|format_date('full') }}">
                 {{ day.day }}
             </span>
-            <a href="{{ path('planning_new', {'date': day|date('Y-m-d'),'category':categorySelected ? categorySelected.id}) }}">
+            <a href="{{ path('planning_new', {'date': day|date('Y-m-d'),'category':categorySelected ? categorySelected.id}) }}"
+            title="Ajouter une planning">
                 <i class="ti ti-plus" style="font-size: 1.2rem;"></i>
             </a>
             <a class="btn btn-sm"
