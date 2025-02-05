@@ -75,7 +75,7 @@ class User implements UserInterface, Stringable, PasswordAuthenticatedUserInterf
 
     public function __toString(): string
     {
-        return (string)$this->getUserIdentifier();
+        return $this->getUserIdentifier();
     }
 
     public function getUserIdentifier(): string

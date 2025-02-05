@@ -2,19 +2,17 @@
 
 namespace AcMarche\Travaux\Security\Authenticator;
 
-use AcMarche\Travaux\Repository\UserRepository;
-use AcMarche\Travaux\Security\Ldap\LdapIntranet;
-use AcMarche\Travaux\Service\Option;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use AcMarche\Travaux\Security\Ldap\LdapTravaux;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Ldap\Security\LdapBadge;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
-use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
@@ -22,54 +20,50 @@ use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 /**
- * Essayer de voir les events.
  *
- * @see UserCheckerListener::postCheckCredentials
- * @see UserProviderListener::checkPassport
- * @see CheckCredentialsListener
- * @see CheckLdapCredentialsListener
- * bin/console debug:event-dispatcher --dispatcher=security.event_dispatcher.main
  */
-class TravauxLdapAuthenticator extends AbstractLoginFormAuthenticator
+class AppTravauxLdapAuthenticator extends AbstractLoginFormAuthenticator
 {
     use TargetPathTrait;
 
-    public const LOGIN_ROUTE = 'app_login';
+    final public const LOGIN_ROUTE = 'app_login';
 
     public function __construct(
-        private UrlGeneratorInterface $urlGenerator,
-        private UserRepository $userRepository,
-        private ParameterBagInterface $parameterBag
-    ) {
-    }
+        #[Autowire(env: 'LDAP_STAFF_BASE'), \SensitiveParameter]
+        private readonly string $ldapDn,
+        #[Autowire(env: 'LDAP_STAFF_ADMIN'), \SensitiveParameter]
+        private readonly string $ldapUser,
+        #[Autowire(env: 'LDAP_STAFF_PWD'), \SensitiveParameter]
+        private readonly string $ldapPassword,
+        private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly UserPasswordHasherInterface $userPasswordHasher,
+    ) {}
 
     public function authenticate(Request $request): Passport
     {
-        $email = $request->request->get('username', '');
-        $password = $request->request->get('password', '');
+        $username = $request->request->get('_username', '');
+        $password = $request->request->get('_password', '');
         $token = $request->request->get('_csrf_token', '');
 
-        $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
+        $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $username);
 
         $badges =
             [
-                new RememberMeBadge(),
                 new CsrfTokenBadge('authenticate', $token),
             ];
 
-        $query = "(&(|(sAMAccountName=*$email*))(objectClass=person))";
+        $query = "(&(|(sAMAccountName=$username))(objectClass=person))";
         $badges[] = new LdapBadge(
-            LdapIntranet::class,
-            $this->parameterBag->get(Option::LDAP_DN),
-            $this->parameterBag->get(Option::LDAP_USER),
-            $this->parameterBag->get(Option::LDAP_PASSWORD),
-            $query
+            LdapTravaux::class, $this->ldapDn,
+            $this->ldapUser,
+            $this->ldapPassword,
+            $query,
         );
 
         return new Passport(
-            new UserBadge($email),
+            new UserBadge($username),
             new PasswordCredentials($password),
-            $badges
+            $badges,
         );
     }
 

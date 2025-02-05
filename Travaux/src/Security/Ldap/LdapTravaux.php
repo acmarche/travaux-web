@@ -14,17 +14,17 @@ use Symfony\Component\Ldap\LdapInterface;
  *
  * @see Ldap
  */
-class LdapIntranet implements LdapInterface
+class LdapTravaux implements LdapInterface
 {
     public function __construct(
-        private AdapterInterface $adapter
+        private readonly AdapterInterface $adapter,
     ) {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function bind(string $dn = null, #[\SensitiveParameter] string $password = null): void
+    public function bind(string $dn = null, string $password = null): void
     {
         $this->adapter->getConnection()->bind($dn, $password);
     }

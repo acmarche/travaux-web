@@ -3,7 +3,7 @@
 use AcMarche\Avaloir\Location\LocationReverseInterface;
 use AcMarche\Avaloir\Location\OpenStreetMapReverse;
 use AcMarche\Avaloir\Namer\DirectoryNamer;
-use AcMarche\Travaux\Security\Ldap\LdapIntranet;
+use AcMarche\Travaux\Security\Ldap\LdapTravaux;
 use AcMarche\Travaux\Service\Option;
 use Liip\ImagineBundle\Service\FilterService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -14,25 +14,13 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
-    $parameters->set('locale', 'fr');
     $parameters->set('ac_marche_avaloir.upload.directory', "%kernel.project_dir%/public/avaloirs");
     $parameters->set('ac_marche_travaux.upload.directory', "%kernel.project_dir%/public/files");
     $parameters->set('ac_marche_travaux_dir_public', "%kernel.project_dir%/public");
     $parameters->set('ac_marche_travaux.download.directory', "/files");
     $parameters->set('acmarche_travaux.elastic.host', '%env(ELASTIC_HOST)%');
     $parameters->set('acmarche_travaux.elastic.index', '%env(ELASTIC_INDEX)%');
-    $parameters->set('router.request_context.host', '%env(APP_URL)%');
-    $parameters->set('router.request_context.scheme', 'http');
     $parameters->set('ac_marche_avaloir_destinataire', '%env(AVALOIR_EMAIL)%');
-    $parameters->set(Option::LDAP_DN, '%env(LDAP_STAFF_BASE)%');
-    $parameters->set(Option::LDAP_USER, '%env(LDAP_STAFF_ADMIN)%');
-    $parameters->set(Option::LDAP_PASSWORD, '%env(LDAP_STAFF_PWD)%');
-
-    /*
-     * Pour envoie de mail en mode console
-     */
-    $parameters->set('router.request_context.scheme', 'https');
-    $parameters->set('router.request_context.host', '%env(APP_URL)%');
 
     $services = $containerConfigurator->services();
 
@@ -80,7 +68,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     ],
                 ]
             );
-        $services = $services->set(LdapIntranet::class)
+        $services = $services->set(LdapTravaux::class)
             ->arg('$adapter', service(Adapter::class))
             ->tag('ldap'); //necessary for new LdapBadge(LdapMercredi::class)
     }
