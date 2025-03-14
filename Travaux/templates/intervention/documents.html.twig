@@ -7,17 +7,21 @@
                 {% for document in intervention.documents %}
                     <tr>
                         <td>
-                            <a href="{{ path('document_show', { 'id': document.id }) }}">
-                                {% if 'image' in document.mime %}
-                                    <img src="{{ document | apptravaux_download | imagine_filter('actravaux_thumb') }}"
-                                         alt="img"/>
-                                {% else %}
-                                    <i class="ti ti-download"></i>
-                                    <a href="{{ absolute_url(document | apptravaux_download ) }}">Télécharger</a>
-                                {% endif %}
+                            {% if 'image' in document.mime %}
+                                <a href="{{ path('document_show', { 'id': document.id }) }}"> <img
+                                            src="{{ document | apptravaux_download | imagine_filter('actravaux_thumb') }}"
+                                            alt="img"/></a>
+                            {% else %}
+                                <i class="ti ti-download"></i>
+                                <a href="{{ absolute_url(document | apptravaux_download ) }}">Télécharger</a>
+                            {% endif %}
+
+                        </td>
+                        <td>
+                            <a title="Details" href="{{ path('document_show', { 'id': document.id }) }}">
+                                {{ document.mime }}
                             </a>
                         </td>
-                        <td>{{ document.mime }}</td>
                     </tr>
                 {% endfor %}
             </table>

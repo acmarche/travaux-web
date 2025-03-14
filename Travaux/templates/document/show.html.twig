@@ -11,10 +11,19 @@
                 <img src="{{ entity | apptravaux_download | imagine_filter('actravaux_zoom') }}"
                      alt="img"/>
                 <br/><br/>
+                {% else %}
+                 <object data=""
+                    width="100%" height="650px" type="{{ entity.mime }}">
+                Votre navigateur ne sait pas afficher le document.
+<br>
+                         <i class="ti ti-download"></i>
+                         <a href="{{ absolute_url(entity | apptravaux_download ) }}">Télécharger</a>
+                </a>
+            </object>
             {% endif %}
-
-            <i class="ti ti-download"></i>
-            <a href="{{ absolute_url(entity | apptravaux_download ) }}">Télécharger</a>
+   <i class="ti ti-download"></i>
+                         <a href="{{ absolute_url(entity | apptravaux_download ) }}">Télécharger</a>
+                </a>
         </div>
     </div>
 
