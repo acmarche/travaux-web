@@ -12,27 +12,27 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'cache' => null,
                 'actravaux_thumb' => [
                     'quality' => 95,
-                    'filters' => ['thumbnail' => ['size' => [250, 188], 'mode' => 'outbound']],
+                    'filters' => ['thumbnail' => ['size' => [250, 188], 'mode' => 'outbound', 'auto_rotate' => ['~']]],
                 ],
                 'aval_thumb' => [
                     'quality' => 95,
-                    'filters' => ['thumbnail' => ['size' => [150, 70], 'mode' => 'outbound']],
+                    'filters' => ['thumbnail' => ['size' => [150, 70], 'mode' => 'outbound', 'auto_rotate' => ['~']]],
                 ],
                 'actravaux_zoom' => [
                     'quality' => 95,
-                    'filters' => ['thumbnail' => ['size' => [1024, 768], 'mode' => 'inset']],
+                    'filters' => ['thumbnail' => ['size' => [1024, 768], 'mode' => 'inset', 'auto_rotate' => ['~']]],
                 ],
                 'avaloir_thumb' => [
                     'quality' => 95,
-                    'filters' => ['thumbnail' => ['size' => [800, 600], 'mode' => 'outbound']],
+                    'filters' => ['thumbnail' => ['size' => [800, 600], 'mode' => 'outbound', 'auto_rotate' => ['~']]],
                 ],
                 'avaloir_heighten_filter' => [
                     'quality' => 95,
-                    'filters' => ['auto_rotate' => [], 'relative_resize' => ['heighten' => 600]],
+                    'filters' => ['relative_resize' => ['heighten' => 600], 'auto_rotate' => ['~']],
                 ],
                 'avaloir_smartphone' => [
                     'quality' => 85,
-                    'filters' => ['auto_rotate' => [], 'relative_resize' => ['heighten' => 600]],
+                    'filters' => ['relative_resize' => ['heighten' => 600], 'auto_rotate' => ['~']],
                 ]
             ],
         ]
