@@ -6,7 +6,11 @@
         <div class="card-body">
 
             {% include '@AcMarcheTravaux/document/actions.html.twig' %}
-
+<br/><br/>
+   <i class="ti ti-download"></i>
+                         <a href="{{ absolute_url(entity | apptravaux_download ) }}">Télécharger</a>
+                </a>
+            <br/><br/>
             {% if 'image' in entity.mime %}
                 <img src="{{ entity | apptravaux_download | imagine_filter('actravaux_zoom') }}"
                      alt="img"/>
@@ -21,9 +25,6 @@
                 </a>
             </object>
             {% endif %}
-   <i class="ti ti-download"></i>
-                         <a href="{{ absolute_url(entity | apptravaux_download ) }}">Télécharger</a>
-                </a>
         </div>
     </div>
 
