@@ -67,7 +67,7 @@ class CommentaireController extends AbstractController
             '@AcMarcheAvaloir/commentaire/new.html.twig',
             array(
                 'commentaire' => $commentaire,
-                'form' => $form->createView(),
+                'form' => $form,
             )
         );
     }

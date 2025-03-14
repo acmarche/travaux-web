@@ -126,7 +126,7 @@ class AvaloirController extends AbstractController
             '@AcMarcheAvaloir/avaloir/new.html.twig',
             array(
                 'entity' => $avaloir,
-                'form' => $form->createView(),
+                'form' => $form,
             )
         );
     }
@@ -146,7 +146,7 @@ class AvaloirController extends AbstractController
             '@AcMarcheAvaloir/avaloir/show.html.twig',
             array(
                 'avaloir' => $avaloir,
-                'form' => $form->createView(),
+                'form' => $form,
             )
         );
     }

@@ -55,7 +55,7 @@ class HoraireController extends AbstractController
         return $this->render(
             '@AcMarcheTravaux/horaire/new.html.twig',
             array(
-                'form' => $form->createView(),
+                'form' => $form,
             )
         );
     }

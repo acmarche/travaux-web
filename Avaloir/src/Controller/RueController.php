@@ -61,7 +61,7 @@ class RueController extends AbstractController
             '@AcMarcheAvaloir/rue/new.html.twig',
             array(
                 'entity' => $rue,
-                'form' => $form->createView(),
+                'form' => $form,
             )
         );
     }

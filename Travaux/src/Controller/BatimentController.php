@@ -55,7 +55,7 @@ class BatimentController extends AbstractController
             '@AcMarcheTravaux/batiment/new.html.twig',
             array(
                 'entity' => $batiment,
-                'form' => $form->createView(),
+                'form' => $form,
             )
         );
     }

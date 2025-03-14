@@ -60,7 +60,7 @@ class CategoryPlanningController extends AbstractController
         return $this->render(
             '@AcMarcheTravaux/category_planning/new.html.twig',
             array(
-                'form' => $form->createView(),
+                'form' => $form,
             )
         );
     }

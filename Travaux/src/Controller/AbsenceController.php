@@ -58,7 +58,7 @@ class AbsenceController extends AbstractController
             array(
                 'absence' => $absence,
                 'employe' => $employe,
-                'form' => $form->createView(),
+                'form' => $form,
             )
         );
     }
@@ -97,7 +97,7 @@ class AbsenceController extends AbstractController
             array(
                 'absence' => $absence,
                 'employe' => $employe,
-                'form' => $form->createView(),
+                'form' => $form,
             )
         );
     }

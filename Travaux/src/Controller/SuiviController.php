@@ -58,7 +58,7 @@ class SuiviController extends AbstractController
             [
                 'entity' => $suivi,
                 'intervention' => $intervention,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
             $response,
         );

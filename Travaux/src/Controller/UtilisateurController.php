@@ -63,7 +63,7 @@ class UtilisateurController extends AbstractController
             '@AcMarcheTravaux/utilisateur/new.html.twig',
             array(
                 'utilisateur' => $utilisateur,
-                'form' => $form->createView(),
+                'form' => $form,
             )
         );
     }
@@ -136,7 +136,7 @@ class UtilisateurController extends AbstractController
             '@AcMarcheTravaux/utilisateur/password.html.twig',
             [
                 'user' => $user,
-                'form' => $form->createView(),
+                'form' => $form,
             ]
         );
     }

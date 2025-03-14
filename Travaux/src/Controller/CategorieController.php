@@ -64,7 +64,7 @@ class CategorieController extends AbstractController
             '@AcMarcheTravaux/categorie/new.html.twig',
             array(
                 'entity' => $categorie,
-                'form' => $form->createView(),
+                'form' => $form,
             )
         );
     }

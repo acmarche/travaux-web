@@ -66,7 +66,7 @@ class DomaineController extends AbstractController
             '@AcMarcheTravaux/domaine/new.html.twig',
             array(
                 'entity' => $domaine,
-                'form' => $form->createView(),
+                'form' => $form,
             )
         );
     }

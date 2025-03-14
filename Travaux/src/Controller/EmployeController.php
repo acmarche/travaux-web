@@ -57,7 +57,7 @@ class EmployeController extends AbstractController
         return $this->render(
             '@AcMarcheTravaux/employe/new.html.twig',
             array(
-                'form' => $form->createView(),
+                'form' => $form,
             )
         );
     }

@@ -38,7 +38,7 @@ class QuartierRueController extends AbstractController
 
         return $this->render('@AcMarcheAvaloir/quartier_rue/new.html.twig', array(
             'quartier' => $quartier,
-            'form' => $form->createView(),
+            'form' => $form,
         ));
     }
 }

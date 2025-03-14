@@ -149,7 +149,7 @@ class PlanningController extends AbstractController
         return $this->render(
             '@AcMarcheTravaux/planning/new.html.twig',
             array(
-                'form' => $form->createView(),
+                'form' => $form,
                 'dateSelected' => $dateSelected,
                 'absents' => $absents,
             ),$response
@@ -219,7 +219,7 @@ class PlanningController extends AbstractController
             '@AcMarcheTravaux/planning/edit.html.twig',
             array(
                 'intervention' => $intervention,
-                'form' => $form->createView(),
+                'form' => $form,
             )
             , $response
         );

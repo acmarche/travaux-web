@@ -40,7 +40,7 @@ class QuantiteController extends AbstractController
         }
         return $this->render(
             '@AcMarcheStock/quantite/index.html.twig',
-            ['produit' => $produit, 'form' => $form->createView()]
+            ['produit' => $produit, 'form' => $form]
         );
     }
 }

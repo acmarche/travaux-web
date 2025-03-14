@@ -48,7 +48,7 @@ class CategorieController extends AbstractController
             '@AcMarcheStock/categorie/new.html.twig',
             [
                 'categorie' => $categorie,
-                'form' => $form->createView(),
+                'form' => $form,
             ]
         );
     }
@@ -83,7 +83,7 @@ class CategorieController extends AbstractController
             '@AcMarcheStock/categorie/edit.html.twig',
             [
                 'categorie' => $categorie,
-                'form' => $form->createView(),
+                'form' => $form,
             ]
         );
     }

@@ -61,7 +61,7 @@ class GroupController extends AbstractController
         return $this->render(
             '@AcMarcheTravaux/group/new.html.twig',
             array(
-                'form' => $form->createView(),
+                'form' => $form,
             )
         );
     }

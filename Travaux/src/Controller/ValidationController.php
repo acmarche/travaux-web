@@ -117,7 +117,7 @@ class ValidationController extends AbstractController
             '@AcMarcheTravaux/validation/show.html.twig',
             array(
                 'entity' => $intervention,
-                'form' => $form->createView(),
+                'form' => $form,
                 'pdf' => false,
             )
         );

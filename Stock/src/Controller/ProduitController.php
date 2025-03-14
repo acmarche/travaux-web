@@ -77,7 +77,7 @@ class ProduitController extends AbstractController
             '@AcMarcheStock/produit/new.html.twig',
             [
                 'produit' => $produit,
-                'form' => $form->createView(),
+                'form' => $form,
             ]
         );
     }
@@ -114,7 +114,7 @@ class ProduitController extends AbstractController
             '@AcMarcheStock/produit/edit.html.twig',
             [
                 'produit' => $produit,
-                'form' => $form->createView(),
+                'form' => $form,
             ]
         );
     }

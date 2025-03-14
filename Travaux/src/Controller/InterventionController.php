@@ -126,7 +126,7 @@ class InterventionController extends AbstractController
             '@AcMarcheTravaux/intervention/new.html.twig',
             [
                 'entity' => $intervention,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
             $response,
         );
@@ -178,7 +178,7 @@ class InterventionController extends AbstractController
             '@AcMarcheTravaux/intervention/edit.html.twig',
             [
                 'entity' => $intervention,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
             $response,
         );

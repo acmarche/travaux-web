@@ -65,7 +65,7 @@ class DateNettoyageController extends AbstractController
         }
         return $this->render('@AcMarcheAvaloir/date_nettoyage/new.html.twig', array(
             'entity' => $dateNettoyage,
-            'form' => $form->createView(),
+            'form' => $form,
         ));
     }
     /**
@@ -125,7 +125,7 @@ class DateNettoyageController extends AbstractController
         return $this->render('@AcMarcheAvaloir/date_nettoyage/nettoyage_quartier_new.html.twig', array(
             'entity' => $entity,
             'quartier' => $quartier,
-            'form' => $form->createView(),
+            'form' => $form,
         ));
     }
     private function createQuartierCreateForm(DateNettoyage $entity): FormInterface

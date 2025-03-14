@@ -66,7 +66,7 @@ class ServiceController extends AbstractController
             '@AcMarcheTravaux/service/new.html.twig',
             array(
                 'entity' => $service,
-                'form' => $form->createView(),
+                'form' => $form,
             )
         );
     }

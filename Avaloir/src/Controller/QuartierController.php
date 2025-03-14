@@ -67,7 +67,7 @@ class QuartierController extends AbstractController
             '@AcMarcheAvaloir/quartier/new.html.twig',
             array(
                 'entity' => $quartier,
-                'form' => $form->createView(),
+                'form' => $form,
             )
         );
     }

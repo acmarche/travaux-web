@@ -72,7 +72,7 @@ class DocumentController extends AbstractController
             array(
                 'entity' => $document,
                 'intervention' => $intervention,
-                'form' => $form->createView(),
+                'form' => $form,
             )
         );
     }
