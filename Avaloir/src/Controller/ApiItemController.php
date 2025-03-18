@@ -30,7 +30,7 @@ class ApiItemController extends AbstractController
             [
                 "name" => "Passage pour piétons",
                 "id" => 3,
-                "image" => "https://apptravaux.marche.be/bundles/travaux/images/items/trash.svg",
+                "image" => "https://apptravaux.marche.be/bundles/travaux/images/items/trash.png",
             ],
             [
                 "name" => "Poubelles",
