@@ -20,12 +20,12 @@ class ApiItemController extends AbstractController
             [
                 "name" => "Bancs",
                 "id" => 1,
-                "image" => "https://apptravaux.marche.be/bundles/travaux/images/items/picnic-table.svg",
+                "image" => "https://apptravaux.marche.be/bundles/travaux/images/items/picnic-table.png",
             ],
             [
                 "name" => "Feu de circulation",
                 "id" => 2,
-                "image" => "https://apptravaux.marche.be/bundles/travaux/images/items/traffic-lights.svg",
+                "image" => "https://apptravaux.marche.be/bundles/travaux/images/items/traffic-lights.png",
             ],
             [
                 "name" => "Passage pour piétons",
@@ -35,7 +35,7 @@ class ApiItemController extends AbstractController
             [
                 "name" => "Poubelles",
                 "id" => 4,
-                "image" => "https://apptravaux.marche.be/bundles/travaux/images/items/walk.svg",
+                "image" => "https://apptravaux.marche.be/bundles/travaux/images/items/walk.png",
             ],
         ];
 
