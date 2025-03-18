@@ -21,6 +21,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'directory_namer' => ['service' => DirectoryNamer::class],
                     'inject_on_load' => false,
                 ],
+                'item_image' => [
+                    'uri_prefix' => '/items',
+                    'upload_destination' => '%kernel.project_dir%/public/items',
+                    'namer' => 'vich_uploader.namer_uniqid',
+                    'directory_namer' => ['service' => DirectoryNamer::class],
+                    'inject_on_load' => false,
+                ],
             ],
         ]
     );
