@@ -10,9 +10,7 @@ use AcMarche\Avaloir\Repository\AvaloirRepository;
 use AcMarche\Avaloir\Repository\CommentaireRepository;
 use AcMarche\Avaloir\Repository\DateNettoyageRepository;
 use AcMarche\Stock\Service\SerializeApi;
-use AcMarche\Travaux\Search\ElasticServer;
 use AcMarche\Travaux\Search\MeiliServer;
-use AcMarche\Travaux\Search\SearchElastic;
 use AcMarche\Travaux\Search\SearchMeili;
 use DateTime;
 use Exception;
@@ -37,8 +35,6 @@ class ApiController extends AbstractController
         private readonly SerializeApi $serializeApi,
         private readonly SearchMeili $meilisearch,
         private readonly MeiliServer $meiliServer,
-        private readonly ElasticServer $elasticServer,
-        private readonly SearchElastic $searchElastic,
         private readonly MailerAvaloir $mailerAvaloir,
         private readonly CacheInterface $cache,
         private readonly LoggerInterface $logger
@@ -131,7 +127,6 @@ class ApiController extends AbstractController
 
         try {
             $this->meiliServer->addData($avaloir);
-            $this->elasticServer->addDoc($avaloir);
         } catch (Exception $exception) {
             $this->mailerAvaloir->sendError('update search avaloir', [$exception->getMessage()]);
         }
@@ -315,12 +310,9 @@ class ApiController extends AbstractController
         }
 
         try {
-            //  $result = $this->meilisearch->searchGeo($latitude, $longitude, $distance);
-            $result = $this->searchElastic->searchGeo($latitude, $longitude, $distance);
-            $count = $result->asObject()->hits->total->value;
-            $hits = $result->asObject()->hits->hits;
-            //$hits = $result->getHits();
-            //$total = $result->count();
+            $result = $this->meilisearch->searchGeo($latitude, $longitude, $distance);
+            $hits = $result->getHits();
+            $count = $result->count();
         } catch (Exception $exception) {
 
             $this->mailerAvaloir->sendError('search avaloir', [$exception->getMessage()]);
@@ -337,9 +329,7 @@ class ApiController extends AbstractController
         $avaloirs = [];
         $this->logger->error('count '.$count.'lat '.$latitude.' lng'.$longitude.' dist '.$distance);
         foreach ($hits as $post) {
-            $source = $post->_source;
-            $id = $source->id;
-            //$id = $post['id'];
+            $id = $post['id'];
             if (($avaloir = $this->avaloirRepository->find($id)) !== null) {
                 $avaloirs[] = $this->serializeApi->serializeAvaloir($avaloir);
             }
