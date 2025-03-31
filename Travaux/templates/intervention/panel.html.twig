@@ -72,10 +72,14 @@
             </tr>
             <tr>
                 <th>
-                    Catégorie
+                    Besoin d'une visite
                 </th>
                 <td>
-                    {{ intervention.categorie }}
+                    {% if intervention.need_visit %}
+                        <span class="text-primary">Une visite sur place est nécessaire</span>
+                        {% else %}
+                        Non
+                    {% endif %}
                 </td>
             </tr>
         </table>
@@ -141,8 +145,7 @@
             </tr>
             <tr>
                 <th>
-                    <i class="ti ti-currency-euro"></i> Coût en main
-                    d'oeuvre:
+                    <i class="ti ti-currency-euro"></i> Coût en main d'œuvre:
                 </th>
                 <td>
                     {% if intervention.coutmain %}
@@ -189,7 +192,7 @@
         <p class="card-text">{{ intervention.descriptif | nl2br }}</p>
 
         {% if intervention.solution %}
-            <h4 class="text-success">Solution apportée:</h4>
+            <h4 class="text-success">Solution apportée :</h4>
             {{ intervention.solution | nl2br }}
         {% endif %}
         <br/>

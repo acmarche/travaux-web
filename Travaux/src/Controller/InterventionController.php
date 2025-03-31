@@ -6,7 +6,6 @@ use AcMarche\Travaux\Entity\Intervention;
 use AcMarche\Travaux\Event\InterventionEvent;
 use AcMarche\Travaux\Form\InterventionType;
 use AcMarche\Travaux\Form\Search\SearchInterventionType;
-use AcMarche\Travaux\Repository\EtatRepository;
 use AcMarche\Travaux\Repository\InterventionRepository;
 use AcMarche\Travaux\Repository\SuiviRepository;
 use AcMarche\Travaux\Service\FileHelper;
@@ -15,7 +14,6 @@ use AcMarche\Travaux\Service\TravauxUtils;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Exception\IOException;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,7 +29,6 @@ class InterventionController extends AbstractController
         private TravauxUtils $travauxUtils,
         private FileHelper $fileHelper,
         private InterventionWorkflow $workflow,
-        private EtatRepository $etatRepository,
         private EventDispatcherInterface $eventDispatcher,
         private InterventionRepository $interventionRepository,
         private SuiviRepository $suiviRepository,
@@ -53,7 +50,7 @@ class InterventionController extends AbstractController
         }
 
         $user = $this->getUser();
-        $data['user'] = $user;
+        $data['current_user'] = $user;
         $data = array_merge($data, $this->travauxUtils->getConstraintsForUser());
         $search_form = $this->createForm(
             SearchInterventionType::class,
@@ -92,12 +89,7 @@ class InterventionController extends AbstractController
     public function new(Request $request): Response
     {
         $intervention = new Intervention();
-        $form = $this
-            ->createForm(
-                InterventionType::class,
-                $intervention,
-            )
-            ->add('Create', SubmitType::class);
+        $form = $this->createForm(InterventionType::class, $intervention);
 
         $form->handleRequest($request);
 
@@ -154,12 +146,7 @@ class InterventionController extends AbstractController
     #[IsGranted('edit', subject: 'intervention')]
     public function edit(Request $request, Intervention $intervention): Response
     {
-        $form = $this
-            ->createForm(
-                InterventionType::class,
-                $intervention,
-            )
-            ->add('Update', SubmitType::class);
+        $form = $this->createForm(InterventionType::class, $intervention);
 
         $form->handleRequest($request);
 

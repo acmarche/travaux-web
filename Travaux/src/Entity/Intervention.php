@@ -66,6 +66,8 @@ class Intervention implements TimestampableInterface, Stringable
     public ?DateTimeInterface $date_validation = null;
     #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 0])]
     public bool $smartphone = false;
+    #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 0])]
+    public bool $need_visit = false;
     #[ORM\Column(type: 'string', nullable: false)]
     public string $user_add;
     #[ORM\ManyToOne(targetEntity: Domaine::class, inversedBy: 'intervention')]

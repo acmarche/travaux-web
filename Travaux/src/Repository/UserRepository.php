@@ -31,7 +31,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      *
      * @see UserProviderListener::checkPassport
      */
-    public function loadUserByIdentifier(string $username):?UserInterface
+    public function loadUserByIdentifier(string $username): ?UserInterface
     {
         return $this->createQueryBuilder('user')
             ->andWhere('user.email = :username OR user.username = :username')
@@ -51,5 +51,22 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         $user->setPassword($newHashedPassword);
         $this->flush();
+    }
+
+    public function getForSearch(): array
+    {
+        $qb = $this->createQueryBuilder('user');
+
+        $qb->orderBy('user.nom');
+        $query = $qb->getQuery();
+
+        $results = $query->getResult();
+        $users = array();
+
+        foreach ($results as $user) {
+            $users[$user->getNom().' '.$user->getPrenom()] = $user->getUsername();
+        }
+
+        return $users;
     }
 }

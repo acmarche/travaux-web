@@ -6,24 +6,20 @@
         <div class="card-body">
 
             {% include '@AcMarcheTravaux/document/actions.html.twig' %}
-<br/><br/>
-   <i class="ti ti-download"></i>
-                         <a href="{{ absolute_url(entity | apptravaux_download ) }}">Télécharger</a>
-                </a>
             <br/><br/>
-            {% if 'image' in entity.mime %}
-                <img src="{{ entity | apptravaux_download | imagine_filter('actravaux_zoom') }}"
+
+            {% if 'image' in document.mime %}
+                <img src="{{ document | apptravaux_download | imagine_filter('actravaux_zoom') }}"
                      alt="img"/>
                 <br/><br/>
-                {% else %}
-                 <object data=""
-                    width="100%" height="650px" type="{{ entity.mime }}">
-                Votre navigateur ne sait pas afficher le document.
-<br>
-                         <i class="ti ti-download"></i>
-                         <a href="{{ absolute_url(entity | apptravaux_download ) }}">Télécharger</a>
-                </a>
-            </object>
+            {% else %}
+                <object data=""
+                        width="100%" height="650px" type="{{ document.mime }}">
+                    Votre navigateur ne sait pas afficher le document.
+                    <br>
+                    <i class="ti ti-download"></i>
+                    <a href="{{ absolute_url(document | apptravaux_download ) }}">Télécharger</a>
+                </object>
             {% endif %}
         </div>
     </div>

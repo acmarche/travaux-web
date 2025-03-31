@@ -41,7 +41,7 @@ class InterventionRepository extends ServiceEntityRepository
     public function setCriteria(array $args, bool $cloture = false): QueryBuilder
     {
         $intitule = $args['intitule'] ?? null;
-        $categorie = $args['categorie'] ?? 0;
+        $username = $args['user'] ?? 0;
         $domaine = $args['domaine'] ?? 0;
         $batiment = $args['batiment'] ?? 0;
         $etat = $args['etat'] ?? null;
@@ -121,9 +121,9 @@ class InterventionRepository extends ServiceEntityRepository
                 ->setParameter('dom', $domaine);
         }
 
-        if ($categorie) {
-            $qb->andWhere('categorie.id = :cat')
-                ->setParameter('cat', $categorie);
+        if ($username) {
+            $qb->andWhere('intervention.user_add = :username')
+                ->setParameter('username', $username);
         }
 
         if ($priorite) {
@@ -188,13 +188,13 @@ class InterventionRepository extends ServiceEntityRepository
      */
     public function search(array $args, bool $cloture)
     {
-        $user = $args['user'] ?? null;
+        $currentUser = $args['current_user'] ?? null;
         $role = $args['role'] ?? null;
 
         $qb = $this->setCriteria($args, $cloture);
 
-        if ($user && $role) {
-            $this->setUserConstraint($user, $role, $qb);
+        if ($currentUser && $role) {
+            $this->setUserConstraint($currentUser, $role, $qb);
         }
 
         $query = $qb->getQuery();

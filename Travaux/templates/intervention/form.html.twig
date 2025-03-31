@@ -1,25 +1,17 @@
 {{ form_start(form, { 'attr': {'class': 'well'} }) }}
 {{ form_errors(form) }}
-<div class="row">
-    <div class="col-md-6">
         {{ form_row(form.intitule) }}
-    </div>
-    <div class="col-md-6">
-        {% if form.priorite is defined %}
-            {{ form_row(form.priorite) }}
-        {% endif %}
-    </div>
-</div>
+
 
 <div class="row">
     <div class="col-md-6">
 
         <div class="row">
-
             <div class="col-md-6">
-                {{ form_row(form.categorie) }}
+                {% if form.priorite is defined %}
+                    {{ form_row(form.priorite) }}
+                {% endif %}
             </div>
-
             <div class="col-md-6">
                 {{ form_row(form.domaine) }}
             </div>
@@ -29,9 +21,7 @@
     <div class="col-md-6">
         {{ form_row(form.date_rappel) }}
     </div>
-
 </div>
-
 
 <div class="row">
     <div class="col-md-6">
@@ -58,6 +48,7 @@
         {% if form.etat is defined %}
             {{ form_row(form.etat) }}
         {% endif %}
+        {{ form_row(form.need_visit) }}
     </div>
 
     <div class="col-md-6">
@@ -100,5 +91,11 @@
         {{ form_row(form.date_solution) }}
     </div>
 </div>
+
+<button class="btn btn-primary mr-1 mb-2" type="submit">
+    <i class="ti ti-device-floppy"
+       aria-hidden="true"></i>
+    Sauvegarder
+</button>
 
 {{ form_end(form) }}

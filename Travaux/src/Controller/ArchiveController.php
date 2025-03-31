@@ -32,7 +32,7 @@ class ArchiveController extends AbstractController
             $data = unserialize($session->get($key));
         }
         $user = $this->getUser();
-        $data['user'] = $user;
+        $data['current_user'] = $user;
         $data['archive'] = 1;
         //force archive
         $data['sort'] = 'createdAt';

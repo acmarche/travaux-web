@@ -3,7 +3,6 @@
 namespace AcMarche\Travaux\Form;
 
 use AcMarche\Travaux\Entity\Batiment;
-use AcMarche\Travaux\Entity\Categorie;
 use AcMarche\Travaux\Entity\Domaine;
 use AcMarche\Travaux\Entity\Etat;
 use AcMarche\Travaux\Entity\Intervention;
@@ -48,7 +47,6 @@ class InterventionType extends AbstractType
         $categories = $this->categorieRepository->getForList();
 
         if (!$admin) {
-            $priorities = $this->prioriteRepository->getNormalForList();
             $categories = $this->categorieRepository->getInterventionForList();
         }
 
@@ -97,6 +95,15 @@ class InterventionType extends AbstractType
                 array(
                     'required' => false,
                     'label' => 'Affecté à un privé',
+                )
+            )
+            ->add(
+                'need_visit',
+                CheckboxType::class,
+                array(
+                    'required' => false,
+                    'label' => 'Besoin d\'une visite',
+                    'help' => 'Une visite sur place est nécessaire',
                 )
             )
             ->add(
@@ -190,17 +197,6 @@ class InterventionType extends AbstractType
                     'class' => Priorite::class,
                     'required' => true,
                     'choices' => $priorities,
-                    'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
-                )
-            )
-            ->add(
-                'categorie',
-                EntityType::class,
-                array(
-                    'class' => Categorie::class,
-                    'required' => true,
-                    'multiple' => false,
-                    'choices' => $categories,
                     'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
                 )
             )

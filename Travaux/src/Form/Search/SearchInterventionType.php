@@ -3,29 +3,33 @@
 namespace AcMarche\Travaux\Form\Search;
 
 use AcMarche\Travaux\Repository\BatimentRepository;
-use AcMarche\Travaux\Repository\CategorieRepository;
 use AcMarche\Travaux\Repository\DomaineRepository;
 use AcMarche\Travaux\Repository\EtatRepository;
 use AcMarche\Travaux\Repository\PrioriteRepository;
+use AcMarche\Travaux\Repository\UserRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\ResetType;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class SearchInterventionType extends AbstractType
 {
-    public function __construct(private BatimentRepository $batimentRepository, private CategorieRepository $categorieRepository, private DomaineRepository $domaineRepository, private EtatRepository $etatRepository, private PrioriteRepository $prioriteRepository)
-    {
+    public function __construct(
+        private readonly BatimentRepository $batimentRepository,
+        private readonly UserRepository $userRepository,
+        private readonly DomaineRepository $domaineRepository,
+        private readonly EtatRepository $etatRepository,
+        private readonly PrioriteRepository $prioriteRepository
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $batiments = $this->batimentRepository->getForSearch();
-        $categories = $this->categorieRepository->getForSearch();
+        $users = $this->userRepository->getForSearch();
         $domaines = $this->domaineRepository->getForSearch();
         $etats = $this->etatRepository->getForSearch();
         $priorites = $this->prioriteRepository->getForSearch();
@@ -73,7 +77,7 @@ class SearchInterventionType extends AbstractType
                 'date_debut',
                 DateType::class,
                 array(
-                    
+
                     'label' => 'Date d\'introduction',
                     'required' => false,
                     'attr' => array(
@@ -85,7 +89,7 @@ class SearchInterventionType extends AbstractType
                 'date_fin',
                 DateType::class,
                 array(
-                    
+
                     'label' => 'Date d\'introduction',
                     'required' => false,
                     'attr' => array(
@@ -124,12 +128,13 @@ class SearchInterventionType extends AbstractType
                 )
             )
             ->add(
-                'categorie',
+                'user',
                 ChoiceType::class,
                 array(
-                    'choices' => $categories,
+                    'label' => 'Utilisateur',
+                    'choices' => $users,
                     'required' => false,
-                    'placeholder' => 'Choisissez une catégorie',
+                    'placeholder' => 'Choisissez un utilisateur',
                     'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
                 )
             )
@@ -157,7 +162,7 @@ class SearchInterventionType extends AbstractType
                 'raz',
                 SubmitType::class,
                 [
-                    'attr' => ['class'=>' mr-1 btn-primary ','title'=>'Réinitialiser la recherche'],
+                    'attr' => ['class' => ' mr-1 btn-primary ', 'title' => 'Réinitialiser la recherche'],
                 ]
             );
     }

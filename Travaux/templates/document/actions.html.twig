@@ -1,4 +1,8 @@
-<a href="{{ path('intervention_show', { 'id': entity.intervention.id }) }}" class="btn btn-primary"
-   role="button"><i class="ti ti-list"></i> Retour à l'intervention</a>
-
-<br/>
+<div class="d-grid gap-2 d-md-block mb-3">
+    <a  class="btn btn-success"  href="{{ absolute_url(document | apptravaux_download ) }}"><i class="ti ti-download"></i> Télécharger</a>
+    <a href="{{ path('intervention_show', { 'id': document.intervention.id }) }}" class="btn btn-primary"
+       role="button"><i class="ti ti-list"></i> Retour à l'intervention</a>
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+        <i class="ti ti-trash"></i> Supprimer le document
+    </button>
+</div>
