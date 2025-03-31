@@ -47,6 +47,7 @@
                     </li>
                 {% endif %}
                 {% if is_granted('ROLE_TRAVAUX_ADMIN') %}
+                    <li><a class="dropdown-item" href="{{ path('imap_index') }}">Ma boîte mail</a></li>
                     <li><a class="dropdown-item" href="{{ path('batiment') }}">Les bâtiments</a></li>
                     <li><a class="dropdown-item" href="{{ path('service') }}">Les services</a></li>
                     <li><a class="dropdown-item" href="{{ path('domaine') }}">Les types</a></li>

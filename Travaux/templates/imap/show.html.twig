@@ -1,0 +1,56 @@
+{% extends '@AcMarcheTravaux/layout.html.twig' %}
+
+{% block body -%}
+
+    <div class="card">
+        <div class="card-header">
+            <h3>Message de {{ message.from.email }} le {{ message.date|format_date('medium') }}</h3>
+        </div>
+        <div class="card-body">
+
+            <div class="text-muted">
+                {{ message.html|raw }}
+            </div>
+
+            <hr>
+            <h4 class="text-success">Ajouter une intervention</h4>
+            <hr>
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            {{ form_row(form.intitule) }}
+            {{ form_row(form.descriptif) }}
+
+            {% if message.attachmentCount > 0 %}
+                <h5 class="text-warning">Cochez les pièces jointes que vous souhaitez ajouter</h5>
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Nom</th>
+                        <th>Type</th>
+                    </tr>
+                    {% for attachment in form.attachments %}
+                        <tr>
+                            <td>
+                                {{ form_row(attachment) }}
+                            </td>
+                            <td>
+                                <a href="/">Aperçu?</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <p>Aucune pièce jointe</p>
+            {% endif %}
+
+            <button class="btn btn-primary mr-1 mb-2" type="submit">
+                <i class="ti ti-device-floppy"
+                   aria-hidden="true"></i>
+                Ajouter l'intervention
+            </button>
+
+            {{ form_end(form) }}
+
+        </div>
+    </div>
+
+{% endblock %}

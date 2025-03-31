@@ -35,7 +35,8 @@ class InterventionController extends AbstractController
         private EventDispatcherInterface $eventDispatcher,
         private InterventionRepository $interventionRepository,
         private SuiviRepository $suiviRepository,
-    ) {}
+    ) {
+    }
 
     #[Route(path: '/', name: 'intervention')]
     #[Route(path: '/ancre/{anchor}/', name: 'intervention_anchor', methods: ['GET'])]
@@ -50,8 +51,6 @@ class InterventionController extends AbstractController
         if ($categorieIntervention = $this->travauxUtils->getCategorieDefault('Intervention')) {
             $data['categorie'] = $categorieIntervention->getId();
         }
-
-        $cloture = $this->etatRepository->find(4);
 
         $user = $this->getUser();
         $data['user'] = $user;

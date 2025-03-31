@@ -1,0 +1,35 @@
+{% extends '@AcMarcheTravaux/layout.html.twig' %}
+
+{% block body -%}
+
+    <div class="card">
+        <div class="card-header">
+            <h3>Messages de {{ user.email }} (sur 7 jours)</h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <tr>
+                    <th>Date</th>
+                    <th>De</th>
+                    <th>Sujet</th>
+                </tr>
+                {% for message in messages %}
+                    <tr>
+                        <td>{{ message.date|format_datetime('medium','medium') }}</td>
+                        <td>{{ message.from.email }}</td>
+                        <td>
+                            <a href="{{ path('imap_show', {'uid': message.uid}) }}">
+                                {% if message.subject %}
+                                    {{ message.subject|u.truncate(120,'...') }}
+                                {% else %}
+                                    Pas de sujet
+                                {% endif %}
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

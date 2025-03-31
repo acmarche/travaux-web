@@ -5,6 +5,8 @@ namespace AcMarche\Travaux\Entity;
 use AcMarche\Travaux\Repository\InterventionRepository;
 use DateTime;
 use DateTimeInterface;
+use DirectoryTree\ImapEngine\Attachment;
+use DirectoryTree\ImapEngine\MessageInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -22,79 +24,84 @@ class Intervention implements TimestampableInterface, Stringable
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    protected int $id;
+    public int $id;
 
     #[ORM\Column(type: 'string', nullable: false)]
     #[ORM\OrderBy(['intitule' => 'ASC'])]
     #[Assert\NotBlank]
-    protected string $intitule;
+    public string $intitule;
     #[ORM\ManyToOne(targetEntity: Etat::class, inversedBy: 'interventions')]
     #[ORM\JoinColumn(nullable: false)]
-    protected Etat $etat;
+    public Etat $etat;
     #[ORM\ManyToOne(targetEntity: Priorite::class, inversedBy: 'interventions')]
     #[ORM\JoinColumn(nullable: false)]
-    protected Priorite $priorite;
+    public Priorite $priorite;
     #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 0])]
-    protected bool $transmis = false;
+    public bool $transmis = false;
     #[ORM\Column(type: 'date', nullable: false)]
-    protected DateTimeInterface $date_introduction;
+    public DateTimeInterface $date_introduction;
     #[ORM\Column(type: 'date', nullable: true)]
-    protected ?DateTimeInterface $date_rappel;
+    public ?DateTimeInterface $date_rappel;
     #[ORM\Column(type: 'date', nullable: true)]
-    protected ?DateTimeInterface $date_execution;
+    public ?DateTimeInterface $date_execution;
     #[ORM\Column(type: 'text', nullable: true)]
-    protected ?string $descriptif;
+    public ?string $descriptif;
     #[ORM\Column(type: 'text', nullable: true)]
-    protected ?string $affectation = null;
+    public ?string $affectation = null;
     #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 0])]
-    protected bool $affecte_prive = false;
+    public bool $affecte_prive = false;
     #[ORM\Column(type: 'date', nullable: true)]
-    protected ?DateTimeInterface $soumis_le;
+    public ?DateTimeInterface $soumis_le;
     #[ORM\Column(type: 'text', nullable: true)]
-    protected ?string $solution;
+    public ?string $solution;
     #[ORM\Column(type: 'date', nullable: true)]
-    protected ?DateTimeInterface $date_solution;
+    public ?DateTimeInterface $date_solution;
     #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 0])]
-    protected bool $archive = false;
+    public bool $archive = false;
     #[ORM\Column(precision: 9, scale: 2, nullable: true)]
-    protected ?float $cout_main = 0;
+    public ?float $cout_main = 0;
     #[ORM\Column(precision: 9, scale: 2, nullable: true)]
-    protected ?float $cout_materiel = 0;
+    public ?float $cout_materiel = 0;
     #[ORM\Column(type: 'date', nullable: true)]
-    protected ?DateTimeInterface $date_validation = null;
+    public ?DateTimeInterface $date_validation = null;
     #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 0])]
-    protected bool $smartphone = false;
+    public bool $smartphone = false;
     #[ORM\Column(type: 'string', nullable: false)]
-    protected string $user_add;
+    public string $user_add;
     #[ORM\ManyToOne(targetEntity: Domaine::class, inversedBy: 'intervention')]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
-    protected ?Domaine $domaine = null;
+    public ?Domaine $domaine = null;
     #[ORM\ManyToOne(targetEntity: Batiment::class, inversedBy: 'intervention')]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
-    protected ?Batiment $batiment = null;
+    public ?Batiment $batiment = null;
     #[ORM\ManyToOne(targetEntity: Service::class, inversedBy: 'intervention')]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
-    protected ?Service $service = null;
+    public ?Service $service = null;
     #[ORM\ManyToOne(targetEntity: Categorie::class, inversedBy: 'intervention')]
     #[ORM\JoinColumn(nullable: false)]
-    protected Categorie $categorie;
+    public Categorie $categorie;
     #[ORM\OneToMany(mappedBy: 'intervention', targetEntity: Document::class, cascade: ['remove'])]
-    protected Collection $documents;
+    public Collection $documents;
     #[ORM\OneToMany(mappedBy: 'intervention', targetEntity: Suivi::class, cascade: ['remove'])]
     #[ORM\OrderBy(['id' => 'DESC'])]
-    protected Collection $suivis;
+    public Collection $suivis;
     /**
      * This property is used by the marking store
      */
     #[ORM\Column(type: 'string', nullable: true)]
     public ?string $currentPlace = null;
 
+    /**
+     * @var array<string,string>
+     */
+    public array $attachments = [];
+
     public function __toString(): string
     {
         return $this->intitule;
     }
 
-    protected ?Suivi $lastSuivi = null;
+    public ?Suivi $lastSuivi = null;
 
     public function getLastSuivi(): ?Suivi
     {
@@ -111,6 +118,20 @@ class Intervention implements TimestampableInterface, Stringable
         $this->date_introduction = new DateTime();
         $this->documents = new ArrayCollection();
         $this->suivis = new ArrayCollection();
+    }
+
+    public static function newFromMessage(MessageInterface $message): self
+    {
+        $intervention = new Intervention();
+        $intervention->intitule = $message->subject();
+        $intervention->descriptif = $message->text();
+
+        foreach ($message->attachments() as $attachment) {
+            $intervention->attachments[$attachment->filename().' '.$attachment->contentType()] = $attachment->contentId(
+            );
+        }
+
+        return $intervention;
     }
 
     public function getId(): ?int
