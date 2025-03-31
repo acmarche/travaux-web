@@ -7,11 +7,6 @@
             <h3>Message de {{ message.from.email }} le {{ message.date|format_date('medium') }}</h3>
         </div>
         <div class="card-body">
-
-            <div class="text-muted">
-                {{ message.html|raw }}
-            </div>
-
             <hr>
             <h4 class="text-success">Ajouter une intervention</h4>
             <hr>
@@ -50,6 +45,9 @@
 
             {{ form_end(form) }}
 
+        </div>
+        <div class="card-footer">
+           <i class="ti ti-arrow-left"></i> <a href="{{ path('imap_index') }}">Retour à la liste</a>
         </div>
     </div>
 

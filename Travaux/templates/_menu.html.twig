@@ -40,6 +40,9 @@
                 Paramètres...
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                {% if is_granted('ROLE_TRAVAUX_ADMIN') %}
+                    <li><a class="dropdown-item" href="{{ path('imap_index') }}">Ma boîte mail</a></li>
+                {% endif %}
                 {% if is_granted('ROLE_TRAVAUX_PLANNING') %}
                     <li><a class="dropdown-item" href="{{ path('employe') }}">Les ouvriers</a></li>
                     <li><a class="dropdown-item" href="{{ path('horaire') }}">Les horaires</a></li>

@@ -18,9 +18,9 @@ class ImapHandler
     ) {
     }
 
-    public function mailbox(string $username, string $password): void
+    public function mailbox(string $username, string $password): ?Mailbox
     {
-       $this->mailbox = new Mailbox([
+        $this->mailbox = new Mailbox([
             'port' => 993,
             'username' => $username,
             'password' => $password,
@@ -28,6 +28,12 @@ class ImapHandler
             'host' => $this->imapHost,
             //'debug' => true,
         ]);
+        return $this->mailbox;
+    }
+
+    public function isConnected(): bool
+    {
+        return $this->mailbox->connected();
     }
 
     /**
@@ -37,9 +43,6 @@ class ImapHandler
      */
     public function messages(int $days = 7): MessageCollection
     {
-        if (!$this->mailbox->connected()) {
-            $this->mailbox->connect();
-        }
         $inbox = $this->mailbox->inbox();
 
         return $inbox->messages()
@@ -50,9 +53,6 @@ class ImapHandler
 
     public function message(string $uid): ?MessageInterface
     {
-        if (!$this->mailbox->connected()) {
-            $this->mailbox->connect();
-        }
         $inbox = $this->mailbox->inbox();
 
         return $inbox->messages()

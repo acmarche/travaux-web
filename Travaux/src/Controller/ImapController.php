@@ -17,6 +17,7 @@ use AcMarche\Travaux\Repository\PrioriteRepository;
 use AcMarche\Travaux\Service\InterventionWorkflow;
 use DirectoryTree\ImapEngine\Attachment;
 use DirectoryTree\ImapEngine\Collections\MessageCollection;
+use DirectoryTree\ImapEngine\Exceptions\ImapConnectionFailedException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,10 +56,22 @@ class ImapController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $passwordCrypted = $this->cryptoHelper->encrypt($form->get('password')->getData());
-            $request->getSession()->set('imap_password', $passwordCrypted);
+            $password = $form->get('password')->getData();
+            $passwordCrypted = $this->cryptoHelper->encrypt($password);
+            try {
+                $this->tryConnectImap($user->getUsername(), $password);
+            } catch (ImapConnectionFailedException|\Exception $e) {
+                $this->addFlash('danger', $e->getMessage());
 
-            return $this->redirectToRoute('imap_index');
+                return $this->redirectToRoute('imap_login');
+            }
+            if ($this->imapHandler->isConnected()) {
+                $request->getSession()->set('imap_password', $passwordCrypted);
+
+                return $this->redirectToRoute('imap_index');
+            }
+
+            return $this->redirectToRoute('imap_login');
         }
 
         return $this->render('@AcMarcheTravaux/imap/login.html.twig', [
