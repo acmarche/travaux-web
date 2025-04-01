@@ -38,7 +38,7 @@ class InterventionRepository extends ServiceEntityRepository
      * @param $args
      * @throws Exception
      */
-    public function setCriteria(array $args, bool $cloture = false): QueryBuilder
+    public function setCriteria(array $args): QueryBuilder
     {
         $intitule = $args['intitule'] ?? null;
         $username = $args['user'] ?? 0;
@@ -52,7 +52,7 @@ class InterventionRepository extends ServiceEntityRepository
         $date_debut = $args['date_debut'] ?? null;
         $date_fin = $args['date_fin'] ?? null;
         //1 => archive, 2 => les deux, pas definis pas d'archive
-        $archive = $args['archive'] ?? null;
+        $archive = $args['archive'];
         $withAValider = $args['withAValider'] ?? false;
         $affectation = $args['affectation'] ?? 0;
         $place = $args['place'] ?? null;
@@ -74,25 +74,13 @@ class InterventionRepository extends ServiceEntityRepository
                 ->setParameter('aff', '%'.$affectation.'%');
         }
 
-
-        if ($archive) {
-            if ($archive == 1) {
-                $qb->andWhere("intervention.archive = 1 ");
-            }
-            //$archive == 2
-            //pas de contrainte;
-        } else {
-            $qb->andWhere("intervention.archive = 0 ");
+        if ($archive !== null) {
+            $qb->andWhere("intervention.archive = $archive ");
         }
 
         if ($etat) {
             $qb->andWhere('intervention.etat = :etat')
                 ->setParameter('etat', $etat);
-        } else {
-            if ($cloture) {
-                $qb->andWhere('intervention.etat != :etat')
-                    ->setParameter('etat', 4);//pas les clotures
-            }
         }
 
         if ($date_introduction) {
@@ -143,34 +131,16 @@ class InterventionRepository extends ServiceEntityRepository
         if ($affecte_prive) {
             $qb->andWhere("intervention.affecte_prive = :prive")
                 ->setParameter('prive', 1);
-        } else {
-            $qb->andWhere("intervention.affecte_prive = :prive")
-                ->setParameter('prive', 0);
         }
 
         if ($place) {
-            if (!is_array($place)) {
-                $qb->andWhere('intervention.currentPlace LIKE :place')
-                    ->setParameter('place', '%'.$place.'%');
-            } else {
-                foreach ($place as $value) {
-                    $qb->orWhere('intervention.currentPlace LIKE :arg')
-                        ->setParameter('arg', '%'.$value.'%');
-                }
-            }
-        } /**
-         * intervention en attente de validation
-         * non pour tous
-         * sauf pour les contributeurs sinon ne voit rien
-         */
-        elseif (!$withAValider) {
             $qb->andWhere('intervention.currentPlace LIKE :place')
-                ->setParameter('place', '%published%');
+                ->setParameter('place', '%'.$place.'%');
         }
 
         $today = new DateTime('now');
-        $qb->andWhere('intervention.date_execution <= :date OR intervention.date_execution IS NULL')
-            ->setParameter('date', $today->format('Y-m-d'));
+        /*$qb->andWhere('intervention.date_execution <= :date OR intervention.date_execution IS NULL')
+               ->setParameter('date', $today->format('Y-m-d'));*/
 
         if ($sort) {
             $qb->addOrderBy('intervention.'.$sort, 'DESC');

@@ -6,6 +6,7 @@ use AcMarche\Travaux\Entity\Intervention;
 use AcMarche\Travaux\Event\InterventionEvent;
 use AcMarche\Travaux\Form\InterventionType;
 use AcMarche\Travaux\Form\Search\SearchInterventionType;
+use AcMarche\Travaux\Repository\EtatRepository;
 use AcMarche\Travaux\Repository\InterventionRepository;
 use AcMarche\Travaux\Repository\SuiviRepository;
 use AcMarche\Travaux\Service\FileHelper;
@@ -31,6 +32,7 @@ class InterventionController extends AbstractController
         private InterventionWorkflow $workflow,
         private EventDispatcherInterface $eventDispatcher,
         private InterventionRepository $interventionRepository,
+        private EtatRepository $etatRepository,
         private SuiviRepository $suiviRepository,
     ) {
     }
@@ -51,6 +53,7 @@ class InterventionController extends AbstractController
 
         $user = $this->getUser();
         $data['current_user'] = $user;
+        $data['archive'] = 0;
         $data = array_merge($data, $this->travauxUtils->getConstraintsForUser());
         $search_form = $this->createForm(
             SearchInterventionType::class,

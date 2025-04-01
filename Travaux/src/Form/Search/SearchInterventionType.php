@@ -7,9 +7,12 @@ use AcMarche\Travaux\Repository\DomaineRepository;
 use AcMarche\Travaux\Repository\EtatRepository;
 use AcMarche\Travaux\Repository\PrioriteRepository;
 use AcMarche\Travaux\Repository\UserRepository;
+use AcMarche\Travaux\Service\WorkflowEnum;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -34,6 +37,7 @@ class SearchInterventionType extends AbstractType
         $etats = $this->etatRepository->getForSearch();
         $priorites = $this->prioriteRepository->getForSearch();
         $affecte_prive = ['Oui' => 1, 'Non' => 0];
+        $archive = ['Les deux' => null, 'Oui' => 1, 'Non' => 0];
 
         $sorts = array(
             'Numéro' => 'id',
@@ -146,6 +150,27 @@ class SearchInterventionType extends AbstractType
                     'required' => false,
                     'placeholder' => 'Choisissez un type',
                     'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
+                )
+            )
+            ->add(
+                'place',
+                EnumType::class,
+                array(
+                    'label' => 'Workflow',
+                    'class' => WorkflowEnum::class,
+                    'required' => false,
+                    'placeholder' => 'Choisissez un type',
+                    'choice_label' => fn(WorkflowEnum $place) => $place->getLabel(),
+                    'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
+                )
+            )
+            ->add(
+                'archive',
+                ChoiceType::class,
+                array(
+                    'label' => 'Archive',
+                    'choices' => $archive,
+                    'required' => false,
                 )
             )
             ->add(
