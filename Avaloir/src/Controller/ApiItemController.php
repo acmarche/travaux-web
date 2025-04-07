@@ -36,6 +36,13 @@ class ApiItemController extends AbstractController
     public function insert(Request $request): JsonResponse
     {
         $coordinatesJson = $request->request->get('coordinates');
+        $categoryId = $request->request->get('category');
+        $this->logger->log(LogLevel::ERROR, 'error cateogry id '.$categoryId);
+        if ($categoryId) {
+            $category = $this->itemCategoryRepository->find($categoryId);
+        } else {
+            $category = $this->itemCategoryRepository->find(1);
+        }
         try {
             $data = json_decode($coordinatesJson, true, 512, JSON_THROW_ON_ERROR);
             if (!$item = $this->itemRepository->findByLatitudeAndLongitude(
@@ -45,6 +52,7 @@ class ApiItemController extends AbstractController
                 $item = new Item();
                 $item->latitude = $data['latitude'];
                 $item->longitude = $data['longitude'];
+                $item->category = $category;
                 $this->itemRepository->persist($item);
             }
             if (isset($data['createdAt'])) {
@@ -125,7 +133,7 @@ class ApiItemController extends AbstractController
                 ];
         }
 
-       return $this->upload($item, $image);
+        return $this->upload($item, $image);
     }
 
     private function upload(Item $item, UploadedFile $image): array
