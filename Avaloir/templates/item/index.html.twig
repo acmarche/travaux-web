@@ -16,7 +16,7 @@
                 {% for item in items %}
                     <tr>
                         <td>
-                            <img src="{{ vich_uploader_asset(item, 'imageFile') | imagine_filter('avaloir_heighten_filter') }}"
+                            <img src="{{ vich_uploader_asset(item, 'imageFile') | imagine_filter('avaloir_heighten_small') }}"
                                  alt="{{ item.id }}" class="card-img-top"/>
                         </td>
                         <td>{{ item.rue }}</td>

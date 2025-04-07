@@ -33,7 +33,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'avaloir_smartphone' => [
                     'quality' => 85,
                     'filters' => ['relative_resize' => ['heighten' => 600], 'auto_rotate' => ['~']],
-                ]
+                ],
+                'avaloir_heighten_small' => [
+                    'quality' => 95,
+                    'filters' => ['relative_resize' => ['heighten' => 300], 'auto_rotate' => ['~']],
+                ],
             ],
         ]
     );
