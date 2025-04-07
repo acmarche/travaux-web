@@ -21,7 +21,11 @@
                                  alt="{{ item.id }}" class="card-img-top"/>
                         </td>
                         <td>{{ item.rue }}</td>
-                        <td>{{ item.latitude }}</td>
+                        <td>
+                          <a href="https://www.google.com/maps?q={{ item.latitude }},{{ item.longitude }}" target="_blank">
+                              {{ item.latitude }}, {{ item.longitude }}
+                          </a>
+                        </td>
                         <td>{{ item.category }}</td>
                         <td>{{ item.description }}</td>
                         <td>{{ item.createdAt|format_date('full') }}</td>
