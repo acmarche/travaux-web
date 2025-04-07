@@ -36,7 +36,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 ],
                 'avaloir_heighten_small' => [
                     'quality' => 95,
-                    'filters' => ['relative_resize' => ['heighten' => 300], 'auto_rotate' => ['~']],
+                    'filters' => ['relative_resize' => ['heighten' => 200], 'auto_rotate' => ['~']],
                 ],
             ],
         ]
