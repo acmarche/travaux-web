@@ -36,8 +36,10 @@ class ApiItemController extends AbstractController
     public function insert(Request $request): JsonResponse
     {
         $coordinatesJson = $request->request->get('coordinates');
-        $categoryId = $request->request->get('category');
+        $categoryId = $request->request->getInt('category');
         $this->logger->log(LogLevel::ERROR, 'get cateogry id '.$categoryId);
+        $description = $request->request->getString('description');
+        $this->logger->log(LogLevel::ERROR, 'get description '.$description);
         if ($categoryId) {
             $category = $this->itemCategoryRepository->find($categoryId);
         } else {
@@ -53,6 +55,7 @@ class ApiItemController extends AbstractController
                 $item->latitude = $data['latitude'];
                 $item->longitude = $data['longitude'];
                 $item->category = $category;
+                $item->description = $description;
                 $this->itemRepository->persist($item);
             }
             if (isset($data['createdAt'])) {
