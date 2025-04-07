@@ -3,6 +3,7 @@
 namespace AcMarche\Avaloir\Entity;
 
 use AcMarche\Avaloir\Repository\ItemRepository;
+use AcMarche\Travaux\Entity\IdTrait;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
@@ -18,11 +19,8 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 class Item implements TimestampableInterface, Stringable
 {
     use TimestampableTrait;
+    use IdTrait;
 
-    #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
-    #[ORM\GeneratedValue(strategy: 'AUTO')]
-    public ?int $id = 0;//todo pq ???
     #[ORM\Column(precision: 10, scale: 8, nullable: false)]
     public float $latitude = 0;
     #[ORM\Column(precision: 10, scale: 8, nullable: false)]
