@@ -106,7 +106,7 @@ class ApiItemController extends AbstractController
         /**
          * @var UploadedFile $image
          */
-        $image = $request->files->get('image');
+        $image = $request->files->get('file');
 
         if (!$image instanceof UploadedFile) {
             return
