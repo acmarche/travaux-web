@@ -102,7 +102,6 @@ class ApiItemController extends AbstractController
 
     public function uploadImage(Item $item, Request $request): array
     {
-        var_dump($request->request->files);
         /**
          * @var UploadedFile $image
          */
