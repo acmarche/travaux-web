@@ -126,9 +126,7 @@ class ApiItemController extends AbstractController
                 ];
         }
 
-        $this->upload($item, $image);
-
-        return [];
+       return $this->upload($item, $image);
     }
 
     private function upload(Item $item, UploadedFile $image): array
