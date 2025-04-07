@@ -1,0 +1,23 @@
+{% extends '@AcMarcheAvaloir/layout_avaloir.html.twig' %}
+
+{% block body -%}
+    <div class="card">
+        <h3 class="card-header">Liste des catégories</h3>
+        <div class="card-body">
+
+            <table class="table table-bordered">
+                <tr>
+                    <th>Nom</th>
+                    <th>Icône</th>
+                </tr>
+                {% for category in categories %}
+                    <tr>
+                        <td>{{ category.name }}</td>
+                        <td>{{ category.icon }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+        </div>
+    </div>
+{% endblock %}

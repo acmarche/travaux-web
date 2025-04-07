@@ -4,6 +4,7 @@ namespace AcMarche\Avaloir\Controller;
 
 use AcMarche\Avaloir\Entity\Item;
 use AcMarche\Avaloir\MailerAvaloir;
+use AcMarche\Avaloir\Repository\ItemCategoryRepository;
 use AcMarche\Avaloir\Repository\ItemRepository;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
@@ -20,8 +21,8 @@ class ApiItemController extends AbstractController
 {
     public function __construct(
         private readonly ItemRepository $itemRepository,
+        private readonly ItemCategoryRepository $itemCategoryRepository,
         private readonly MailerAvaloir $mailerAvaloir,
-        private readonly CacheInterface $cache,
         private readonly LoggerInterface $logger
     ) {
     }
@@ -29,31 +30,7 @@ class ApiItemController extends AbstractController
     #[Route(path: '/categories', methods: ['GET'], format: 'json')]
     public function categories(): JsonResponse
     {
-        $items = [
-            [
-                "name" => "Bancs",
-                "id" => 1,
-                "image" => "https://apptravaux.marche.be/bundles/travaux/images/items/picnic-table.png",
-            ],
-            [
-                "name" => "Feu de circulation",
-                "id" => 2,
-                "image" => "https://apptravaux.marche.be/bundles/travaux/images/items/traffic-lights.png",
-            ],
-            [
-                "name" => "Passage pour piétons",
-                "id" => 3,
-                "image" => "https://apptravaux.marche.be/bundles/travaux/images/items/trash.png",
-            ],
-            [
-                "name" => "Poubelles",
-                "id" => 4,
-                "image" => "https://apptravaux.marche.be/bundles/travaux/images/items/walk.png",
-            ],
-        ];
-
-        return $this->json($items);
-
+        return $this->json($this->itemCategoryRepository->findAllOrdered());
     }
 
     #[Route(path: '/insert', methods: ['POST'], format: 'json')]

@@ -1,0 +1,27 @@
+{% extends '@AcMarcheAvaloir/layout_avaloir.html.twig' %}
+
+{% block body -%}
+    <div class="card">
+        <h3 class="card-header">Liste des items</h3>
+        <div class="card-body">
+
+            <table class="table table-bordered">
+                <tr>
+                    <th>Rue</th>
+                    <th>Géolocalisation</th>
+                    <th>Catégorie</th>
+                    <th>Ajouté le</th>
+                </tr>
+                {% for item in items %}
+                    <tr>
+                        <td>{{ item.rue }}</td>
+                        <td>{{ item.latitude }}</td>
+                        <td>{{ item.category }}</td>
+                        <td>{{ item.createdAt|format_date('full') }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+        </div>
+    </div>
+{% endblock %}

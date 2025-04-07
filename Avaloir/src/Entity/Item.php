@@ -42,6 +42,9 @@ class Item implements TimestampableInterface, Stringable
     public ?string $imageName = null;
     #[ORM\Column(nullable: false)]
     public bool $finished = false;
+    #[ORM\ManyToOne(targetEntity: ItemCategory::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    public ItemCategory $category;
 
     public function __toString(): string
     {
