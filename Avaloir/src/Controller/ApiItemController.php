@@ -37,7 +37,7 @@ class ApiItemController extends AbstractController
     {
         $coordinatesJson = $request->request->get('coordinates');
         $categoryId = $request->request->get('category');
-        $this->logger->log(LogLevel::ERROR, 'error cateogry id '.$categoryId);
+        $this->logger->log(LogLevel::ERROR, 'get cateogry id '.$categoryId);
         if ($categoryId) {
             $category = $this->itemCategoryRepository->find($categoryId);
         } else {

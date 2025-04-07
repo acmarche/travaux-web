@@ -3,16 +3,17 @@
 namespace AcMarche\Avaloir\Entity;
 
 use AcMarche\Avaloir\Repository\AvaloirRepository;
-use Stringable;
+use AcMarche\Travaux\Entity\IdTrait;
 use DateTime;
-use Exception;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Stringable;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -23,34 +24,31 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 class Avaloir implements TimestampableInterface, Stringable
 {
     use TimestampableTrait;
+    use IdTrait;
 
-    #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
-    #[ORM\GeneratedValue(strategy: 'AUTO')]
-    protected ?int $id = 0;//todo pq ???
     #[ORM\Column(precision: 10, scale: 8, nullable: false)]
     public float $latitude = 0;
     #[ORM\Column(precision: 10, scale: 8, nullable: false)]
     public float $longitude = 0;
     #[ORM\Column(type: 'text', nullable: true)]
-    protected ?string $description = null;
+    public ?string $description = null;
     #[ORM\Column(type: 'string', length: 120, nullable: true)]
-    protected ?string $rue = null;
+    public ?string $rue = null;
     #[ORM\Column(type: 'string', length: 120, nullable: true)]
-    protected ?string $localite = null;
+    public ?string $localite = null;
     #[ORM\Column(type: 'string', nullable: true)]
-    protected ?string $numero = null;
-    #[ORM\OneToMany(targetEntity: 'DateNettoyage', mappedBy: 'avaloir', cascade: ['persist', 'remove'])]
-    private Collection $dates;
-    #[ORM\OneToMany(targetEntity: 'Commentaire', mappedBy: 'avaloir', cascade: ['persist', 'remove'])]
-    private Collection $commentaires;
+    public ?string $numero = null;
+    #[ORM\OneToMany(targetEntity: DateNettoyage::class, mappedBy: 'avaloir', cascade: ['persist', 'remove'])]
+    public Collection $dates;
+    #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'avaloir', cascade: ['persist', 'remove'])]
+    public Collection $commentaires;
     #[ORM\Column(type: 'date', nullable: true, options: ['comment' => 'date de rappel'])]
     #[Assert\Type(DateTime::class)]
-    protected ?DateTimeInterface $date_rappel = null;
+    public ?DateTimeInterface $date_rappel = null;
     #[Vich\UploadableField(mapping: 'avaloir_image', fileNameProperty: 'imageName')]
-    private ?File $imageFile = null;
+    public ?File $imageFile = null;
     #[ORM\Column(type: 'string', length: 120, nullable: true)]
-    private ?string $imageName = null;
+    public ?string $imageName = null;
     #[ORM\Column(nullable: false)]
     public bool $finished = false;
 

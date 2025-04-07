@@ -42,4 +42,17 @@ class ItemRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    /**
+     * @return Item[]
+     */
+    public function findAllNotFinished(): array
+    {
+        return $this->createQueryBuilder('item')
+            ->andWhere('item.finished = :finish')
+            ->setParameter('finish', false)
+            ->addOrderBy('item.createdAt', 'DESC')
+            ->getQuery()->getResult();
+
+    }
+
 }
