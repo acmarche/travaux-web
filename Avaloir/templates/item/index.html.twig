@@ -11,6 +11,7 @@
                     <th>Rue</th>
                     <th>Géolocalisation</th>
                     <th>Catégorie</th>
+                    <th>Description</th>
                     <th>Ajouté le</th>
                 </tr>
                 {% for item in items %}
@@ -22,6 +23,7 @@
                         <td>{{ item.rue }}</td>
                         <td>{{ item.latitude }}</td>
                         <td>{{ item.category }}</td>
+                        <td>{{ item.description }}</td>
                         <td>{{ item.createdAt|format_date('full') }}</td>
                     </tr>
                 {% endfor %}
