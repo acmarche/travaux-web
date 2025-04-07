@@ -102,6 +102,7 @@ class ApiItemController extends AbstractController
 
     public function uploadImage(Item $item, Request $request): array
     {
+        var_dump($request->request->all());
         /**
          * @var UploadedFile $image
          */
@@ -111,7 +112,7 @@ class ApiItemController extends AbstractController
             return
                 [
                     'error' => 1,
-                    'message' => 'Upload raté',
+                    'message' => 'Upload not UploadedFile',
                     'item' => $this->serializeApi($item),
                 ];
         }
