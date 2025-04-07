@@ -6,6 +6,7 @@ use AcMarche\Travaux\Entity\Intervention;
 use AcMarche\Travaux\Event\InterventionEvent;
 use AcMarche\Travaux\Form\InterventionType;
 use AcMarche\Travaux\Form\Search\SearchInterventionType;
+use AcMarche\Travaux\Repository\CategorieRepository;
 use AcMarche\Travaux\Repository\EtatRepository;
 use AcMarche\Travaux\Repository\InterventionRepository;
 use AcMarche\Travaux\Repository\SuiviRepository;
@@ -32,7 +33,7 @@ class InterventionController extends AbstractController
         private InterventionWorkflow $workflow,
         private EventDispatcherInterface $eventDispatcher,
         private InterventionRepository $interventionRepository,
-        private EtatRepository $etatRepository,
+        private CategorieRepository $categorieRepository,
         private SuiviRepository $suiviRepository,
     ) {
     }
@@ -99,6 +100,9 @@ class InterventionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $this->getUser();
             $intervention->setUserAdd($user->getUserIdentifier());
+
+            $category = $this->categorieRepository->find(3);
+            $intervention->categorie = $category;
 
             $this->interventionRepository->persist($intervention);
             $this->interventionRepository > flush();
