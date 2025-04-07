@@ -37,7 +37,7 @@ class Item implements TimestampableInterface, Stringable
     public ?string $numero = null;
     #[ORM\Column(type: 'date', nullable: true, options: ['comment' => 'date de rappel'])]
     #[Vich\UploadableField(mapping: 'item_image', fileNameProperty: 'imageName')]
-    private ?File $imageFile = null;
+    public ?File $imageFile = null;
     #[ORM\Column(type: 'string', length: 120, nullable: true)]
     public ?string $imageName = null;
     #[ORM\Column(nullable: false)]

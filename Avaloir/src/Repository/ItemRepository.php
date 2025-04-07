@@ -31,17 +31,15 @@ class ItemRepository extends ServiceEntityRepository
         return $this->findBy(array(), array('id' => 'DESC'));
     }
 
-    /**
-     * @return Item[]
-     */
-    public function findAllNotFinished(): array
+    public function findByLatitudeAndLongitude(mixed $latitude, mixed $longitude): ?Item
     {
         return $this->createQueryBuilder('item')
-            ->andWhere('item.finished = :finish')
-            ->setParameter('finish', false)
-            ->addOrderBy('item.createdAt', 'DESC')
-            ->getQuery()->getResult();
-
+            ->andWhere('item.latitude = :latitude')
+            ->setParameter('latitude', $latitude)
+            ->andWhere('item.longitude = :longitude')
+            ->setParameter('longitude', $longitude)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
 }

@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Contracts\Cache\CacheInterface;
 
 #[Route(path: '/items/api')]
 class ApiItemController extends AbstractController
@@ -67,8 +66,8 @@ class ApiItemController extends AbstractController
         } catch (\Exception $exception) {
             $data = [
                 'error' => 1,
-                'message' => 'Avaloir non insérer dans la base de données',
-                'avaloir' => $exception->getMessage(),
+                'message' => 'Item non inséré dans la base de données',
+                'item' => $exception->getMessage(),
             ];
 
             $this->logger->log(LogLevel::ERROR, 'error '.$exception->getMessage());
@@ -87,7 +86,7 @@ class ApiItemController extends AbstractController
         try {
             //  $this->meiliServer->addData($item);
         } catch (\Exception $exception) {
-            $this->mailerAvaloir->sendError('update search avaloir', [$exception->getMessage()]);
+            $this->mailerAvaloir->sendError('update search item', [$exception->getMessage()]);
         }
 
 
@@ -95,7 +94,7 @@ class ApiItemController extends AbstractController
             'error' => 0,
             'elastic' => '',
             'message' => 'ok',
-            'avaloir' => $this->serializeApi($item),
+            'item' => $this->serializeApi($item),
         ];
 
         return new JsonResponse($data);
@@ -113,7 +112,7 @@ class ApiItemController extends AbstractController
                 [
                     'error' => 1,
                     'message' => 'Upload raté',
-                    'avaloir' => $this->serializeApi($item),
+                    'item' => $this->serializeApi($item),
                 ];
         }
 
@@ -122,7 +121,7 @@ class ApiItemController extends AbstractController
                 [
                     'error' => 1,
                     'message' => $image->getErrorMessage(),
-                    'avaloir' => $this->serializeApi($item),
+                    'item' => $this->serializeApi($item),
                 ];
         }
 
@@ -133,31 +132,31 @@ class ApiItemController extends AbstractController
 
     private function upload(Item $item, UploadedFile $image): array
     {
-        $name = 'aval-'.$item->id.'.jpg';
+        $name = 'item-'.$item->id.'.jpg';
         try {
             $image->move(
-                $this->getParameter('ac_marche_avaloir.upload.directory').DIRECTORY_SEPARATOR.$item->id,
+                $this->getParameter('ac_marche_item.upload.directory').DIRECTORY_SEPARATOR.$item->id,
                 $name
             );
         } catch (FileException) {
             return [
                 'error' => 1,
                 'message' => $image->getErrorMessage(),
-                'avaloir' => $this->serializeApi($item),
+                'item' => $this->serializeApi($item),
             ];
         }
 
         $item->imageName = $name;
         $this->itemRepository->flush();
 
-        return ['error' => 0, 'message' => $name, 'avaloir' => $this->serializeApi($item)];
+        return ['error' => 0, 'message' => $name, 'item' => $this->serializeApi($item)];
     }
 
     private function serializeApi(Item $item): array
     {
         return [
             'id' => $item->id,
-            'refId' => $item->id,
+            'idServer' => $item->id,
             'latitude' => $item->latitude,
             'longitude' => $item->longitude,
         ];
