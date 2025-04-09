@@ -7,12 +7,12 @@ use AcMarche\Travaux\Event\InterventionEvent;
 use AcMarche\Travaux\Form\InterventionType;
 use AcMarche\Travaux\Form\Search\SearchInterventionType;
 use AcMarche\Travaux\Repository\CategorieRepository;
-use AcMarche\Travaux\Repository\EtatRepository;
 use AcMarche\Travaux\Repository\InterventionRepository;
 use AcMarche\Travaux\Repository\SuiviRepository;
 use AcMarche\Travaux\Service\FileHelper;
 use AcMarche\Travaux\Service\InterventionWorkflow;
 use AcMarche\Travaux\Service\TravauxUtils;
+use AcMarche\Travaux\Service\WorkflowEnum;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Exception\IOException;
@@ -55,6 +55,8 @@ class InterventionController extends AbstractController
         $user = $this->getUser();
         $data['current_user'] = $user;
         $data['archive'] = 0;
+        $data['categorie'] = 3;
+        $data['place'] = WorkflowEnum::PUBLISHED;
         $data = array_merge($data, $this->travauxUtils->getConstraintsForUser());
         $search_form = $this->createForm(
             SearchInterventionType::class,

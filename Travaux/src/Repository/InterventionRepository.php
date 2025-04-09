@@ -6,6 +6,7 @@ use AcMarche\Travaux\Doctrine\OrmCrudTrait;
 use AcMarche\Travaux\Entity\Intervention;
 use AcMarche\Travaux\Entity\Security\Group;
 use AcMarche\Travaux\Entity\Security\User;
+use AcMarche\Travaux\Service\WorkflowEnum;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -59,6 +60,7 @@ class InterventionRepository extends ServiceEntityRepository
         $sort = $args['sort'] ?? null;
         $affecte_prive = $args['affecte_prive'] ?? false;
         $date_execution = $args['date_execution'] ?? false;
+        $category = $args['categorie'] ?? null;
 
         $qb = $this->createQbl();
 
@@ -133,9 +135,14 @@ class InterventionRepository extends ServiceEntityRepository
                 ->setParameter('prive', 1);
         }
 
-        if ($place) {
+        if ($place instanceof WorkflowEnum) {
             $qb->andWhere('intervention.currentPlace LIKE :place')
-                ->setParameter('place', '%'.$place.'%');
+                ->setParameter('place', '%'.$place->value.'%');
+        }
+
+        if ($category) {
+            $qb->andWhere('intervention.categorie = :cat')
+                ->setParameter('cat', $category);
         }
 
         $today = new DateTime('now');
@@ -170,6 +177,19 @@ class InterventionRepository extends ServiceEntityRepository
         $query = $qb->getQuery();
 
         return $query->getResult();
+    }
+
+    /**
+     * @param int $categoryId
+     * @return Intervention[]
+     */
+    public function findOlderThan(DateTime $dateTime): array
+    {
+        return $this->createQbl()
+            ->andWhere('intervention.updatedAt < :cat ')
+            ->setParameter('cat', $dateTime->format('Y-m-d'))
+            ->getQuery()
+            ->getResult();
     }
 
     /**

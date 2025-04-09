@@ -3,13 +3,13 @@
 namespace AcMarche\Travaux\Form\Search;
 
 use AcMarche\Travaux\Repository\BatimentRepository;
+use AcMarche\Travaux\Repository\CategorieRepository;
 use AcMarche\Travaux\Repository\DomaineRepository;
 use AcMarche\Travaux\Repository\EtatRepository;
 use AcMarche\Travaux\Repository\PrioriteRepository;
 use AcMarche\Travaux\Repository\UserRepository;
 use AcMarche\Travaux\Service\WorkflowEnum;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
@@ -22,6 +22,7 @@ class SearchInterventionType extends AbstractType
 {
     public function __construct(
         private readonly BatimentRepository $batimentRepository,
+        private readonly CategorieRepository $categorieRepository,
         private readonly UserRepository $userRepository,
         private readonly DomaineRepository $domaineRepository,
         private readonly EtatRepository $etatRepository,
@@ -33,6 +34,7 @@ class SearchInterventionType extends AbstractType
     {
         $batiments = $this->batimentRepository->getForSearch();
         $users = $this->userRepository->getForSearch();
+        $categories = $this->categorieRepository->getForSearch();
         $domaines = $this->domaineRepository->getForSearch();
         $etats = $this->etatRepository->getForSearch();
         $priorites = $this->prioriteRepository->getForSearch();
@@ -139,6 +141,16 @@ class SearchInterventionType extends AbstractType
                     'choices' => $users,
                     'required' => false,
                     'placeholder' => 'Choisissez un utilisateur',
+                    'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
+                )
+            )
+            ->add(
+                'categorie',
+                ChoiceType::class,
+                array(
+                    'choices' => $categories,
+                    'required' => false,
+                    'placeholder' => 'Choisissez une catégorie',
                     'attr' => ['class' => 'custom-select my-1 mr-sm-2'],
                 )
             )
