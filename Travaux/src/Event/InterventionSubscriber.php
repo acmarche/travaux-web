@@ -2,13 +2,13 @@
 
 namespace AcMarche\Travaux\Event;
 
-use Exception;
-use DateTime;
 use AcMarche\Travaux\Repository\InterventionRepository;
 use AcMarche\Travaux\Repository\UserRepository;
 use AcMarche\Travaux\Service\Mailer;
 use AcMarche\Travaux\Service\SuiviService;
 use AcMarche\Travaux\Service\TravauxUtils;
+use DateTime;
+use Exception;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
@@ -162,6 +162,7 @@ class InterventionSubscriber implements EventSubscriberInterface
         $this->flashBag->add("success", "L'intervention a bien été refusée");
         try {
             $this->mailer->sendMailAcceptOrReject($event, "refusée");
+            $this->interventionRepository->flush();
         } catch (TransportExceptionInterface $e) {
             $this->flashBag->add('danger', 'Le mail n\'a pas pu être envoyé: '.$e->getMessage());
         }

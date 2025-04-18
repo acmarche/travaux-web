@@ -14,10 +14,11 @@ use Symfony\Component\Workflow\Exception\LogicException;
 use Symfony\Component\Workflow\Registry;
 use Symfony\Component\Workflow\Transition;
 use Symfony\Component\Workflow\Workflow;
+use Symfony\Component\Workflow\WorkflowInterface;
 
 class InterventionWorkflow
 {
-    private ?Workflow $workflow = null;
+    private ?WorkflowInterface $workflow = null;
 
     public function __construct(
         private Registry $workflowRegistry,
@@ -106,6 +107,7 @@ class InterventionWorkflow
         if ($this->workflow->can($intervention, 'reject_from_auteur')) {
             $transition = 'reject_from_auteur';
             $result = $this->applyTransition($intervention, $transition);
+
             if (isset($result['error'])) {
                 return $result;
             }
