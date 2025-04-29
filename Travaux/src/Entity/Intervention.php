@@ -29,6 +29,7 @@ class Intervention implements TimestampableInterface, Stringable
     #[ORM\Column(type: 'string', nullable: false)]
     #[ORM\OrderBy(['intitule' => 'ASC'])]
     #[Assert\NotBlank]
+    #[Assert\Length(min: 5)]
     public string $intitule;
     #[ORM\ManyToOne(targetEntity: Etat::class, inversedBy: 'interventions')]
     #[ORM\JoinColumn(nullable: false)]

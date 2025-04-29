@@ -3,12 +3,11 @@
 namespace AcMarche\Travaux\Form;
 
 use AcMarche\Travaux\Entity\Intervention;
-use AcMarche\Travaux\Entity\Security\User;
 use AcMarche\Travaux\Repository\UserRepository;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -22,7 +21,7 @@ class InterventionFromMessageType extends AbstractType
     {
         $users = $this->userRepository->getForSearch();
         $builder
-            ->add('intitule')
+            ->add('intitule', TextType::class, ['required' => true])
             ->add(
                 'descriptif',
                 TextareaType::class,
