@@ -37,7 +37,7 @@ class Document implements TimestampableInterface, Stringable
     protected bool$smartphone = false;
     protected array$files;
 
-    public function setOFile(File|UploadedFile $file = null): void
+    public function setOFile(File|UploadedFile|null $file = null): void
     {
         $this->Ofile = $file;
 

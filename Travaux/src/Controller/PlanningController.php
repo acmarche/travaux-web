@@ -49,7 +49,7 @@ class PlanningController extends AbstractController
     }
 
     #[Route(path: '/listing/{yearmonth}/{categoryPlanning}', name: 'planning_index')]
-    public function index(string $yearmonth = null, ?CategoryPlanning $categoryPlanning = null): Response
+    public function index(?string $yearmonth = null, ?CategoryPlanning $categoryPlanning = null): Response
     {
         $dateSelected = Carbon::now()->toImmutable();
         if ($yearmonth) {
@@ -159,7 +159,7 @@ class PlanningController extends AbstractController
     #[Route(path: '/{id}/{yearmonth}/{categoryId}', name: 'planning_show', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function show(
         InterventionPlanning $intervention,
-        string $yearmonth = null,
+        ?string $yearmonth = null,
         ?int $categoryId = null
     ): Response {
         return $this->render(
@@ -189,7 +189,7 @@ class PlanningController extends AbstractController
     public function edit(
         Request $request,
         InterventionPlanning $intervention,
-        string $yearmonth = null,
+        ?string $yearmonth = null,
         ?int $categoryId = null
     ): Response {
         $request->getSession()->set(self::CATEGORY_SELECTED, $intervention->category?->getId());

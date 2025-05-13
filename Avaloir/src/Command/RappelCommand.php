@@ -25,7 +25,7 @@ class RappelCommand extends Command
         private MailerInterface $mailer,
         private AvaloirRepository $avaloirRepository,
         private ParameterBagInterface $parameterBag,
-        string $name = null
+        ?string $name = null
     ) {
         parent::__construct($name);
         $this->name = $name;

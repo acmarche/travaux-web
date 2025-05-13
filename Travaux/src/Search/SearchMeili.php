@@ -41,7 +41,7 @@ class SearchMeili
      * @param string|null $localite
      * @return iterable|SearchResult
      */
-    public function search(string $keyword, string $id = null): iterable|SearchResult
+    public function search(string $keyword, ?string $id = null): iterable|SearchResult
     {
         $this->init();
         $index = $this->client->index($this->indexName);

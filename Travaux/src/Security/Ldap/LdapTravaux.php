@@ -24,7 +24,7 @@ class LdapTravaux implements LdapInterface
     /**
      * {@inheritdoc}
      */
-    public function bind(string $dn = null, string $password = null): void
+    public function bind(?string $dn = null, ?string $password = null): void
     {
         $this->adapter->getConnection()->bind($dn, $password);
     }

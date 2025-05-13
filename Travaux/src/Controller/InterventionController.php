@@ -132,7 +132,7 @@ class InterventionController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}', name: 'intervention_show', methods: ['GET'])]
+    #[Route(path: '/{id}/show', name: 'intervention_show', methods: ['GET'])]
     public function show(Intervention $intervention): Response
     {
         $deleteFormSuivis = $this->createSuivisDeleteForm($intervention->getId());
@@ -250,5 +250,18 @@ class InterventionController extends AbstractController
             ->setAction($this->generateUrl('suivis_delete', ['id' => $intervention_id]))
             ->setMethod(Request::METHOD_DELETE)
             ->getForm();
+    }
+
+    #[Route(path: '/affecte/prive', name: 'intervention_prive', methods: ['GET'])]
+    public function indexPrive(Request $request): Response
+    {
+        $interventions = $this->interventionRepository->findPrive(false);
+
+        return $this->render(
+            '@AcMarcheTravaux/intervention/prive.html.twig',
+            [
+                'interventions' => $interventions,
+            ],
+        );
     }
 }

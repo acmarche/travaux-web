@@ -45,7 +45,7 @@ class TokenAuthenticator
      * @param Request $request The request that resulted in an AuthenticationException
      * @param AuthenticationException $authException The exception that started the authentication process
      */
-    public function start(Request $request, AuthenticationException $authException = null): JsonResponse
+    public function start(Request $request, ?AuthenticationException $authException = null): JsonResponse
     {
         $data = [
             // you might translate this message

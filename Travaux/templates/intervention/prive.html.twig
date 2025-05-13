@@ -1,0 +1,73 @@
+{% extends '@AcMarcheTravaux/layout.html.twig' %}
+
+{% block body %}
+
+    <div class="card">
+        <h3 class="card-header">Liste des {{ interventions | length }} interventions attribuées au privé</h3>
+        <div class="card-body">
+
+                <table class='table table-bordered table-hover'>
+                    <thead>
+                    <tr>
+                        <th scope="col">Numéro</th>
+                        <th scope="col">Intitule</th>
+                        <th scope="col">Dernier suivis</th>
+                        <th scope="col">Type</th>
+                        <th scope="col" class="hidden-xs">Etat</th>
+                        <th scope="col" class="hidden-xs">Transmis</th>
+                        <th scope="col">Priorité</th>
+                        <th scope="col" class="hidden-xs" style="width: 10%;">Validé le</th>
+                        <th scope="col">Encodé par</th>
+                        <th scope="col" class="hidden-xs">Affection</th>
+                        <th scope="col" class="hidden-xs">Bâtiment</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for intervention in interventions %}
+
+                        {% set class = '' %}
+                        {% set title = '' %}
+                        {% if intervention.priorite == 'Haute' and intervention.etat != 'Clôturé' %}
+                            {% set class = 'table-danger' %}
+                        {% endif %}
+
+                        <tr class="" id="{{ intervention.id }}" title="{{ title }}">
+                            <td>
+                                {{ intervention.id }}
+                            </td>
+                            <td>
+                                <a href="{{ path('intervention_show', { 'id': intervention.id }) }}"
+                                   title="Détail de l'intervention">{{ intervention.intitule }}</a>
+                            </td>
+                            <td></td>
+                            <td>{{ intervention.domaine }}</td>
+                            <td class="hidden-xs">{{ intervention.etat }}</td>
+                            <td class="hidden-xs">
+                                {% if intervention.transmis %}
+                                    <i class="ti ti-check"></i>
+                                {% endif %}
+                            </td>
+                            <td>{{ intervention.priorite }}</td>
+                            <td class="hidden-xs">
+                                {% if intervention.dateValidation %}
+                                    {{ intervention.dateValidation | date('d-m-Y') }}
+                                {% endif %}
+                            </td>
+                            <td>{{ intervention.useradd }}</td>
+                            <td class="hidden-xs">{{ intervention.affectation }}</td>
+                            <td class="hidden-xs align-middle">
+                                {% if intervention.batiment %}
+                                    <span class="d-block"
+                                          style="{% if intervention.batiment.color %}background-color: {{ intervention.batiment.color }}; {% endif %}width: 120px;height: 50px">
+                                            {{ intervention.batiment }}
+                                        </span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+        </div>
+    </div>
+{% endblock %}
+

@@ -64,6 +64,8 @@ class InterventionRepository extends ServiceEntityRepository
 
         $qb = $this->createQbl();
 
+        $qb->andWhere('intervention.affecte_prive != 1');
+
         if ($intitule) {
             $qb->andWhere(
                 'intervention.intitule LIKE :mot OR intervention.descriptif LIKE :mot OR intervention.affectation LIKE :mot'
@@ -304,6 +306,16 @@ class InterventionRepository extends ServiceEntityRepository
             ->setParameter('date_end', $dateEnd)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * @param array $args
+     * @return Intervention[]
+     */
+    public function findPrive(bool $cloture): array
+    {
+        return $this->createQbl()->where('intervention.affecte_prive = 1')
+            ->andWhere("intervention.archive = 0 ")->getQuery()->getResult();
     }
 
     private function createQbl(): QueryBuilder

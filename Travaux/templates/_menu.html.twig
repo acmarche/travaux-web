@@ -11,6 +11,11 @@
                     <i class="ti ti-plus"></i>
                     Ajouter une intervention</a>
             </li>
+            <li>
+                <a href="{{ path('intervention_prive') }}" class="nav-link px-2 link-dark">
+                    <i class="ti ti-list"></i>
+                    Affecté au privé</a>
+            </li>
         {% endif %}
         {% if is_granted('ROLE_TRAVAUX_PLANNING') %}
             <li>
