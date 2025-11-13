@@ -2,16 +2,16 @@
 
 {% block body %}
     <div class="card">
-        <h3 class="card-header">{{ utilisateur }}</h3>
+        <h3 class="card-header">{{ utilisateur.nom }} {{ utilisateur.prenom }}</h3>
         <div class="card-body">
             {% include '@AcMarcheTravaux/utilisateur/actions.html.twig' %}
             <br/>
             <table class="table table-bordered table-hover">
                 <tbody>
                 <tr>
-                    <th>Nom prénom</th>
+                    <th>Username</th>
                     <td>
-                        {{ utilisateur.nom }} {{ utilisateur.prenom }}
+                        {{ utilisateur.username }}
                     </td>
                 </tr>
                 <tr>

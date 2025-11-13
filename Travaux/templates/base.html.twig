@@ -18,7 +18,9 @@
 <body class="d-flex flex-column h-100">
 {% set action = app.request.attributes.get("_route") %}
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm border-bottom d-print-none">
+<nav class="navbar navbar-expand-lg {% if is_granted('IS_IMPERSONATOR') %}
+    navbar-dark bg-dark
+    {% else %}navbar-light bg-light{% endif %}  shadow-sm border-bottom d-print-none">
     <div class="container">
         {% block brand %}
             <a class="navbar-brand" href="{{ path('intervention') }}">

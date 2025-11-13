@@ -19,6 +19,7 @@ class UtilisateurEditType extends AbstractType
                 "groups",
                 EntityType::class,
                 [
+                    'label' => 'Rôles',
                     'class' => Group::class,
                     'choice_label' => 'nameDescription',
                     'label_html' => true,

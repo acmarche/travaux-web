@@ -62,4 +62,5 @@ return static function (SecurityConfig $security): void {
             'always_remember_me' => true,
         ]);
 
+    $security->roleHierarchy('ROLE_TRAVAUX_ADMIN', ['ROLE_ALLOWED_TO_SWITCH']);
 };

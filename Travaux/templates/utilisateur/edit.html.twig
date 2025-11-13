@@ -4,6 +4,7 @@
     <div class="card">
         <h3 class="card-header">{{ utilisateur }}</h3>
         <div class="card-body">
+            {% include '@AcMarcheTravaux/utilisateur/_roles_legend.html.twig' %}
             {{ form(edit_form) }}
         </div>
         <div class="card-footer">
