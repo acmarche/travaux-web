@@ -7,6 +7,7 @@ use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use LdapRecord\Models\Model;
 use Stringable;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -20,42 +21,54 @@ class User implements UserInterface, Stringable, PasswordAuthenticatedUserInterf
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    protected int $id;
+    public int $id;
 
     #[ORM\Column(type: 'string', unique: true, length: 180)]
-    protected string $username;
+    public string $username;
 
     #[ORM\Column(type: 'string')]
-    protected string $password;
+    public string $password;
 
-    protected ?string $plainPassword;
+    public ?string $plainPassword;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
-    protected string $email;
+    public string $email;
     #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'users')]
     #[ORM\JoinTable(name: 'fos_user_group')]
-    protected Collection $groups;
+    public Collection $groups;
 
     #[ORM\Column(type: 'array')]
-    protected array $roles;
+    public array $roles;
 
     #[ORM\Column(type: 'string', nullable: false)]
     #[ORM\OrderBy(['intitule' => 'ASC'])]
     #[Assert\Length(min: 3)]
-    protected string $nom;
+    public string $nom;
     #[ORM\Column(type: 'string', nullable: false)]
     #[Assert\Length(min: 3)]
-    protected ?string $prenom;
+    public ?string $prenom;
     #[ORM\Column(type: 'boolean', nullable: true)]
-    private ?bool $accord = null;
+    public ?bool $accord = null;
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private ?\DateTimeInterface $accord_date = null;
+    public ?\DateTimeInterface $accord_date = null;
 
     #[ORM\Column(type: 'string', length: 180, unique: true, nullable: true)]
-    protected ?string $token;
+    public ?string $token;
 
     #[ORM\Column(type: 'boolean', nullable: false)]
     public ?bool $notification = false;
+
+    public static function createFromLdap(Model $userModel): User
+    {
+        $user = new self();
+
+        $user->nom = $userModel->getFirstAttribute('sn');
+        $user->prenom = $userModel->getFirstAttribute('givenName');
+        $user->email = $userModel->getFirstAttribute('mail');
+        $user->username = $userModel->getFirstAttribute('sAMAccountName');
+
+        return $user;
+    }
 
     public function getPlainPassword(): ?string
     {

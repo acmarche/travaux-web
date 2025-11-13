@@ -15,7 +15,6 @@ class UtilisateurEditType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->remove("plainPassword")
             ->add(
                 "groups",
                 EntityType::class,
@@ -31,11 +30,6 @@ class UtilisateurEditType extends AbstractType
                 'label' => 'Recevoir les notifications par mail',
                 'required' => false,
             ]);
-    }
-
-    public function getParent(): ?string
-    {
-        return UtilisateurType::class;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

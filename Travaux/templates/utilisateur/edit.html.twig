@@ -5,8 +5,10 @@
         <h3 class="card-header">{{ utilisateur }}</h3>
         <div class="card-body">
             {{ form(edit_form) }}
-            <a href="{{ path('actravaux_utilisateur') }}">
-                <span class="ti ti-list"></span> Annuler et retour à la liste
+        </div>
+        <div class="card-footer">
+            <a href="{{ path('actravaux_utilisateur_show',{'id':utilisateur.id}) }}">
+                <span class="ti ti-list"></span> Annuler
             </a>
         </div>
     </div>

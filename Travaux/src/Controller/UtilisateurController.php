@@ -4,11 +4,9 @@ namespace AcMarche\Travaux\Controller;
 
 use AcMarche\Travaux\Entity\Security\User;
 use AcMarche\Travaux\Form\Security\UtilisateurEditType;
-use AcMarche\Travaux\Form\Security\UtilisateurPasswordType;
 use AcMarche\Travaux\Form\Security\UtilisateurType;
+use AcMarche\Travaux\Repository\LdapRepository;
 use AcMarche\Travaux\Repository\UserRepository;
-use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -16,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/admin/utilisateur')]
 #[IsGranted('ROLE_TRAVAUX_ADMIN')]
@@ -24,7 +23,7 @@ class UtilisateurController extends AbstractController
     public function __construct(
         private UserRepository $userRepository,
         private UserPasswordHasherInterface $userPasswordHasher,
-        private ManagerRegistry $managerRegistry
+        private LdapRepository $ldapRepository
     ) {
     }
 
@@ -45,18 +44,36 @@ class UtilisateurController extends AbstractController
     public function new(Request $request): Response
     {
         $utilisateur = new User();
-        $form = $this->createForm(UtilisateurType::class, $utilisateur)
-            ->add('submit', SubmitType::class, array('label' => 'Create'));
+
+        $form = $this->createForm(UtilisateurType::class, $utilisateur);
+
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $utilisateur->setPassword(
-                $this->userPasswordHasher->hashPassword($utilisateur, $form->getData()->getPlainPassword())
-            );
-            $this->userRepository->insert($utilisateur);
+
+            $username = $form->get('username')->getData();
+            if ($this->userRepository->findOneBy(['username' => $username])) {
+                $this->addFlash("error", "L'utilisateur existe déjà");
+
+                return $this->redirectToRoute('actravaux_utilisateur_new');
+            }
+
+            $userModel = $this->ldapRepository->getEntry($username);
+            if ($userModel == null) {
+                $this->addFlash("error", "L'utilisateur n'existe pas dans la LDAP");
+
+                return $this->redirectToRoute('actravaux_utilisateur_new');
+            }
+
+            $user = User::createFromLdap($userModel);
+            $randomPassword = bin2hex(random_bytes(16));
+            $user->setPassword($this->userPasswordHasher->hashPassword($user, $randomPassword));
+            $this->userRepository->insert($user);
 
             $this->addFlash("success", "L'utilisateur a bien été ajouté");
+            $this->addFlash("warning", "Attribué son rôle");
 
-            return $this->redirectToRoute('actravaux_utilisateur');
+            return $this->redirectToRoute('actravaux_utilisateur_show', ['id' => $user->getId()]);
         }
 
         return $this->render(
@@ -106,38 +123,13 @@ class UtilisateurController extends AbstractController
     public function delete(Request $request, User $user): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->managerRegistry->getManager();
-            $entityManager->remove($user);
-            $entityManager->flush();
+
+            $this->userRepository->remove($user);
+            $this->userRepository->flush();
             $this->addFlash('success', 'L\'utilisateur a été supprimé');
         }
 
         return $this->redirectToRoute('actravaux_utilisateur');
     }
 
-    #[Route(path: '/password/{id}', name: 'actravaux_utilisateur_password', methods: ['GET', 'POST'])]
-    public function password(Request $request, User $user): Response
-    {
-        $em = $this->managerRegistry->getManager();
-        $form = $this->createForm(UtilisateurPasswordType::class, $user)
-            ->add('submit', SubmitType::class, ['label' => 'Valider']);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $password = $this->userPasswordHasher->hashPassword($user, $form->getData()->getPlainPassword());
-            $user->setPassword($password);
-            $em->flush();
-
-            $this->addFlash('success', 'Mot de passe changé');
-
-            return $this->redirectToRoute('actravaux_utilisateur_show', ['id' => $user->getId()]);
-        }
-
-        return $this->render(
-            '@AcMarcheTravaux/utilisateur/password.html.twig',
-            [
-                'user' => $user,
-                'form' => $form,
-            ]
-        );
-    }
 }

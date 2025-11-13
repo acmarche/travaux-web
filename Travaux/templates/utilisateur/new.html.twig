@@ -4,9 +4,20 @@
     <div class="card">
         <h3 class="card-header">Nouvel utilisateur</h3>
         <div class="card-body">
-            {{ form(form) }}
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            {{ form_row(form.username) }}
+            <button class="btn btn-primary mr-1 mb-2" type="submit">
+                <i class="ti ti-device-floppy"
+                   aria-hidden="true"></i>
+                Sauvegarder
+            </button>
+
+            {{ form_end(form) }}
+        </div>
+        <div class="card-footer">
             <a href="{{ path('actravaux_utilisateur') }}">
-                <span class="ti ti-list"></span> Annuler et retour à la liste
+                <span class="ti ti-list"></span> Annuler
             </a>
         </div>
     </div>
