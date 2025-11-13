@@ -1,6 +1,7 @@
 <?php
 
 use AcMarche\Travaux\Entity\Intervention;
+use AcMarche\Travaux\Service\WorkflowEnum;
 use Symfony\Config\FrameworkConfig;
 
 return static function (FrameworkConfig $framework) {
@@ -8,52 +9,52 @@ return static function (FrameworkConfig $framework) {
     $interventionPublishing
         ->type('state_machine')
         ->supports([Intervention::class])
-        ->initialMarking(['auteur_checking']);
+        ->initialMarking([WorkflowEnum::AUTEUR_CHECKING->value]);
 
     $interventionPublishing->auditTrail()->enabled(true);
     $interventionPublishing->markingStore()
         ->type('method')
         ->property('currentPlace');
 
-    $interventionPublishing->place()->name('auteur_checking');
-    $interventionPublishing->place()->name('redacteur');
-    $interventionPublishing->place()->name('admin_checking');
-    $interventionPublishing->place()->name('deleted');
-    $interventionPublishing->place()->name('published');
+    $interventionPublishing->place()->name(WorkflowEnum::REDACTEUR->value);
+    $interventionPublishing->place()->name(WorkflowEnum::AUTEUR_CHECKING->value);
+    $interventionPublishing->place()->name(WorkflowEnum::ADMIN_CHECKING->value);
+    $interventionPublishing->place()->name(WorkflowEnum::DELETED->value);
+    $interventionPublishing->place()->name(WorkflowEnum::PUBLISHED->value);
 
     $interventionPublishing->transition()
         ->name('auteur_accept')
-        ->from(['auteur_checking'])
-        ->to(['admin_checking']);
+        ->from([WorkflowEnum::AUTEUR_CHECKING->value])
+        ->to([WorkflowEnum::ADMIN_CHECKING->value]);
 
     $interventionPublishing->transition()
         ->name('info_back_auteur')
-        ->from(['admin_checking'])
-        ->to(['auteur_checking']);
+        ->from([WorkflowEnum::ADMIN_CHECKING->value])
+        ->to([WorkflowEnum::AUTEUR_CHECKING->value]);
 
     $interventionPublishing->transition()
         ->name('info_back_contributeur')
-        ->from(['admin_checking'])
-        ->to(['auteur_checking']);
+        ->from([WorkflowEnum::ADMIN_CHECKING->value])
+        ->to([WorkflowEnum::AUTEUR_CHECKING->value]);
 
     $interventionPublishing->transition()
         ->name('info_back_redacteur')
-        ->from(['admin_checking'])
-        ->to(['admin_checking']);
+        ->from([WorkflowEnum::ADMIN_CHECKING->value])
+        ->to([WorkflowEnum::ADMIN_CHECKING->value]);
 
     $interventionPublishing->transition()
         ->name('publish')
-        ->from(['admin_checking'])
-        ->to(['published']);
+        ->from([WorkflowEnum::ADMIN_CHECKING->value])
+        ->to([WorkflowEnum::PUBLISHED->value]);
 
     $interventionPublishing->transition()
         ->name('reject_from_auteur')
-        ->from(['admin_checking'])
-        ->to(['deleted']);
+        ->from([WorkflowEnum::ADMIN_CHECKING->value])
+        ->to([WorkflowEnum::DELETED->value]);
 
     $interventionPublishing->transition()
         ->name('reject_from_admin')
-        ->from(['admin_checking'])
-        ->to(['deleted']);
+        ->from([WorkflowEnum::ADMIN_CHECKING->value])
+        ->to([WorkflowEnum::DELETED->value]);
 
 };

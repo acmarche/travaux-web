@@ -48,23 +48,19 @@ class InterventionController extends AbstractController
         if ($session->has($key)) {
             $data = unserialize($session->get($key));
         }
-        if ($categorieIntervention = $this->travauxUtils->getCategorieDefault('Intervention')) {
+
+        if ($categorieIntervention = $this->travauxUtils->getDefaultCategory('Intervention')) {
             $data['categorie'] = $categorieIntervention->getId();
         }
 
         $user = $this->getUser();
         $data['current_user'] = $user;
         $data['archive'] = 0;
-        $data['categorie'] = 3;
-        $data['place'] = WorkflowEnum::PUBLISHED;
-        $data = array_merge($data, $this->travauxUtils->getConstraintsForUser());
-        $search_form = $this->createForm(
-            SearchInterventionType::class,
-            $data,
-            [
-                'method' => 'GET',
-            ],
-        );
+        $data['placeSelected'] = WorkflowEnum::PUBLISHED;
+
+        $data['role'] = $this->travauxUtils->setRoleConstraint();
+
+        $search_form = $this->createForm(SearchInterventionType::class, $data, ['method' => 'GET']);
         $search_form->handleRequest($request);
         if ($search_form->isSubmitted() && $search_form->isValid()) {
             $data = $search_form->getData();
@@ -76,8 +72,9 @@ class InterventionController extends AbstractController
                 return $this->redirectToRoute('intervention');
             }
         }
+
         $session->set($key, serialize($data));
-        $interventions = $this->interventionRepository->search($data, true);
+        $interventions = $this->interventionRepository->search($data);
         $this->travauxUtils->setLastSuivisForInterventions($interventions);
 
         return $this->render(

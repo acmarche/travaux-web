@@ -54,12 +54,10 @@ class InterventionRepository extends ServiceEntityRepository
         $date_fin = $args['date_fin'] ?? null;
         //1 => archive, 2 => les deux, pas definis pas d'archive
         $archive = $args['archive'];
-        $withAValider = $args['withAValider'] ?? false;
         $affectation = $args['affectation'] ?? 0;
-        $place = $args['place'] ?? null;
+        $placeSelected = $args['placeSelected'] ?? null;
         $sort = $args['sort'] ?? null;
         $affecte_prive = $args['affecte_prive'] ?? false;
-        $date_execution = $args['date_execution'] ?? false;
         $category = $args['categorie'] ?? null;
 
         $qb = $this->createQbl();
@@ -137,19 +135,15 @@ class InterventionRepository extends ServiceEntityRepository
                 ->setParameter('prive', 1);
         }
 
-        if ($place instanceof WorkflowEnum) {
+        if ($placeSelected instanceof WorkflowEnum) {
             $qb->andWhere('intervention.currentPlace LIKE :place')
-                ->setParameter('place', '%'.$place->value.'%');
+                ->setParameter('place', '%'.$placeSelected->value.'%');
         }
 
         if ($category) {
             $qb->andWhere('intervention.categorie = :cat')
                 ->setParameter('cat', $category);
         }
-
-        $today = new DateTime('now');
-        /*$qb->andWhere('intervention.date_execution <= :date OR intervention.date_execution IS NULL')
-               ->setParameter('date', $today->format('Y-m-d'));*/
 
         if ($sort) {
             $qb->addOrderBy('intervention.'.$sort, 'DESC');
@@ -164,13 +158,14 @@ class InterventionRepository extends ServiceEntityRepository
     /**
      * @param array $args
      * @return Intervention[]
+     * @throws Exception
      */
-    public function search(array $args, bool $cloture)
+    public function search(array $args): array
     {
         $currentUser = $args['current_user'] ?? null;
         $role = $args['role'] ?? null;
 
-        $qb = $this->setCriteria($args, $cloture);
+        $qb = $this->setCriteria($args);
 
         if ($currentUser && $role) {
             $this->setUserConstraint($currentUser, $role, $qb);
@@ -229,7 +224,7 @@ class InterventionRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function setUserConstraint(User $user, $role, QueryBuilder $qb): QueryBuilder
+    public function setUserConstraint(User $user, string $role, QueryBuilder $qb): QueryBuilder
     {
         $em = $this->getEntityManager();
         $usernames = false;
@@ -277,7 +272,7 @@ class InterventionRepository extends ServiceEntityRepository
             $qb->andWhere(
                 "(
             (intervention.user_add = :user AND intervention.currentPlace NOT LIKE '%admin_checking%') OR
-            (intervention.user_add = :user) OR 
+            (intervention.user_add = :user) OR
             (intervention.currentPlace LIKE '%published%')
             )"
             )

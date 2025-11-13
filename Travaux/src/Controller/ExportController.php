@@ -50,7 +50,7 @@ class ExportController extends AbstractController
         } elseif ($session->has("intervention_search")) {
             $args = unserialize($session->get("intervention_search"));
         }
-        $interventions = $this->interventionRepository->search($args, $archive);
+        $interventions = $this->interventionRepository->search($args);
 
         $html = $this->renderView(
             '@AcMarcheTravaux/pdf/interventions.html.twig',

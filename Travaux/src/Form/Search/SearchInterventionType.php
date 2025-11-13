@@ -26,7 +26,7 @@ class SearchInterventionType extends AbstractType
         private readonly UserRepository $userRepository,
         private readonly DomaineRepository $domaineRepository,
         private readonly EtatRepository $etatRepository,
-        private readonly PrioriteRepository $prioriteRepository
+        private readonly PrioriteRepository $prioriteRepository,
     ) {
     }
 
@@ -165,7 +165,7 @@ class SearchInterventionType extends AbstractType
                 )
             )
             ->add(
-                'place',
+                'placeSelected',
                 EnumType::class,
                 array(
                     'label' => 'Workflow',

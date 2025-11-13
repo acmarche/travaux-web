@@ -22,7 +22,7 @@ class InterventionWorkflow
 
     public function __construct(
         private Registry $workflowRegistry,
-        protected AuthorizationCheckerInterface $authorizationChecker,
+        private AuthorizationCheckerInterface $authorizationChecker,
         private TravauxUtils $travauxUtils
     ) {
     }
@@ -34,7 +34,7 @@ class InterventionWorkflow
     {
         //si admin on passe toutes les etapes d'un coup
         if ($this->authorizationChecker->isGranted('ROLE_TRAVAUX_ADMIN')) {
-            return $intervention->setCurrentPlace('published');
+            return $intervention->setCurrentPlace(WorkflowEnum::PUBLISHED->value);
         }
 
         /**
@@ -42,21 +42,21 @@ class InterventionWorkflow
          * demande une validation admin
          */
         if ($this->authorizationChecker->isGranted('ROLE_TRAVAUX_AUTEUR')) {
-            return $intervention->setCurrentPlace('admin_checking');
+            return $intervention->setCurrentPlace(WorkflowEnum::ADMIN_CHECKING->value);
         }
 
         /**
          * si redacteur
          */
         if ($this->authorizationChecker->isGranted('ROLE_TRAVAUX_REDACTEUR')) {
-            return $intervention->setCurrentPlace('admin_checking');
+            return $intervention->setCurrentPlace(WorkflowEnum::ADMIN_CHECKING->value);
         }
 
         /**
          * si contributeur
          */
         if ($this->authorizationChecker->isGranted('ROLE_TRAVAUX_CONTRIBUTEUR')) {
-            return $intervention->setCurrentPlace('auteur_checking');
+            return $intervention->setCurrentPlace(WorkflowEnum::AUTEUR_CHECKING->value);
         }
 
         return $intervention;
@@ -144,10 +144,10 @@ class InterventionWorkflow
         }
 
         switch ($from) {
-            case 'auteur_checking':
+            case WorkflowEnum::AUTEUR_CHECKING->value:
                 $transitions = ['info_back_contributeur'];
                 break;
-            case 'admin_checking':
+            case WorkflowEnum::ADMIN_CHECKING->value:
                 $transitions = ['info_back_auteur'];
                 if ($role === 'redacteur') {
                     $transitions = ['info_back_redacteur'];
@@ -207,5 +207,37 @@ class InterventionWorkflow
         }
 
         return $from;
+    }
+
+    /**
+     * @return array<WorkflowEnum>
+     */
+    public function getListWorkflow(): array
+    {
+        /**
+         * Doit voir ceux non valider sinon ne voit pas ce qu'il a encode
+         */
+        if ($this->authorizationChecker->isGranted('ROLE_TRAVAUX_REDACTEUR')) {
+            return [WorkflowEnum::PUBLISHED, WorkflowEnum::ADMIN_CHECKING];
+        }
+
+        /**
+         * auteur doit voir demande des contributeurs et les siennes
+         */
+        if ($this->authorizationChecker->isGranted('ROLE_TRAVAUX_AUTEUR')) {
+            return [WorkflowEnum::PUBLISHED, WorkflowEnum::AUTEUR_CHECKING, WorkflowEnum::ADMIN_CHECKING];
+        }
+
+        /**
+         * contributeur doit voir ses demandes
+         * les non valider aussi sinon ne voit pas ce qu'il a encode !
+         * absence du cadre a notifier contrairement à l'admin et à l'auteur
+         */
+        if ($this->authorizationChecker->isGranted('ROLE_TRAVAUX_CONTRIBUTEUR')) {
+            return [WorkflowEnum::PUBLISHED, WorkflowEnum::AUTEUR_CHECKING];
+        }
+
+        return [];
+
     }
 }

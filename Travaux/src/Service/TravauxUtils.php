@@ -11,36 +11,36 @@ namespace AcMarche\Travaux\Service;
 use AcMarche\Travaux\Entity\Categorie;
 use AcMarche\Travaux\Entity\Intervention;
 use AcMarche\Travaux\Entity\Security\User;
-use AcMarche\Travaux\Entity\Suivi;
+use AcMarche\Travaux\Repository\CategorieRepository;
 use AcMarche\Travaux\Repository\GroupRepository;
 use AcMarche\Travaux\Repository\InterventionRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
+use AcMarche\Travaux\Repository\SuiviRepository;
+use AcMarche\Travaux\Repository\UserRepository;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class TravauxUtils
 {
-    /**
-     * TravauxUtils constructor.
-     * @param AuthorizationChecker $authorizationChecker
-     * @param EntityManagerInterface $em
-     */
     public function __construct(
         private AuthorizationCheckerInterface $authorizationChecker,
         private InterventionRepository $interventionRepository,
-        private EntityManagerInterface $em,
-        private GroupRepository $groupRepository
+        private CategorieRepository $categorieRepository,
+        private UserRepository $userRepository,
+        private GroupRepository $groupRepository,
+        private SuiviRepository $suiviRepository,
     ) {
     }
 
-    public function getInterventionsEnAttentes()
+    /**
+     * @return array<Intervention>
+     */
+    public function getInterventionsEnAttentes(): array
     {
         $places = null;
 
         if ($this->authorizationChecker->isGranted('ROLE_TRAVAUX_AUTEUR')) {
-            $places = ['auteur_checking'];
+            $places = [WorkflowEnum::AUTEUR_CHECKING->value];
         } elseif ($this->authorizationChecker->isGranted('ROLE_TRAVAUX_ADMIN')) {
-            $places = ['admin_checking'];
+            $places = [WorkflowEnum::ADMIN_CHECKING->value];
         }
 
         if ($places) {
@@ -54,7 +54,7 @@ class TravauxUtils
 
     public function getUser(string $username): ?User
     {
-        return $this->em->getRepository(User::class)->findOneBy(['username' => $username]);
+        return $this->userRepository->findOneBy(['username' => $username]);
     }
 
     public function getRoleByEmail(string $email): ?string
@@ -102,22 +102,18 @@ class TravauxUtils
         return $destinataires;
     }
 
-    public function getCategorieDefault(string $name): ?Categorie
+    public function getDefaultCategory(string $name): ?Categorie
     {
-        return $this->em->getRepository(Categorie::class)->findOneBy(
-            ['intitule' => $name]
-        );
+        return $this->categorieRepository->findOneBy(['intitule' => $name]);
     }
 
-    public function getConstraintsForUser(): array
+    public function setRoleConstraint(): ?string
     {
-        $data = [];
         /**
          * auteur doit voir demande des contributeurs et les siennes
          */
         if ($this->authorizationChecker->isGranted('ROLE_TRAVAUX_AUTEUR')) {
-            $data['role'] = 'AUTEUR';
-            $data['withAValider'] = true;
+            return 'AUTEUR';
         }
 
         /**
@@ -126,19 +122,17 @@ class TravauxUtils
          * absence du cadre a notifier contrairement à l'admin et à l'auteur
          */
         if ($this->authorizationChecker->isGranted('ROLE_TRAVAUX_CONTRIBUTEUR')) {
-            $data['role'] = 'CONTRIBUTEUR';
-            $data['withAValider'] = true;
+            return 'CONTRIBUTEUR';
         }
 
         /**
          * Doit voir ceux non valider sinon ne voit pas ce qu'il a encode
          */
         if ($this->authorizationChecker->isGranted('ROLE_TRAVAUX_REDACTEUR')) {
-            $data['role'] = 'REDACTEUR';
-            $data['withAValider'] = true;
+            return WorkflowEnum::REDACTEUR->value;
         }
 
-        return $data;
+        return null;
     }
 
     /**
@@ -147,7 +141,7 @@ class TravauxUtils
     public function setLastSuivisForInterventions($interventions): void
     {
         foreach ($interventions as $intervention) {
-            $suivis = $this->em->getRepository(Suivi::class)->getLastSuivi($intervention);
+            $suivis = $this->suiviRepository->getLastSuivi($intervention);
             if ($suivis) {
                 $intervention->setLastSuivi($suivis);
             }

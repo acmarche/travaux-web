@@ -6,6 +6,7 @@ use AcMarche\Travaux\Entity\Intervention;
 use AcMarche\Travaux\Event\InterventionEvent;
 use AcMarche\Travaux\Form\Search\SearchInterventionType;
 use AcMarche\Travaux\Repository\InterventionRepository;
+use AcMarche\Travaux\Service\TravauxUtils;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -18,8 +19,10 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_TRAVAUX')]
 class ArchiveController extends AbstractController
 {
-    public function __construct(private InterventionRepository $interventionRepository)
-    {
+    public function __construct(
+        private readonly InterventionRepository $interventionRepository,
+        private readonly TravauxUtils $travauxUtils
+    ) {
     }
 
     #[Route(path: '/', name: 'intervention_archive', methods: ['GET'])]
@@ -37,29 +40,10 @@ class ArchiveController extends AbstractController
         //force archive
         $data['sort'] = 'createdAt';
         /**
-         * dans le repository je perds les roles ??
-         * auteur doit voir demande des contributeurs et les siennes
+         * Doit voir les demandes a valider
          */
-        if ($user->hasRole('ROLE_TRAVAUX_AUTEUR')) {
-            $data['role'] = 'AUTEUR';
-            $data['withAValider'] = true;
-        }
-        /**
-         * contributeur doit voir ses demandes
-         * les non valider aussi sinon ne voit pas ce qu'il a encode !
-         * absence du cadre a notifier contrairement à l'admin et à l'auteur
-         */
-        if ($user->hasRole('ROLE_TRAVAUX_CONTRIBUTEUR')) {
-            $data['role'] = 'CONTRIBUTEUR';
-            $data['withAValider'] = true;
-        }
-        /**
-         * Doit voir ceux non valider sinon ne voit pas ce qu'il a encode
-         */
-        if ($user->hasRole('ROLE_TRAVAUX_REDACTEUR')) {
-            $data['role'] = 'REDACTEUR';
-            $data['withAValider'] = true;
-        }
+        $data['role'] = $this->travauxUtils->setRoleConstraint();
+
         $search_form = $this->createForm(
             SearchInterventionType::class,
             $data,
@@ -80,7 +64,7 @@ class ArchiveController extends AbstractController
                 return $this->redirectToRoute('intervention_archive');
             }
             $session->set($key, serialize($data));
-            $entities = $this->interventionRepository->search($data, false);
+            $entities = $this->interventionRepository->search($data);
         }
 
         return $this->render(
@@ -112,7 +96,7 @@ class ArchiveController extends AbstractController
                 $intervention->setArchive(false);
             } else {
                 $intervention->setArchive(true);
-                $intervention->setCurrentPlace('published');//force
+                $intervention->setCurrentPlace(WorkflowEnum::PUBLISHED->value);//force
                 $dispatcher->dispatch($event, InterventionEvent::INTERVENTION_ARCHIVE);
             }
 
