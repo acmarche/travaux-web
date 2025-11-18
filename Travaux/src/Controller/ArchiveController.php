@@ -7,6 +7,7 @@ use AcMarche\Travaux\Event\InterventionEvent;
 use AcMarche\Travaux\Form\Search\SearchInterventionType;
 use AcMarche\Travaux\Repository\InterventionRepository;
 use AcMarche\Travaux\Service\TravauxUtils;
+use AcMarche\Travaux\Service\WorkflowEnum;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
