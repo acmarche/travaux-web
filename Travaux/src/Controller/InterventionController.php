@@ -103,8 +103,15 @@ class InterventionController extends AbstractController
             $category = $this->categorieRepository->find(3);
             $intervention->categorie = $category;
 
-            $this->interventionRepository->persist($intervention);
-            $this->interventionRepository > flush();
+            try {
+                $this->interventionRepository->persist($intervention);
+                $this->interventionRepository->flush();
+
+            } catch (\Exception $exception) {
+                $this->addFlash('danger', $exception->getMessage());
+
+                return $this->redirectToRoute('intervention_new');
+            }
 
             $this->workflow->newIntervention($intervention);
 
