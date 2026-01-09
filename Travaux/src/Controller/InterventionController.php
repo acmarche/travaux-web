@@ -108,7 +108,14 @@ class InterventionController extends AbstractController
 
             $this->workflow->newIntervention($intervention);
 
-            $this->interventionRepository->flush();
+            try {
+                $this->interventionRepository->flush();
+            } catch (\Exception $exception) {
+                $this->addFlash('danger', $exception->getMessage());
+
+                return $this->redirectToRoute('intervention_new');
+            }
+
             $this->addFlash('success', 'L\'intervention a bien été crée.');
 
             $event = new InterventionEvent($intervention, null);
