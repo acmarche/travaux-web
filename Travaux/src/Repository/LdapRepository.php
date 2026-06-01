@@ -33,7 +33,7 @@ class LdapRepository
             'base_dn' => $this->dn,
             'username' => $this->user,
             'password' => $this->password,
-            'port' => LdapInterface::PORT_TLS,
+            'port' => 636,
             'protocol' => 'ldaps://',
             'use_ssl' => true,
             'use_tls' => false,
