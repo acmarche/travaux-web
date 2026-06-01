@@ -11,9 +11,7 @@ use LdapRecord\LdapInterface;
 use LdapRecord\LdapRecordException;
 use LdapRecord\Models\Model;
 use LdapRecord\Query\Collection;
-use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Contracts\Cache\CacheInterface;
 
 class LdapRepository
 {
@@ -28,7 +26,6 @@ class LdapRepository
         private readonly string $user,
         #[Autowire(env: 'LDAP_STAFF_PWD'), \SensitiveParameter]
         private readonly string $password,
-        private readonly CacheInterface $cache,
     ) {
 
         $domain = new DomainConfiguration([
