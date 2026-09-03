@@ -7,10 +7,10 @@ use LdapRecord\Configuration\DomainConfiguration;
 use LdapRecord\Connection;
 use LdapRecord\Container;
 use LdapRecord\ContainerException;
-use LdapRecord\LdapInterface;
 use LdapRecord\LdapRecordException;
 use LdapRecord\Models\Model;
 use LdapRecord\Query\Collection;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class LdapRepository
@@ -26,6 +26,7 @@ class LdapRepository
         private readonly string $user,
         #[Autowire(env: 'LDAP_STAFF_PWD'), \SensitiveParameter]
         private readonly string $password,
+        private readonly LoggerInterface $logger,
     ) {
 
         $domain = new DomainConfiguration([
@@ -45,6 +46,9 @@ class LdapRepository
         $this->connection = new Connection($domain);
     }
 
+    /**
+     * @throws LdapRecordException
+     */
     public function connect(): void
     {
         $connection = $this->connection;
@@ -54,8 +58,17 @@ class LdapRepository
             }
             try {
                 $connection->connect($this->user, $this->password);
-            } catch (\Exception|ContainerException  $exception) {
-                dd($exception->getMessage());
+            } catch (\Exception|ContainerException $exception) {
+                $this->logger->error('Connexion ldap impossible: '.$exception->getMessage(), [
+                    'host' => $this->host,
+                    'exception' => $exception,
+                ]);
+
+                throw new LdapRecordException(
+                    'Connexion ldap impossible: '.$exception->getMessage(),
+                    (int)$exception->getCode(),
+                    $exception,
+                );
             }
         }
     }
@@ -107,25 +120,6 @@ class LdapRepository
             ->orWhere('mail', 'contains', $nom)
             ->orWhere('proxyAddresses', 'contains', $nom)
             ->get();
-    }
-
-    /**
-     * @param Model $model
-     * @param EmailDto $original
-     * @param EmailDto $emailDto
-     * @return void
-     * @throws LdapRecordException
-     */
-    public function update(Model $model, EmailDto $original, EmailDto $emailDto): void
-    {
-        $diff = array_diff_assoc((array)$emailDto, (array)$original);
-        if (count($diff) > 0) {
-            foreach ($diff as $key => $value) {
-                $model->setAttribute($key, $value);
-            }
-            $this->connect();
-            $model->save();
-        }
     }
 
     /**

@@ -52,7 +52,7 @@ class MeiliCommand extends Command
         $update = (bool)$input->getOption('update');
 
         if ($key) {
-            dump($this->meiliServer->createKey());
+            $this->displayJson('Clé créée', $this->meiliServer->createKey());
 
             return Command::SUCCESS;
         }
@@ -64,10 +64,8 @@ class MeiliCommand extends Command
         }
 
         if ($reset) {
-            $result = $this->meiliServer->createIndex();
-            dump($result);
-            $result = $this->meiliServer->settings();
-            dump($result);
+            $this->displayJson('Index créé', $this->meiliServer->createIndex());
+            $this->displayJson('Paramètres', $this->meiliServer->settings());
         }
 
         if ($update) {
@@ -83,6 +81,12 @@ class MeiliCommand extends Command
         }
 
         return Command::SUCCESS;
+    }
+
+    private function displayJson(string $title, mixed $result): void
+    {
+        $this->io->section($title);
+        $this->io->writeln(json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
     }
 
     private function tasks(OutputInterface $output): void
